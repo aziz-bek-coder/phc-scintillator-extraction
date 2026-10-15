@@ -1,0 +1,22 @@
+{
+  "description": "Time per RCWA solve vs Fourier order for the reference Si3N4 pillar lattice (derivation 03, 2l), plus the cost of one backward pass. Sizes every grid in docs/decisions.md.",
+  "geometry": {"n1": 1.81, "n2": 1.46, "wavelength_um": 0.42, "period_um": 0.40, "radius_um": 0.12, "height_um": 0.30, "n_pillar": 2.0906},
+  "geometry_note": "n_pillar = Si3N4 (Luke 2015) at 420 nm, n2 = EJ-550 grease; the index values barely affect timing",
+  "incidence_deg": [60.0, 30.0],
+  "orders": [3, 5, 7, 9, 11, 13],
+  "repeats": 3,
+  "n_grid": 256,
+  "report_window": 4,
+  "fit_min_order": 7,
+  "grad_orders": [5, 7, 9],
+  "grad_repeats": 2,
+  "grad_edge_sharpness": 50.0,
+  "planned_grids": {
+    "coarse_lut": {"n_theta": 45, "n_phi": 10, "orders": [5, 7, 9]},
+    "fine_lut": {"n_theta": 90, "n_phi": 19, "orders": [7, 9, 11]}
+  },
+  "planned_gradient_steps": {
+    "m4_step_M5_72_incidences": {"order": 5, "incidences": 72},
+    "m4_step_M7_72_incidences": {"order": 7, "incidences": 72}
+  }
+}

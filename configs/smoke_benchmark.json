@@ -1,0 +1,15 @@
+{
+  "description": "Tiny smoke version of the benchmark job, used by tests/test_remote_job.py.",
+  "geometry": {"n1": 1.81, "n2": 1.46, "wavelength_um": 0.42, "period_um": 0.40, "radius_um": 0.12, "height_um": 0.30, "n_pillar": 2.0906},
+  "incidence_deg": [60.0, 30.0],
+  "orders": [1, 2],
+  "repeats": 1,
+  "n_grid": 32,
+  "report_window": 4,
+  "fit_min_order": 1,
+  "grad_orders": [1],
+  "grad_repeats": 1,
+  "grad_edge_sharpness": 50.0,
+  "planned_grids": {"coarse_lut": {"n_theta": 45, "n_phi": 10, "orders": [1, 2]}},
+  "planned_gradient_steps": {"step_M1": {"order": 1, "incidences": 72}}
+}

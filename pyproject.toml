@@ -8,7 +8,7 @@ version = "0.0.1"
 description = "Inverse-designed photonic-crystal readout layer for scintillator light extraction and fast timing"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-license = { text = "Proprietary (licence to be chosen before public release)" }
+license = { text = "MIT" }
 authors = [{ name = "Azizbek Eshmominov" }]
 dependencies = [
     "numpy==2.5.4",
@@ -30,10 +30,11 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra --strict-markers"
+# Laptop default: skip slow tests. CI runs everything with -m "slow or not slow".
+addopts = "-ra --strict-markers -m 'not slow'"
 xfail_strict = true
 markers = [
-    "slow: tests that take more than ~10 s on CPU (deselect with -m 'not slow')",
+    "slow: heavier tests (Monte Carlo vs analytic, larger RCWA); skipped locally, run in CI",
 ]
 
 [tool.ruff]

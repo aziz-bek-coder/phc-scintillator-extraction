@@ -29,7 +29,15 @@ Dates revised 2026-10-15 (Aziz): pause 21 Dec 2026 to 3 Jan 2027.
       grid sizes for M2 chosen from that measurement
 - [x] Material constants cited in `docs/references.md` (PROVISIONAL until Aziz confirms)
 - [x] xfail gate converted to normal tests
-- [ ] `docs/status.md` updated, PR merged after CI
+- [x] `docs/status.md` updated, PR merged after CI (PR #1)
+
+## Infrastructure (2026-10-16)
+- [x] History audited; emails rewritten to the noreply address (one approved rewrite)
+- [x] MIT licence; README "work in progress"; actions pinned; read-only workflow token
+- [x] Remote compute workflow (`compute.yml`) and job driver (`scripts/remote_job.py`)
+- [ ] Repository public (blocked: PR #1 ref still exposes old commits; docs/status.md)
+- [ ] Secret scanning push protection and branch protection (after publication)
+- [ ] First remote job: RCWA benchmark; grids sized from it
 
 ## M2 — angle-resolved RCWA for a reference photonic crystal (by 22 Nov 2026)
 - [ ] Derivation 03: k∥ + G, which orders propagate, trapped-mode escape
