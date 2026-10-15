@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phcscint"
+version = "0.0.1"
+description = "Inverse-designed photonic-crystal readout layer for scintillator light extraction and fast timing"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Proprietary (licence to be chosen before public release)" }
+authors = [{ name = "Azizbek Eshmominov" }]
+dependencies = [
+    "numpy==2.5.4",
+    "scipy==1.18.1",
+    "torch==2.14.1",
+    "torcwa==0.1.4.2",
+    "matplotlib==3.11.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.17.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+xfail_strict = true
+markers = [
+    "slow: tests that take more than ~10 s on CPU (deselect with -m 'not slow')",
+]
+
+[tool.ruff]
+line-length = 99
+target-version = "py312"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "NPY"]

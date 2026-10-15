@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets: never committed
+.env
+.env.*
+*.pem
+*.key
+
+# Generated data and caches (regenerate from scripts/)
+data/
+cache/
+*.npz
+*.npy
+*.pt
+*.h5
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
