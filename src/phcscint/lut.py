@@ -22,7 +22,7 @@ from pathlib import Path
 
 import numpy as np
 
-from phcscint.provenance import REPO_ROOT
+from phcscint.provenance import REPO_ROOT, git_commit
 from phcscint.rcwa import PhCLayer, order_window, propagating_mask, solve_phc
 
 DATA_DIR = REPO_ROOT / "data" / "lut"
@@ -200,6 +200,84 @@ class LUT:
             raise RuntimeError("no open channel after masking (should not happen)")
         return orders, t / s, r / s
 
+    # ---------------------------------------------------------------- batch sampling
+    def _bilinear_batch(self, theta: np.ndarray, phi: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        """Vectorised version of _bilinear: returns (T, R) of shape (N, K)."""
+
+        def bracket(x: np.ndarray, grid: np.ndarray):
+            if len(grid) == 1:
+                z = np.zeros(x.size, dtype=int)
+                return z, z, np.zeros(x.size)
+            xc = np.clip(x, grid[0], grid[-1])
+            j = np.clip(np.searchsorted(grid, xc) - 1, 0, len(grid) - 2)
+            w = (xc - grid[j]) / (grid[j + 1] - grid[j])
+            return j, j + 1, w
+
+        i0, i1, wt = bracket(theta, self.theta)
+        j0, j1, wp = bracket(phi, self.phi)
+        wt = wt[:, None]
+        wp = wp[:, None]
+
+        def mix(a: np.ndarray) -> np.ndarray:
+            return (
+                (1 - wt) * (1 - wp) * a[i0, j0]
+                + (1 - wt) * wp * a[i0, j1]
+                + wt * (1 - wp) * a[i1, j0]
+                + wt * wp * a[i1, j1]
+            )
+
+        return mix(self.T), mix(self.R)
+
+    def channel_powers_batch(
+        self, d: np.ndarray, tol: float = 1e-12
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        """For unit directions d (N, 3) with d_z > 0 hitting the PhC from inside, return
+        (orders (N, K, 2), T (N, K), R (N, K), u_mn (N, K, 2)) in the actual frame, after
+        C4v mapping, bilinear interpolation, masking of closed orders and
+        renormalisation (derivation 03, 2h-2i)."""
+        n1, n2, g = self.config.n1, self.config.n2, self.g
+        u = n1 * d[:, :2]
+        qs = np.stack(C4V)  # (8, 2, 2)
+        v = np.einsum("qji,nj->nqi", qs, u)  # Q^T u for every Q
+        ok = (v[..., 1] >= -tol) & (v[..., 0] >= v[..., 1] - tol)
+        qi = np.argmax(ok, axis=1)
+        vw = v[np.arange(len(u)), qi]
+        phi_w = np.where(np.hypot(vw[:, 0], vw[:, 1]) > 0, np.arctan2(vw[:, 1], vw[:, 0]), 0.0)
+        theta = np.arccos(np.clip(d[:, 2], -1.0, 1.0))
+        t_w, r_w = self._bilinear_batch(theta, phi_w)
+        orders = np.einsum("nij,kj->nki", qs[qi], self.orders)  # actual order = Q o'
+        umn = u[:, None, :] + g * orders
+        mag = np.hypot(umn[..., 0], umn[..., 1])
+        t = np.where(mag < n2, t_w, 0.0)
+        r = np.where(mag < n1, r_w, 0.0)
+        tot = t.sum(1) + r.sum(1)
+        if np.any(tot <= 0):
+            raise RuntimeError("no open channel after masking (should not happen)")
+        return orders, t / tot[:, None], r / tot[:, None], umn
+
+    def sample_batch(
+        self, d: np.ndarray, rng: np.random.Generator
+    ) -> tuple[np.ndarray, np.ndarray]:
+        """Draw one channel per photon (derivation 04, 2e). Returns (transmitted (N,),
+        new_d (N, 3)); new_d is the reflected direction, eq. (3) of derivation 04, and
+        is meaningless for transmitted photons."""
+        n = d.shape[0]
+        _, t, r, umn = self.channel_powers_batch(d)
+        k = t.shape[1]
+        cum = np.cumsum(np.concatenate([t, r], axis=1), axis=1)
+        x = rng.random(n)[:, None] * cum[:, -1:]
+        ch = np.minimum((cum < x).sum(axis=1), 2 * k - 1)
+        transmitted = ch < k
+        new_d = np.zeros((n, 3))
+        refl = ~transmitted
+        if refl.any():
+            um = umn[np.flatnonzero(refl), ch[refl] - k]  # (n_refl, 2)
+            n1 = self.config.n1
+            new_d[refl, 0] = um[:, 0] / n1
+            new_d[refl, 1] = um[:, 1] / n1
+            new_d[refl, 2] = -np.sqrt(np.clip(1.0 - (um[:, 0] ** 2 + um[:, 1] ** 2) / n1**2, 0, 1))
+        return transmitted, new_d
+
     # ---------------------------------------------------------------- integrals
     def single_pass_extraction(self, theta_split_deg: float | None = None) -> dict[str, float]:
         """Eq. (9) of derivation 03 by midpoint rule in theta (the theta grid must be a
@@ -240,16 +318,32 @@ def build_lut(
     t_arr = np.zeros((n_t, n_p, n_o))
     r_arr = np.zeros((n_t, n_p, n_o))
     done = np.zeros((n_t, n_p), dtype=bool)
+    # every commit whose code computed some of the points (more than one only if a
+    # build was interrupted and resumed after a commit)
+    commits: list[str] = []
     if partial.exists():
         with np.load(partial, allow_pickle=False) as z:
             if str(z["config"]) == config.to_json():
                 t_arr, r_arr, done = z["T"], z["R"], z["done"].astype(bool)
+                if "commits" in z.files:
+                    commits = json.loads(str(z["commits"]))
+                else:
+                    commits = ["not recorded"]
+    if git_commit() not in commits:
+        commits.append(git_commit())
     seconds = 0.0
 
     def checkpoint() -> None:
         cache_dir.mkdir(parents=True, exist_ok=True)
         tmp = partial.with_suffix(".tmp.npz")
-        np.savez_compressed(tmp, config=config.to_json(), T=t_arr, R=r_arr, done=done)
+        np.savez_compressed(
+            tmp,
+            config=config.to_json(),
+            T=t_arr,
+            R=r_arr,
+            done=done,
+            commits=json.dumps(commits),
+        )
         os.replace(tmp, partial)
 
     last = time.perf_counter()
@@ -290,7 +384,12 @@ def build_lut(
         orders,
         t_arr,
         r_arr,
-        {"complete": True, "max_energy_error": energy_err, "solve_seconds_this_run": seconds},
+        {
+            "complete": True,
+            "max_energy_error": energy_err,
+            "solve_seconds_this_run": seconds,
+            "built_at_commits": commits,
+        },
     )
     lut.save(final)
     if partial.exists():

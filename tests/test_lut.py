@@ -18,7 +18,7 @@ from phcscint.lut import (
     window_for,
 )
 from phcscint.materials import LYSO, N_GREASE, n_si3n4_luke
-from phcscint.rcwa import PhCLayer, solve_phc
+from phcscint.rcwa import PhCLayer, order_window, solve_phc
 
 N_SIN = n_si3n4_luke(LYSO.wavelength_um)
 LAYER = PhCLayer(period_um=0.40, radius_um=0.12, height_um=0.30, n_pillar=N_SIN)
@@ -140,3 +140,67 @@ def test_single_pass_integral_reproduces_bare_fresnel() -> None:
     lut = LUT(cfg, orders, T, 1 - T)
     eta = lut.single_pass_extraction()["eta_single_pass"]
     assert eta == pytest.approx(escape_fraction_one_face_fresnel(LYSO.n, N_GREASE), abs=1e-3)
+
+
+# ---------------------------------------------------------------- batch sampling
+
+
+def _first_order_lut() -> LUT:
+    """All power reflected into table order (-1, 0) everywhere."""
+    th_deg = midpoint_grid(0.0, 90.0, 10.0)
+    ph_deg = inclusive_grid(0.0, 45.0, 45.0)
+    orders = order_window(1)
+    k = int(np.flatnonzero((orders == [-1, 0]).all(axis=1))[0])
+    T = np.zeros((len(th_deg), len(ph_deg), len(orders)))
+    R = np.zeros_like(T)
+    R[:, :, k] = 1.0
+    layer = PhCLayer(0.40, 0.12, 0.30, 2.09)
+    cfg = LUTConfig(LYSO.n, N_GREASE, 0.42, layer, 1, 0, th_deg, ph_deg, 1)
+    return LUT(cfg, orders, T, R)
+
+
+@pytest.mark.parametrize("phi_deg", [0.0, 90.0, 180.0, 270.0])
+def test_reflected_order_direction(phi_deg, rng) -> None:
+    """Eq. (3) of derivation 04: the reflected order (m, n) leaves with in-plane
+    wavevector u + g (m, n). For the synthetic table the order is Q(-1, 0), i.e. it
+    always points against the incident in-plane direction."""
+    lut = _first_order_lut()
+    g = 0.42 / 0.40
+    sin_t = 1.2 / LYSO.n  # |u| = 1.2: trapped for grease, and |u - g| = 0.15 is open
+    ph = math.radians(phi_deg)
+    d = np.array([[sin_t * math.cos(ph), sin_t * math.sin(ph), math.sqrt(1 - sin_t**2)]])
+    trans, new_d = lut.sample_batch(d, rng)
+    assert not trans[0]
+    u_new = LYSO.n * new_d[0, :2]
+    expected = (1.2 - g) * np.array([math.cos(ph), math.sin(ph)])
+    np.testing.assert_allclose(u_new, expected, atol=1e-12)
+    assert new_d[0, 2] < 0
+    assert np.linalg.norm(new_d[0]) == pytest.approx(1.0, abs=1e-12)
+
+
+def test_batch_lookup_equals_single_lookup(tmp_path) -> None:
+    layer = PhCLayer(0.40, 0.12, 0.30, n_si3n4_luke(0.42))
+    cfg = LUTConfig(
+        LYSO.n,
+        N_GREASE,
+        0.42,
+        layer,
+        3,
+        48,
+        midpoint_grid(0.0, 90.0, 30.0),
+        inclusive_grid(0.0, 45.0, 22.5),
+        3,
+    )
+    lut, _ = build_lut(cfg, cache_dir=tmp_path, progress=None)
+    rng = np.random.default_rng(3)
+    d = rng.normal(size=(300, 3))
+    d /= np.linalg.norm(d, axis=1, keepdims=True)
+    d[:, 2] = np.abs(d[:, 2])
+    orders_b, t_b, r_b, _ = lut.channel_powers_batch(d)
+    for i in range(len(d)):
+        th = math.acos(d[i, 2])
+        ph = math.atan2(d[i, 1], d[i, 0])
+        orders_s, t_s, r_s = lut.lookup(th, ph)
+        np.testing.assert_array_equal(orders_b[i], orders_s)
+        np.testing.assert_allclose(t_b[i], t_s, atol=1e-12)
+        np.testing.assert_allclose(r_b[i], r_s, atol=1e-12)

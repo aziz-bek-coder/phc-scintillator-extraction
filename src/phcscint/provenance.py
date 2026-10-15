@@ -17,7 +17,7 @@ RESULTS_DIR = REPO_ROOT / "results"
 FIGURES_DIR = REPO_ROOT / "docs" / "figures"
 
 
-def git_commit() -> str:
+def _compute_commit() -> str:
     try:
         out = subprocess.run(
             ["git", "rev-parse", "--short", "HEAD"],
@@ -39,9 +39,23 @@ def git_commit() -> str:
         return "unknown"
 
 
+# Captured once, when the package is imported, i.e. when the code that will produce
+# the numbers is loaded. Editing files later in the same session does not change the
+# code already running, so the stamp must not be recomputed at save time.
+_COMMIT_AT_IMPORT = _compute_commit()
+_STARTED_UTC = _dt.datetime.now(_dt.UTC).isoformat(timespec="seconds")
+
+
+def git_commit() -> str:
+    """Commit (with '-dirty' if src/, scripts/ or pyproject.toml had uncommitted
+    changes) of the code loaded by this process."""
+    return _COMMIT_AT_IMPORT
+
+
 def stamp() -> dict[str, Any]:
     return {
         "git_commit": git_commit(),
+        "started_utc": _STARTED_UTC,
         "utc": _dt.datetime.now(_dt.UTC).isoformat(timespec="seconds"),
         "python": platform.python_version(),
         "numpy": np.__version__,

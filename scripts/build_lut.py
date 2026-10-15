@@ -123,6 +123,7 @@ def main() -> None:
         {
             "config": cfg.to_json(),
             "lut_file": path.name,
+            "lut_built_at_commits": lut.meta.get("built_at_commits", ["not recorded"]),
             "max_energy_error": lut.meta.get("max_energy_error"),
             "wall_seconds_this_run": wall,
             "theta_c_deg": theta_c,

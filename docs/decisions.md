@@ -74,6 +74,47 @@ so the fine-grid run must be resumable.
 So that every number quoted in docs has a file with the commit hash that produced it.
 Large arrays (lookup tables) stay in `data/` (git-ignored) and are regenerated.
 
+## 2026-10-16 — Grease index 1.46 (Eljen EJ-550) instead of the brief's 1.5
+Numbers must come from a source; 1.5 had none. EJ-550 lists 1.46 and Luxium BC-631
+lists 1.465. The brief's 1.5 is kept as `N_GREASE_BRIEF` only to reproduce the brief's
+21.7 % check. A first convergence run with 1.5 was stopped and redone with 1.46.
+
+## 2026-10-16 — Pillar material Si3N4 (Luke 2015), not TiO2
+Knapitsch et al. used silicon nitride (paper abstract). Two independent Si3N4 sources
+agree to 1.4 % at 420 nm (Luke 2.091, Philipp 2.062), while TiO2 thin-film records
+disagree by 0.3 in n (2.29 vs 2.62) and one shows absorption at 420 nm. TiO2 can be
+revisited in M4 as a higher-contrast option once a deposition-matched source exists.
+
+## 2026-10-16 — Reference design is "Knapitsch-style", not a replica
+The Knapitsch geometry is not in the abstracts, and the thesis PDF is copy-protected,
+so it was not text-extracted. Reference: square lattice of Si3N4 pillars, a = 0.40 µm,
+r = 0.12 µm (fill factor 0.28), h = 0.30 µm. Period chosen from the grating equation
+so that order (−1, 0) maps the middle of the trapped band into the escape cone
+(derivation 03, 2l); radius and height are typical single-etch values, not optimised.
+Replace with the published geometry if Aziz reads it from the thesis.
+
+## 2026-10-16 — Pillars sit directly on LYSO and are surrounded by the outside medium
+No residual Si3N4 layer under the pillars. Simplest structure that M4 can optimise
+with three parameters (period, radius, height).
+
+## 2026-10-16 — Light is treated as unpolarised at every interaction
+LUT stores the unpolarised order powers, eq. (7) of derivation 03. Bias discussed in
+derivation 03, 2g. Tracking polarisation is a possible extension, not planned.
+
+## 2026-10-16 — LUT grids and storage
+θ on a midpoint grid (no solve at exactly 90°, where the input kz vanishes), φ on an
+inclusive grid over the C4v wedge [0°, 45°]. Coarse: 2° × 5° (450 solves). Fine: 1° ×
+2.5° (1710 solves). Stored order window |m|, |n| ≤ ceil(2 n1 / g) = 4 for the
+reference (81 orders), which holds every order that can propagate in LYSO. Cached in
+`data/lut/` (git-ignored) under a hash of the full configuration; builds checkpoint
+every 60 s and resume.
+
+## 2026-10-16 — The M1 benchmark overstated solve times
+`scripts/benchmark_rcwa.py` timed the solve plus a Python loop calling `S_parameters`
+once per order (529 calls at order 11). With vectorised extraction (`rcwa.solve_phc`)
+the convergence run measured roughly a third of the benchmark time per solve; see
+`seconds` in `results/m2_convergence.json`. Grid budgets above use the new numbers.
+
 ## 2026-10-16 — Heavy computation moves to GitHub Actions (Aziz's decision)
 The laptop overheated during about 50 minutes of RCWA runs (docs/status.md). Laptop:
 edit code, fast tests with 2 threads, plotting downloaded results. Everything else runs
@@ -131,6 +172,8 @@ torch and calls `torch.set_num_threads`. `pytest` skips `@pytest.mark.slow` by d
 (`-m 'not slow'` in pyproject); CI overrides with `-m "slow or not slow"`.
 
 ## Open
-- Group index of LYSO at 420 nm: needs a dispersion source before M3.
+- Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
+  M3 uses n_g = n and states the bias.
 - Wavelength at which Epic Crystal quotes n = 1.82 for LYSO is not stated on its page.
+- Knapitsch geometry from the thesis, to replace the Knapitsch-style reference.
 - Publication: waiting on Aziz (docs/status.md).
