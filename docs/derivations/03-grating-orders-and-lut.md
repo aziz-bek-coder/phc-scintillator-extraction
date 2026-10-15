@@ -7,7 +7,7 @@ Written by Claude (agent) 2026-10-16. Code: `src/phcscint/rcwa.py` (patterned so
 ## Part 1 — Predict
 
 1. A ray in LYSO (n1 = 1.81) hits a square-lattice photonic crystal (PhC) with period
-   a = 0.40 µm at θ = 60°, φ = 0, λ = 0.42 µm. Grease outside (n2 = 1.5). Which
+   a = 0.40 µm at θ = 60°, φ = 0, λ = 0.42 µm. Grease outside (n2 = 1.46). Which
    transmitted orders (m, n) can carry power out? Which reflected orders exist?
 2. Without the PhC this ray is trapped. With the PhC, is it *guaranteed* to escape on
    this pass? On some later pass?
@@ -54,8 +54,8 @@ n1 − n2 < g < 2 n2, i.e.
 
     λ / (2 n2) < a < λ / (n1 − n2).                                              (5)
 
-For LYSO → grease at 420 nm: 0.14 µm < a < 1.35 µm. For LYSO → air: 0.21 µm < a <
-0.52 µm. This is the reason the period must be comparable to the wavelength.
+For LYSO → grease (n2 = 1.46) at 420 nm: 0.14 µm < a < 1.2 µm. For LYSO → air:
+0.21 µm < a < 0.52 µm. This is the reason the period must be comparable to the wavelength.
 
 Whether the ray actually escapes is a question of *power*: the grating equation
 says which channels are open, the RCWA says how much power goes into each. Power not
@@ -193,8 +193,8 @@ not in the abstract and have not been read from the paper yet (docs/status.md). 
 reference design here is therefore *Knapitsch-style*, not a replica:
 Si₃N₄ pillars (n from Luke et al. 2015, ≈ 2.09 at 420 nm), square lattice, chosen from
 (4)–(5) so that the (−1, 0) order maps the middle of the trapped band into the
-centre of the escape cone. For LYSO → grease, the trapped band is
-1.5 < |u| < 1.81; g ≈ 1.05 (a = 0.40 µm) sends it to 0.45 < |u − g| < 0.76, well inside
+centre of the escape cone. For LYSO → grease (n2 = 1.46), the trapped band is
+1.46 < |u| < 1.81; g ≈ 1.05 (a = 0.40 µm) sends it to 0.41 < |u − g| < 0.76, well inside
 the grease cone (and inside the air cone too). Radius 0.12 µm (area fill factor
 π r²/a² ≈ 0.28) and height 0.30 µm are typical values for a single-etch nitride
 layer, not optimised. M4 optimises a, r and h.

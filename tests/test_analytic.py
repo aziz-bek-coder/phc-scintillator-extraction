@@ -11,9 +11,9 @@ import numpy as np
 import pytest
 
 from phcscint import analytic
-from phcscint.materials import BGO, LYSO, LYSO_N_EPIC, N_AIR, N_GREASE
+from phcscint.materials import BGO, LYSO, LYSO_N_EPIC, N_AIR, N_GREASE, N_GREASE_BRIEF
 
-PAIRS = [(LYSO.n, N_AIR), (LYSO.n, N_GREASE), (BGO.n, N_AIR)]
+PAIRS = [(LYSO.n, N_AIR), (LYSO.n, N_GREASE), (LYSO.n, N_GREASE_BRIEF), (BGO.n, N_AIR)]
 
 
 def _eta_oracle(n1: float, n2: float) -> float:
@@ -41,16 +41,16 @@ def test_escape_fraction_one_face(n1: float, n2: float) -> None:
 
 def test_escape_fraction_brief_values() -> None:
     """The project brief quotes LYSO->air ~8.2 %, LYSO->n=1.5 ~21.7 %, BGO->air ~5.7 %,
-    computed with n_LYSO = 1.82 (the Epic Crystal value). Reproduce them at that index
-    to 0.1 percentage point. With Luxium's 1.81 (the value used in the code) the grease
-    case moves to 22.0 %; that spread is recorded in docs/status.md."""
+    computed with n_LYSO = 1.82 (the Epic Crystal value) and n2 = 1.5. Reproduce them at
+    those indices to 0.1 percentage point. The code's production values (Luxium 1.81,
+    EJ-550 grease 1.46) give different numbers; see results/m1_escape_cone.json."""
     assert analytic.escape_fraction_one_face(LYSO_N_EPIC, N_AIR) == pytest.approx(0.082, abs=0.001)
-    assert analytic.escape_fraction_one_face(LYSO_N_EPIC, N_GREASE) == pytest.approx(
+    assert analytic.escape_fraction_one_face(LYSO_N_EPIC, N_GREASE_BRIEF) == pytest.approx(
         0.217, abs=0.001
     )
     assert analytic.escape_fraction_one_face(BGO.n, N_AIR) == pytest.approx(0.057, abs=0.001)
     # and the sensitivity to the vendor spread in n_LYSO is below 0.4 percentage points
-    for n2 in (N_AIR, N_GREASE):
+    for n2 in (N_AIR, N_GREASE, N_GREASE_BRIEF):
         d = analytic.escape_fraction_one_face(LYSO.n, n2) - analytic.escape_fraction_one_face(
             LYSO_N_EPIC, n2
         )
@@ -101,7 +101,7 @@ def test_trapped_fraction_matches_escape_cone(rng: np.random.Generator) -> None:
 
 def test_cones_overlap_threshold() -> None:
     assert not analytic.cones_overlap(LYSO.n, N_AIR)  # n2/n1 = 0.55 < 0.707
-    assert analytic.cones_overlap(LYSO.n, N_GREASE)  # 0.83 > 0.707
+    assert analytic.cones_overlap(LYSO.n, N_GREASE)  # 1.46 / 1.81 = 0.81 > 0.707
     assert not analytic.cones_overlap(1.0, 1 / math.sqrt(2) - 1e-9)
     assert analytic.cones_overlap(1.0, 1 / math.sqrt(2) + 1e-9)
 

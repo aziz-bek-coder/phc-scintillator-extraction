@@ -1,7 +1,8 @@
 """Fourier-order and grid convergence for the reference photonic crystal (M2).
 
 Reference design (derivation 03, 2l): Si3N4 pillars, square lattice, a = 0.40 um,
-r = 0.12 um, h = 0.30 um, on LYSO at 420 nm, outside medium grease (1.5) and air.
+r = 0.12 um, h = 0.30 um, on LYSO at 420 nm, outside medium grease (EJ-550, n = 1.46)
+and air.
 For a set of incidences, computes total T and the largest single transmitted order vs
 Fourier order M, plus a real-space grid check at fixed M.
 
@@ -58,6 +59,7 @@ def main() -> None:
                 rows.append(
                     {
                         "medium": mname,
+                        "n2": n2,
                         "theta_deg": th,
                         "phi_deg": ph,
                         "order": m,
@@ -90,6 +92,7 @@ def main() -> None:
             grid_rows.append(
                 {
                     "medium": mname,
+                    "n2": n2,
                     "theta_deg": th,
                     "phi_deg": ph,
                     "order": args.grid_order,

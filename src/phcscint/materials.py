@@ -24,7 +24,12 @@ BGO = Scintillator(name="BGO", n=2.15, wavelength_um=0.480, reference="Luxium-BG
 LYSO_N_EPIC = 1.82
 
 N_AIR = 1.0
-N_GREASE = 1.5  # optical coupling grease, working value from the brief (no datasheet yet)
+# Optical coupling grease: Eljen EJ-550 datasheet value (docs/references.md, Eljen-EJ550);
+# wavelength not stated by the manufacturer, assumed valid at the emission peak.
+# Luxium BC-631 lists 1.465. PROVISIONAL.
+N_GREASE = 1.46
+# The project brief's round value, kept only to reproduce the brief's 21.7 % check.
+N_GREASE_BRIEF = 1.5
 
 
 def n_si3n4_luke(wavelength_um: float) -> float:
