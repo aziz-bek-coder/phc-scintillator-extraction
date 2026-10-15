@@ -74,7 +74,63 @@ so the fine-grid run must be resumable.
 So that every number quoted in docs has a file with the commit hash that produced it.
 Large arrays (lookup tables) stay in `data/` (git-ignored) and are regenerated.
 
+## 2026-10-16 — Heavy computation moves to GitHub Actions (Aziz's decision)
+The laptop overheated during about 50 minutes of RCWA runs (docs/status.md). Laptop:
+edit code, fast tests with 2 threads, plotting downloaded results. Everything else runs
+through `.github/workflows/compute.yml`.
+
+## 2026-10-16 — Licence MIT (Aziz's decision)
+`LICENSE` added; README marked "work in progress".
+
+## 2026-10-16 — One history rewrite to the noreply address (approved by Aziz)
+All author and committer emails now use `262705928+aziz-bek-coder@users.noreply.github.com`,
+including the agents' commits. Old-to-new commit map in `docs/history-rewrite.md`, so
+provenance stamps written before the rewrite stay traceable. A local bundle of the old
+history was kept outside the repository and is not pushed anywhere.
+
+## 2026-10-16 — Publication deferred until PR #1's ref is gone
+GitHub keeps `refs/pull/1/head` at the old commit `d096fce`, and the API still returns
+the Gmail address for `d096fce`, `8f1c7c4` and the old merge commit `0308772`.
+Publishing now would expose it. Options for Aziz are in docs/status.md. Meanwhile the
+private repository's free Actions quota is used, on 2-vCPU runners.
+
+## 2026-10-16 — Actions pinned to full commit SHAs
+Tags can be moved; SHAs cannot. Pinned (latest releases on 2026-10-16):
+actions/checkout 3d3c42e5aac5ba805825da76410c181273ba90b1 (v7.0.1),
+actions/setup-python 5fda3b95a4ea91299a34e894583c3862153e4b97 (v7.0.0),
+actions/upload-artifact cf430e030ddbb5b0abf93d22962f4752f3646cd9 (v7.0.2),
+actions/download-artifact 9000827ccba6bdab643e8b6fd33ac0654aef8333 (v8.0.2).
+Checkout runs with `persist-credentials: false`; workflow inputs reach shell steps only
+through environment variables, never by direct expression interpolation.
+
+## 2026-10-16 — Workflow permissions
+Repository default token is read-only. `ci.yml` asks for `contents: read`;
+`compute.yml` asks for `contents: read` and `actions: read` (needed to download an
+earlier run's artifacts when resuming). No workflow uses `pull_request_target` or a
+schedule.
+
+## 2026-10-16 — CI triggers: pull requests and pushes to main only
+Previously every branch push ran CI and the pull request ran it again. Halves CI minutes.
+CI runs the full suite including `@pytest.mark.slow` tests.
+
+## 2026-10-16 — Remote job design (`scripts/remote_job.py`)
+`plan` turns a config into a matrix of chunks; `run` executes one chunk with a
+checkpoint file and a 270-minute self-imposed deadline (hard limit 300 minutes) and
+writes `chunk.json` (config, commit, runner CPU, runtime per segment, complete flag);
+`merge` combines chunks into `summary.json` plus csv/png/npz. A chunk that hits its
+deadline exits cleanly and its artifact is uploaded, so `resume_run_id` can continue it.
+At most 6 chunks run in parallel. Configs live in `configs/` and nowhere else.
+
+## 2026-10-16 — Results layout
+Downloaded artifacts go to `results/<job>/<run-id>/` and are git-ignored. Small summary
+JSONs at the top level of `results/` and final figures in `docs/figures/` are committed.
+
+## 2026-10-16 — Laptop test settings
+`tests/conftest.py` sets OMP_NUM_THREADS = 2 (unless already set) before importing
+torch and calls `torch.set_num_threads`. `pytest` skips `@pytest.mark.slow` by default
+(`-m 'not slow'` in pyproject); CI overrides with `-m "slow or not slow"`.
+
 ## Open
-- Licence for the public release: MIT or Apache-2.0. Decide by M5.
 - Group index of LYSO at 420 nm: needs a dispersion source before M3.
 - Wavelength at which Epic Crystal quotes n = 1.82 for LYSO is not stated on its page.
+- Publication: waiting on Aziz (docs/status.md).

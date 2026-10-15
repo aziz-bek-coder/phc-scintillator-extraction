@@ -5,14 +5,18 @@ Mode since 2026-10-15: agents work autonomously, decide and log decisions in
 `docs/decisions.md`, and report in `docs/status.md`. Aziz reviews afterwards.
 
 ## Identity
+- Every commit uses Aziz's GitHub noreply email,
+  `262705928+aziz-bek-coder@users.noreply.github.com`, as author and committer email.
+  Never commit with a personal email address.
 - Each agent commits under its own author name: `Claude (agent)` or `Argon (agent)`
-  (`git commit --author="Claude (agent) <noreply@anthropic.com>"`), or adds a
-  `Co-authored-by:` trailer. Aziz commits under his own name.
+  (`git commit --author="Claude (agent) <262705928+aziz-bek-coder@users.noreply.github.com>"`),
+  or adds a `Co-authored-by:` trailer. Aziz commits under his own name.
 - Branch prefixes: `claude/*`, `argon/*`, `aziz/*`.
 
 ## Branching and PRs
-- Never commit to or push `main` directly. GitHub branch protection is not available on
-  this private Free-plan repo, so this rule is enforced by discipline and by review.
+- Never commit to or push `main` directly. Once the repository is public, branch
+  protection on `main` requires a pull request and passing CI (no approvals); until
+  then the rule is enforced by discipline and by review.
 - One topic per branch; one milestone (or one fix) per PR, ideally under 300 changed
   lines of code, always with tests.
 - Every PR description states: what changed, which equation or derivation it implements
@@ -37,7 +41,8 @@ Mode since 2026-10-15: agents work autonomously, decide and log decisions in
 | `src/phcscint/rcwa.py`, `lut.py` | Claude |
 | `src/phcscint/montecarlo.py`, `timing.py` | Claude |
 | `src/phcscint/optimize.py` | Claude |
-| `scripts/`, `results/`, `docs/figures/`, `tests/` (except `tests/xcheck/`) | Claude |
+| `scripts/`, `configs/`, `results/`, `docs/figures/`, `tests/` (except `tests/xcheck/`) | Claude |
+| `.github/workflows/` (actions pinned by SHA; never `pull_request_target`) | Claude |
 | `docs/derivations/`, `docs/status.md`, `docs/decisions.md` | Claude writes; Aziz annotates |
 | `src/phcscint/xcheck/` (independent re-implementation: escape cone, Fresnel, bare-face MC) | Argon |
 | `tests/xcheck/` (tests comparing the two implementations) | Argon |
@@ -48,14 +53,30 @@ Argon's cross-checks must not import from the Claude-owned modules they check; t
 only numpy and scipy. Shared fixtures live in `tests/conftest.py` (Claude). If an agent
 needs a change in a file it does not own, it opens an issue or notes it in `docs/status.md`.
 
-## Compute constraints (Aziz's laptop: Intel i3-1215U, 8 GB RAM, CPU only)
-- Benchmark before sizing: one RCWA solve timed against Fourier order
-  (`scripts/benchmark_rcwa.py`); grids are sized from that measurement.
-- Use C4v symmetry of the square lattice: for unpolarised light φ runs over 0–45° only.
-- Coarse angle grid for optimisation, fine grid for final evaluation.
-- Cache lookup tables to disk; long runs must be resumable.
-- Keep peak RAM under 4 GB.
-- Colab only if a step truly cannot run locally, and log it in `docs/decisions.md`.
+## Compute rules (since 2026-10-16)
+Laptop (Intel i3-1215U, 8 GB RAM): only editing code, the fast unit tests (under 60 s,
+OMP_NUM_THREADS=2 and `torch.set_num_threads(2)`, set in `tests/conftest.py`), and
+plotting downloaded results. Nothing heavier. Tests that take more than a few seconds
+are marked `@pytest.mark.slow`; they are skipped locally by default and run in CI.
+
+Remote (GitHub Actions, `.github/workflows/compute.yml`, manual trigger only):
+- Every heavy computation is a job in `scripts/remote_job.py` with a config in
+  `configs/`: benchmarks, convergence studies, lookup tables, Monte Carlo runs,
+  optimisation, figures for the technical note. Nothing unrelated to this project and
+  no scheduled or always-on jobs.
+- Split big sweeps into chunks (matrix, at most 6 in parallel, each under 5 h).
+  Checkpoint every chunk so a later run can resume it (`resume_run_id`).
+- OMP_NUM_THREADS=4 on the runner; pip/torch cached.
+- Artifacts: npz/csv/png plus JSON with parameters, git commit and runtime.
+- Control from the terminal: `gh workflow run compute.yml -f job=... -f config=...`,
+  then `gh run watch <id>`, then `gh run download <id> -D results/<job>/<id>/`.
+- `results/<job>/<run-id>/` is git-ignored; commit only small summaries
+  (`results/*.json`) and final figures (`docs/figures/`).
+
+Physics-side sizing rules still apply: benchmark before sizing grids; use the C4v
+symmetry (φ over 0–45° for unpolarised light); coarse grid for optimisation, fine grid
+for final evaluation; cache lookup tables; keep peak RAM per job well under the
+runner's memory.
 
 ## Tests required
 - No physics function is merged without a test against an analytic value or a

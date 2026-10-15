@@ -14,13 +14,22 @@ dist/
 *.pem
 *.key
 
-# Generated data and caches (regenerate from scripts/)
+# Generated data and caches (regenerate from scripts/ or remote jobs)
 data/
 cache/
 *.npz
 *.npy
 *.pt
 *.h5
+
+# Remote-job artifacts are downloaded to results/<job>/<run-id>/ and never committed.
+# Small summaries (results/*.json at the top level) and final figures (docs/figures/)
+# are committed.
+results/*/
+out/
+chunks/
+resume/
+final/
 
 # Editors / OS
 .vscode/
