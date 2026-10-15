@@ -52,22 +52,23 @@ homogeneous layer of the scintillator material is added because torcwa's global
 S-matrix path assumes at least one internal layer (the zero-layer path also worked in
 a probe, but is not the documented usage).
 
-## 2026-10-15 — complex128 for validation; complex64 allowed for optimisation sweeps
-Measured (`results/m1_rcwa_benchmark.json`): complex64 is 20-30 % faster per solve on
-this CPU. Measured flat-interface deviation from Fresnel: complex128 about 3e-14,
-complex64 about 2e-5 (one-off check in the M1 session, asserted loosely in
-`tests/test_rcwa_flat.py`). Validation and final evaluation use complex128; complex64
-may be used for coarse optimisation sweeps once M2 checks its error on the patterned
-layer.
+## 2026-10-15 — complex128 everywhere
+Two benchmark runs on the same commit disagreed: in the first, complex64 was 20-30 %
+faster; in the second (the one saved in `results/m1_rcwa_benchmark.json`) it was slower
+at orders 5-9. Laptop timings vary by up to about 50 % between runs (thermal state,
+background load), so complex64 has no demonstrated speed advantage here. Its accuracy
+cost is measured: flat-interface deviation from Fresnel about 2e-5 for complex64 vs
+about 3e-14 for complex128. Decision: complex128 for everything.
 
 ## 2026-10-15 — Fourier-order plan for M2 from the benchmark
-Measured per solve (complex128, 6 threads, placeholder pillar lattice): order 7 about
-4 s, order 9 about 12 s, order 11 about 32 s; peak RSS under 1 GB at order 11. Total
-transmitted s-power changed by 0.8 % from order 7 to 9 and 0.3 % from 9 to 11.
-Plan: order 7 for optimisation sweeps, order 9 to 11 for final evaluation, to be
-confirmed by the M2 convergence study on the actual reference geometry. A coarse grid
-of about 300 angles at order 7 costs about 20 min; a fine grid of about 1700 angles at
-order 9 costs about 6 h, so the fine-grid run must be resumable.
+Per solve, complex128, 6 threads, placeholder pillar lattice, range over two runs:
+order 7 about 4 s, order 9 about 12 s, order 11 about 32-50 s; peak RSS under 1 GB.
+Total transmitted s-power changed by 0.8 % from order 7 to 9 and 0.3 % from 9 to 11;
+order 3 is 60 % off, so it is never used. Plan: order 7 for optimisation sweeps, order
+9 for final evaluation, order 11 only for spot checks, all to be confirmed by the M2
+convergence study on the actual reference geometry. A coarse grid of about 300 angles
+at order 7 costs about 20 min; a fine grid of about 1700 angles at order 9 about 6 h,
+so the fine-grid run must be resumable.
 
 ## 2026-10-15 — Small numeric outputs are committed under `results/` as JSON
 So that every number quoted in docs has a file with the commit hash that produced it.

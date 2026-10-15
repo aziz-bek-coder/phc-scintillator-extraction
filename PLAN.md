@@ -17,18 +17,18 @@ Dates revised 2026-10-15 (Aziz): pause 21 Dec 2026 to 3 Jan 2027.
 - [x] Argon works through Aziz's account; branch prefixes `claude/*`, `argon/*`, `aziz/*`
 
 ## M1 — analytic baseline + flat-interface RCWA (by 8 Nov 2026)
-- [ ] Derivation 01 (escape cone, trapping) and 02 (Fresnel, flat RCWA) written, with
+- [x] Derivation 01 (escape cone, trapping) and 02 (Fresnel, flat RCWA) written, with
       predict exercises and 3 check questions each
-- [ ] Escape-cone fraction η₁(n₁, n₂) implemented (Claude); cross-check by Argon pending
-- [ ] Analytic Fresnel r_s, r_p, t_s, t_p incl. TIR
-- [ ] torcwa flat interface reproduces Fresnel R, T (s and p) vs angle, tolerance stated
-- [ ] R + T = 1 for lossless materials within tolerance
-- [ ] Unpatterned LYSO→air, LYSO→n=1.5, BGO→air match the escape-cone estimate;
+- [x] Escape-cone fraction η₁(n₁, n₂) implemented (Claude); cross-check by Argon pending
+- [x] Analytic Fresnel r_s, r_p, t_s, t_p incl. TIR
+- [x] torcwa flat interface reproduces Fresnel R, T (s and p) vs angle, tolerance stated
+- [x] R + T = 1 for lossless materials within tolerance
+- [x] Unpatterned LYSO→air, LYSO→n=1.5, BGO→air match the escape-cone estimate;
       numbers produced by `scripts/escape_cone.py` and `scripts/fresnel_vs_rcwa.py`
-- [ ] One RCWA solve benchmarked against Fourier order (`scripts/benchmark_rcwa.py`);
+- [x] One RCWA solve benchmarked against Fourier order (`scripts/benchmark_rcwa.py`);
       grid sizes for M2 chosen from that measurement
-- [ ] Material constants cited in `docs/references.md` (PROVISIONAL until Aziz confirms)
-- [ ] xfail gate converted to normal tests
+- [x] Material constants cited in `docs/references.md` (PROVISIONAL until Aziz confirms)
+- [x] xfail gate converted to normal tests
 - [ ] `docs/status.md` updated, PR merged after CI
 
 ## M2 — angle-resolved RCWA for a reference photonic crystal (by 22 Nov 2026)

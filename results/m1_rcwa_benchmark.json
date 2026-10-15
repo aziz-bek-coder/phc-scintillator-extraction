@@ -1,0 +1,94 @@
+{
+  "provenance": {
+    "git_commit": "c85772f",
+    "utc": "2026-10-15T18:58:44+00:00",
+    "python": "3.12.6",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "machine": "AMD64"
+  },
+  "geometry": "square lattice, n_pillar=2.5, period 0.45 um, r 0.15 um, h 0.30 um, LYSO->air, theta 40 deg, phi 20 deg, 256x256 eps grid",
+  "torch_threads": 6,
+  "rows": [
+    {
+      "dtype": "c128",
+      "order": 3,
+      "n_harmonics": 49,
+      "seconds": 0.4662557998672128,
+      "T_ss_total_order00_in": 0.12305268287477056,
+      "rss_gb_after": 0.249143296
+    },
+    {
+      "dtype": "c128",
+      "order": 5,
+      "n_harmonics": 121,
+      "seconds": 1.2091127000749111,
+      "T_ss_total_order00_in": 0.08014878157442876,
+      "rss_gb_after": 0.279191552
+    },
+    {
+      "dtype": "c128",
+      "order": 7,
+      "n_harmonics": 225,
+      "seconds": 3.8585488002281636,
+      "T_ss_total_order00_in": 0.07724599016830236,
+      "rss_gb_after": 0.355946496
+    },
+    {
+      "dtype": "c128",
+      "order": 9,
+      "n_harmonics": 361,
+      "seconds": 12.185630700085312,
+      "T_ss_total_order00_in": 0.07662708341596551,
+      "rss_gb_after": 0.44980224
+    },
+    {
+      "dtype": "c128",
+      "order": 11,
+      "n_harmonics": 529,
+      "seconds": 50.01934770005755,
+      "T_ss_total_order00_in": 0.07639142667853113,
+      "rss_gb_after": 0.91754496
+    },
+    {
+      "dtype": "c64",
+      "order": 3,
+      "n_harmonics": 49,
+      "seconds": 0.44875469990074635,
+      "T_ss_total_order00_in": 0.12305257372450767,
+      "rss_gb_after": 0.908918784
+    },
+    {
+      "dtype": "c64",
+      "order": 5,
+      "n_harmonics": 121,
+      "seconds": 1.5963777999859303,
+      "T_ss_total_order00_in": 0.08014738612158559,
+      "rss_gb_after": 0.922550272
+    },
+    {
+      "dtype": "c64",
+      "order": 7,
+      "n_harmonics": 225,
+      "seconds": 5.40381980012171,
+      "T_ss_total_order00_in": 0.07724955313507731,
+      "rss_gb_after": 0.344276992
+    },
+    {
+      "dtype": "c64",
+      "order": 9,
+      "n_harmonics": 361,
+      "seconds": 19.15225589997135,
+      "T_ss_total_order00_in": 0.07662548653814653,
+      "rss_gb_after": 0.351178752
+    },
+    {
+      "dtype": "c64",
+      "order": 11,
+      "n_harmonics": 529,
+      "seconds": 40.50797410006635,
+      "T_ss_total_order00_in": 0.07639789297906298,
+      "rss_gb_after": 0.551604224
+    }
+  ]
+}
