@@ -84,3 +84,36 @@ def escape_fraction_one_face_fresnel(n1: float, n2: float, n_theta: int = 20001)
     th = np.linspace(0.0, math.pi / 2, n_theta)
     integrand = unpolarised_transmittance(n1, n2, th) * 0.5 * np.sin(th)
     return float(np.trapezoid(integrand, th))
+
+
+def thin_film_power(
+    n1: float,
+    n_film: complex,
+    n2: complex,
+    thickness_um: float,
+    wavelength_um: float,
+    theta: float | _Array,
+) -> tuple[_Array, _Array, _Array, _Array]:
+    """(R_s, R_p, T_s, T_p) of one homogeneous film between a lossless incident medium
+    n1 and exit medium n2, characteristic-matrix method (derivation 03, eq. 10).
+    Convention exp(-i omega t): decaying waves have Im(n cos theta) >= 0."""
+    th = np.asarray(theta, dtype=float)
+    cos1 = np.cos(th) + 0j
+    sin1 = np.sin(th)
+    cos_f = _cos_theta2(n1, n_film, np.cos(th), sin1)
+    cos_2 = _cos_theta2(n1, n2, np.cos(th), sin1)
+    k0 = 2 * np.pi / wavelength_um
+    delta = k0 * n_film * thickness_um * cos_f
+    out = []
+    for pol in ("s", "p"):
+        if pol == "s":
+            e1, ef, e2 = n1 * cos1, n_film * cos_f, n2 * cos_2
+        else:
+            e1, ef, e2 = n1 / cos1, n_film / cos_f, n2 / cos_2
+        b = np.cos(delta) - 1j * np.sin(delta) / ef * e2
+        c = -1j * ef * np.sin(delta) + np.cos(delta) * e2
+        r = (e1 * b - c) / (e1 * b + c)
+        t = 4 * np.real(e1) * np.real(e2) / np.abs(e1 * b + c) ** 2
+        out.append((np.abs(r) ** 2, t))
+    (r_s, t_s), (r_p, t_p) = out
+    return r_s, r_p, t_s, t_p
