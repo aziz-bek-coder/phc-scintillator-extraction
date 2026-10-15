@@ -303,10 +303,13 @@ def build_lut(
     checkpoint_seconds: float = 60.0,
     max_points: int | None = None,
     progress: Callable[[str], None] | None = print,
+    should_stop: Callable[[], bool] | None = None,
 ) -> tuple[LUT, Path]:
     """Build (or load from cache) the LUT for config. Resumable: completed points are
     checkpointed to <key>.partial.npz and skipped on restart. If max_points is given,
-    stop after that many new points and return the partial table (for tests)."""
+    stop after that many new points and return the partial table (for tests). If
+    should_stop() becomes true (a remote job's deadline), checkpoint and return the
+    partial table; meta["complete"] is False in both cases."""
     name = (config.label + "_" if config.label else "") + config.key()
     final = cache_dir / f"{name}.npz"
     partial = cache_dir / f"{name}.partial.npz"
@@ -352,6 +355,9 @@ def build_lut(
         for j, ph in enumerate(config.phi_deg):
             if done[i, j]:
                 continue
+            if should_stop is not None and should_stop():
+                checkpoint()
+                return LUT(config, orders, t_arr, r_arr, {"complete": False}), partial
             t0 = time.perf_counter()
             op = solve_phc(
                 config.n1,
