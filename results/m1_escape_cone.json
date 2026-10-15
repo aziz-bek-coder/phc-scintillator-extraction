@@ -1,0 +1,60 @@
+{
+  "provenance": {
+    "git_commit": "c85772f",
+    "utc": "2026-10-15T18:55:39+00:00",
+    "python": "3.12.6",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "machine": "AMD64"
+  },
+  "definition": "eta_1 = (1 - cos theta_c)/2; eta_1_fresnel = eq. (7) of derivation 02",
+  "cases": [
+    {
+      "case": "LYSO -> air",
+      "n1": 1.81,
+      "n2": 1.0,
+      "theta_c_deg": 33.53774359782298,
+      "eta_1": 0.08323897367911082,
+      "eta_1_fresnel": 0.07165614359059827,
+      "cones_overlap_same_n2": false
+    },
+    {
+      "case": "LYSO -> grease",
+      "n1": 1.81,
+      "n2": 1.5,
+      "theta_c_deg": 55.96842494093398,
+      "eta_1": 0.2201751540961882,
+      "eta_1_fresnel": 0.20786920220307928,
+      "cones_overlap_same_n2": true
+    },
+    {
+      "case": "BGO -> air",
+      "n1": 2.15,
+      "n2": 1.0,
+      "theta_c_deg": 27.71774768960954,
+      "eta_1": 0.05737520207734231,
+      "eta_1_fresnel": 0.046938166418863475,
+      "cones_overlap_same_n2": false
+    },
+    {
+      "case": "BGO -> grease",
+      "n1": 2.15,
+      "n2": 1.5,
+      "theta_c_deg": 44.24071879020048,
+      "eta_1": 0.14179251626164274,
+      "eta_1_fresnel": 0.1291794825197708,
+      "cones_overlap_same_n2": false
+    },
+    {
+      "case": "LYSO(n=1.82, Epic) -> air",
+      "n1": 1.82,
+      "n2": 1.0,
+      "theta_c_deg": 33.329326528789586,
+      "eta_1": 0.08223688120284917,
+      "eta_1_fresnel": 0.07068750462979292,
+      "cones_overlap_same_n2": false
+    }
+  ],
+  "lyso_six_faces_air_specular": 0.4994338420746649,
+  "lyso_grease_readout_air_sides_specular": 0.6363700224917423
+}

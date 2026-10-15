@@ -1,0 +1,76 @@
+{
+  "provenance": {
+    "git_commit": "c85772f",
+    "utc": "2026-10-15T18:56:10+00:00",
+    "python": "3.12.6",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "machine": "AMD64"
+  },
+  "azimuth_deg": 20.0,
+  "cases": [
+    {
+      "case": "LYSO -> air",
+      "n1": 1.81,
+      "n2": 1.0,
+      "wavelength_um": 0.42,
+      "R_normal_incidence": 0.08309165284127608,
+      "brewster_deg": 28.920044037606456,
+      "critical_deg": 33.53774359782298,
+      "max_abs_dev_rcwa_vs_fresnel": {
+        "R_s": 2.6645352591003757e-15,
+        "R_p": 2.842170943040401e-14,
+        "T_s": 1.8596235662471372e-15,
+        "T_p": 2.6645352591003757e-15,
+        "cross_pol_max": 2.31543001634011e-28,
+        "R_plus_T_minus_1_max": 2.886579864025407e-14
+      },
+      "eta_1_analytic": 0.08323897367911082,
+      "eta_1_geometric_from_rcwa_grid": 0.08335392655371479,
+      "eta_1_fresnel_weighted_from_rcwa_grid": 0.07177193989424531,
+      "n_theta": 181
+    },
+    {
+      "case": "LYSO -> grease",
+      "n1": 1.81,
+      "n2": 1.5,
+      "wavelength_um": 0.42,
+      "R_normal_incidence": 0.00877136937413861,
+      "brewster_deg": 39.64953722006908,
+      "critical_deg": 55.96842494093398,
+      "max_abs_dev_rcwa_vs_fresnel": {
+        "R_s": 3.774758283725532e-15,
+        "R_p": 2.842170943040401e-14,
+        "T_s": 3.497202527569243e-15,
+        "T_p": 6.106226635438361e-15,
+        "cross_pol_max": 6.480615595907054e-28,
+        "R_plus_T_minus_1_max": 2.842170943040401e-14
+      },
+      "eta_1_analytic": 0.2201751540961882,
+      "eta_1_geometric_from_rcwa_grid": 0.21994752812948148,
+      "eta_1_fresnel_weighted_from_rcwa_grid": 0.2079392102122269,
+      "n_theta": 181
+    },
+    {
+      "case": "BGO -> air",
+      "n1": 2.15,
+      "n2": 1.0,
+      "wavelength_um": 0.48,
+      "R_normal_incidence": 0.13328294280675226,
+      "brewster_deg": 24.943905263424583,
+      "critical_deg": 27.71774768960954,
+      "max_abs_dev_rcwa_vs_fresnel": {
+        "R_s": 2.6645352591003757e-15,
+        "R_p": 2.1538326677728037e-14,
+        "T_s": 1.1102230246251565e-15,
+        "T_p": 1.4432899320127035e-15,
+        "cross_pol_max": 2.6910140888868206e-27,
+        "R_plus_T_minus_1_max": 2.220446049250313e-14
+      },
+      "eta_1_analytic": 0.05737520207734231,
+      "eta_1_geometric_from_rcwa_grid": 0.056876837211029416,
+      "eta_1_fresnel_weighted_from_rcwa_grid": 0.04683386053929338,
+      "n_theta": 181
+    }
+  ]
+}
