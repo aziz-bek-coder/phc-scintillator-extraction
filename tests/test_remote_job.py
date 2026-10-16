@@ -98,3 +98,73 @@ def test_merge_flags_incomplete(tmp_path) -> None:
                 str(tmp_path / "final"),
             ]
         )
+
+
+# ---------------------------------------------------------------- M2 jobs
+
+
+def _run_all_chunks(job: str, config: str, out, n: int) -> None:
+    for c in range(n):
+        remote_job.main(
+            ["run", "--job", job, "--config", config, "--chunk", str(c), "--n-chunks", str(n),
+             "--out", str(out)]
+        )  # fmt: skip
+
+
+def test_material_names_resolve_to_materials_module() -> None:
+    from phcscint.jobs import resolve_index, resolve_wavelength
+    from phcscint.materials import LYSO, N_GREASE, n_si3n4_luke
+
+    lam = resolve_wavelength("LYSO-peak")
+    assert lam == LYSO.wavelength_um
+    assert resolve_index("LYSO", lam) == LYSO.n
+    assert resolve_index("grease", lam) == N_GREASE
+    assert resolve_index("Si3N4-Luke2015", lam) == n_si3n4_luke(lam)
+    assert resolve_index(1.7, lam) == 1.7
+    with pytest.raises(ValueError):
+        resolve_index("unobtainium", lam)
+
+
+def test_convergence_job_assigns_every_item_once_and_merges(tmp_path) -> None:
+    from phcscint.jobs import JOBS
+
+    cfg = json.loads((REPO / "configs" / "smoke_convergence.json").read_text())
+    pairs = JOBS["convergence"].assignment(cfg, 2)
+    assert len(pairs) == 3 + 2  # three orders plus two grid-check items
+    assert {owner for _, owner in pairs} == {0, 1}
+    out = tmp_path / "out"
+    _run_all_chunks("convergence", "configs/smoke_convergence.json", out, 2)
+    final = tmp_path / "final"
+    remote_job.main(["merge", "--job", "convergence", "--config", "configs/smoke_convergence.json",
+                     "--in", str(out), "--out", str(final)])  # fmt: skip
+    s = json.loads((final / "summary.json").read_text())
+    assert s["complete"] is True
+    assert len(s["rows"]) == 5
+    assert s["max_energy_error"] < 1e-9
+    assert {r["order"] for r in s["relative_change"]} == {1, 2, 3}
+    assert "grease" in s["recommended_order"]
+    assert (final / "convergence.png").exists() and (final / "convergence.csv").exists()
+
+
+def test_lut_job_chunks_merge_to_the_same_table_as_a_direct_build(tmp_path) -> None:
+    from phcscint.jobs import JOBS
+    from phcscint.lut import LUT, build_lut
+
+    out = tmp_path / "out"
+    _run_all_chunks("lut", "configs/smoke_lut.json", out, 2)
+    final = tmp_path / "final"
+    remote_job.main(["merge", "--job", "lut", "--config", "configs/smoke_lut.json",
+                     "--in", str(out), "--out", str(final)])  # fmt: skip
+    s = json.loads((final / "summary.json").read_text())
+    assert s["complete"] is True and s["lut_complete"] is True
+    assert s["max_energy_error"] < 1e-9
+    assert 0 < s["eta_single_pass_phc"] < 0.5
+    merged = LUT.load(final / s["lut_file"])
+    cfg = json.loads((REPO / "configs" / "smoke_lut.json").read_text())
+    full = JOBS["lut"].full_config(cfg)
+    assert merged.config == full
+    direct, _ = build_lut(full, cache_dir=tmp_path / "direct", progress=None)
+    import numpy as np
+
+    np.testing.assert_allclose(merged.T, direct.T, atol=1e-13)
+    np.testing.assert_allclose(merged.R, direct.R, atol=1e-13)

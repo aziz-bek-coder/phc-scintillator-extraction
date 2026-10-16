@@ -1,0 +1,12 @@
+{
+  "description": "Tiny smoke version of the convergence job, used by tests/test_remote_job.py.",
+  "n1": "LYSO",
+  "wavelength_um": "LYSO-peak",
+  "layer": {"period_um": 0.40, "radius_um": 0.12, "height_um": 0.30, "n_pillar": "Si3N4-Luke2015"},
+  "media": [{"name": "grease", "n2": "grease"}],
+  "incidences_deg": [[60.0, 30.0]],
+  "orders": [1, 2, 3],
+  "n_grid": 32,
+  "grid_check": {"order": 2, "n_grids": [16, 32], "incidence_deg": [60.0, 30.0]},
+  "chunks": 2
+}

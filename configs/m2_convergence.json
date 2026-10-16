@@ -1,0 +1,12 @@
+{
+  "description": "M2: Fourier-order and grid convergence of total transmission for the reference Si3N4 pillar lattice (derivation 03, 2e and 2l). Sized from benchmark run 38798175139: about 47 runner-minutes in total, split into 4 chunks.",
+  "n1": "LYSO",
+  "wavelength_um": "LYSO-peak",
+  "layer": {"period_um": 0.40, "radius_um": 0.12, "height_um": 0.30, "n_pillar": "Si3N4-Luke2015"},
+  "media": [{"name": "grease", "n2": "grease"}, {"name": "air", "n2": "air"}],
+  "incidences_deg": [[20.0, 0.0], [45.0, 0.0], [60.0, 0.0], [60.0, 30.0], [75.0, 20.0]],
+  "orders": [3, 5, 7, 9, 11, 13, 15],
+  "n_grid": 256,
+  "grid_check": {"order": 9, "n_grids": [128, 256, 512], "incidence_deg": [60.0, 30.0]},
+  "chunks": 4
+}

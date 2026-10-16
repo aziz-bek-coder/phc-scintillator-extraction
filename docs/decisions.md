@@ -112,8 +112,8 @@ every 60 s and resume.
 ## 2026-10-16 — The M1 benchmark overstated solve times
 `scripts/benchmark_rcwa.py` timed the solve plus a Python loop calling `S_parameters`
 once per order (529 calls at order 11). With vectorised extraction (`rcwa.solve_phc`)
-the convergence run measured roughly a third of the benchmark time per solve; see
-`seconds` in `results/m2_convergence.json`. Grid budgets above use the new numbers.
+the extraction step costs about 7 ms (remote benchmark below). The laptop numbers are
+superseded by `results/benchmark-38798175139.json`.
 
 ## 2026-10-16 — Heavy computation moves to GitHub Actions (Aziz's decision)
 The laptop overheated during about 50 minutes of RCWA runs (docs/status.md). Laptop:
@@ -170,6 +170,48 @@ JSONs at the top level of `results/` and final figures in `docs/figures/` are co
 `tests/conftest.py` sets OMP_NUM_THREADS = 2 (unless already set) before importing
 torch and calls `torch.set_num_threads`. `pytest` skips `@pytest.mark.slow` by default
 (`-m 'not slow'` in pyproject); CI overrides with `-m "slow or not slow"`.
+
+## 2026-10-16 — Repository requires SHA-pinned actions
+Enabled the Actions setting `sha_pinning_required` (checklist item 4, "pin third-party
+actions"), so a workflow that references an action by tag fails instead of running.
+
+## 2026-10-16 — Grids sized from the remote benchmark (run 38798175139)
+Runner: GitHub-hosted, 2 vCPU AMD EPYC 9V74 (private-repository runner), torch on 2
+threads. Reference pillar lattice, θ = 60°, φ = 30°, complex128, n_grid 256, median of
+3 repeats (spread under 1 %); numbers in `results/benchmark-38798175139.json`, figure
+`docs/figures/benchmark_rcwa_remote.png`.
+
+| Order M | Harmonics | Forward solve | Backward pass |
+|---|---|---|---|
+| 5 | 121 | 0.44 s | 0.29 s |
+| 7 | 225 | 2.45 s | 1.76 s |
+| 9 | 361 | 9.5 s | 7.2 s |
+| 11 | 529 | 28.6 s | not measured |
+| 13 | 729 | 73 s | not measured |
+
+Time grows as (harmonics)^2.89 for M ≥ 7; extraction of all order powers costs 7 ms;
+peak memory 1.7 GB at M = 13; energy conserved to 4e-13. Choices, per runner:
+- Convergence study: orders 3–15 at 10 incidences plus a grid check, about 47
+  runner-minutes, 4 chunks. Order 15 is added so that order 13 has an error estimate.
+- Coarse LUT, order 7 (2° × 5°, 450 solves): 18 runner-minutes, 2 chunks. For M3
+  development and M4 screening.
+- Fine LUT, order 9 (1° × 2.5°, 1710 solves): 4.5 runner-hours, 4 chunks of about
+  70 minutes. For the final evaluation of each design.
+- Order 11 on the fine grid would take 13.6 runner-hours: not planned; order-11 spot
+  checks only.
+- M4 gradient steps at order 5 with 72 incidences: 0.9 runner-minutes per step, so 4
+  starts × 50 steps ≈ 3 runner-hours in 4 chunks; candidates re-checked at order 7
+  (about 5 minutes per evaluation) before the fine-grid Monte Carlo.
+Orders used for final numbers are confirmed by the remote convergence study. Public
+4-vCPU runners should be faster; rerun the benchmark after publication.
+
+## 2026-10-16 — Job code in `src/phcscint/jobs.py`; laptop-made M2 results removed
+The benchmark, convergence and lut jobs live in the package (standard-library imports at
+module level, so the plan step needs no installation); `scripts/remote_job.py` is the
+command line. `scripts/convergence.py` and `scripts/build_lut.py` were removed because
+their logic moved into the jobs, and the laptop-made `results/m2_convergence.json` and
+its figure were removed: those numbers will come from the remote convergence job.
+Configs name materials ("LYSO", "grease", "Si3N4-Luke2015") instead of copying numbers.
 
 ## Open
 - Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
