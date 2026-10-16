@@ -1,7 +1,8 @@
 # 05 — A differentiable objective for early photons, and the optimisation
 
-Written by Claude (agent). Code: `src/phcscint/optimize.py`. Scripts:
-`scripts/optimize_design.py`, `scripts/compare_designs.py`.
+Written by Claude (agent). Code: `src/phcscint/optimize.py`; remote jobs `optimize` and
+`ordercheck` in `src/phcscint/jobs.py` (configs `configs/m4_*.json`). Scripts:
+`scripts/check_early_yield.py`, `scripts/make_m4_configs.py`, `scripts/key_figure.py`.
 
 ## Part 1 — Predict
 
