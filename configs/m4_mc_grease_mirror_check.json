@@ -1,0 +1,69 @@
+{
+  "description": "M4 check of derivation 05, eq. (1), with the fine grease tables: ideal mirror walls (no loss at the side faces), so the early yields (tau < t_dir) must equal eq. (1) of the lookup model. Compare with configs/m4_mc_grease.json (rho 0.95 wraps).",
+  "pixel": {
+    "n1": "LYSO",
+    "wavelength_um": "LYSO-peak",
+    "lx_um": 3000,
+    "ly_um": 3000,
+    "lz_um": 20000
+  },
+  "t_max_ps": 300,
+  "n_photons_per_chunk": 500000,
+  "chunks_per_case": 2,
+  "seed": 20261020,
+  "tau_ps": [
+    50,
+    100
+  ],
+  "t_grid_ps": {
+    "stop": 300,
+    "step": 10
+  },
+  "cases": [
+    {
+      "name": "reference PhC, mirror walls",
+      "walls": {
+        "kind": "specular",
+        "reflectivity": 1.0
+      },
+      "readout": {
+        "n_out": "grease",
+        "lut": {
+          "run_id": 38931698470,
+          "artifact": "lut-result",
+          "file": "ref_lyso_grease_fine_M9_426c69943168.npz"
+        }
+      }
+    },
+    {
+      "name": "optimised: early photons, mirror walls",
+      "walls": {
+        "kind": "specular",
+        "reflectivity": 1.0
+      },
+      "readout": {
+        "n_out": "grease",
+        "lut": {
+          "run_id": 38931708295,
+          "artifact": "lut-result",
+          "file": "opt_early_lyso_grease_fine_M9_11257d45d072.npz"
+        }
+      }
+    },
+    {
+      "name": "optimised: single pass, mirror walls",
+      "walls": {
+        "kind": "specular",
+        "reflectivity": 1.0
+      },
+      "readout": {
+        "n_out": "grease",
+        "lut": {
+          "run_id": 38931717766,
+          "artifact": "lut-result",
+          "file": "opt_single_pass_lyso_grease_fine_M9_346245ba92e6.npz"
+        }
+      }
+    }
+  ]
+}
