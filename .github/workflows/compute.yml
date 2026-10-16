@@ -87,6 +87,7 @@ jobs:
             || echo "no checkpoint for chunk $CHUNK in run $RESUME; starting fresh"
       - name: Run chunk
         env:
+          GH_TOKEN: ${{ github.token }}  # read-only; lets a job download an earlier run's artifact
           JOB: ${{ inputs.job }}
           CONFIG: ${{ inputs.config }}
           CHUNK: ${{ matrix.chunk }}

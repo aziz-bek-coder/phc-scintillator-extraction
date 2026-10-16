@@ -803,4 +803,295 @@ class LutJob(Job):
         return result
 
 
-JOBS: dict[str, Job] = {j.name: j for j in (Benchmark(), Convergence(), LutJob())}
+# ----------------------------------------------------------------------------- Monte Carlo
+
+
+class MonteCarlo(Job):
+    """Monte Carlo of one pixel (derivation 04) for a list of cases.
+
+    Config keys: pixel {n1, wavelength_um, lx_um, ly_um, lz_um, n_group, abs_length_um},
+    t_max_ps, n_photons_per_chunk, chunks_per_case, seed, tau_ps, t_grid_ps {stop, step},
+    cases [{name, walls, readout, analytic?}]. walls is one wall dict or five (faces -x,
+    +x, -y, +y, back); readout is {n_out} for a bare face or {n_out, lut: {run_id,
+    artifact, file}} (downloaded with gh) or {n_out, lut: {path}} for a local table.
+    analytic {"type": "specular_box", "back": "mirror" | "bare"} adds the eq. (5)
+    oracle of derivation 04 to the summary, with residuals in units of sigma.
+    Chunk c runs case c // chunks_per_case with its own seed stream."""
+
+    name = "mc"
+
+    def n_chunks(self, cfg: dict[str, Any]) -> int:
+        return len(cfg["cases"]) * int(cfg.get("chunks_per_case", 1))
+
+    @staticmethod
+    def _pixel(cfg, case: dict[str, Any] | None = None):
+        """Pixel from cfg["pixel"], with optional per-case overrides in case["pixel"]."""
+        from phcscint.montecarlo import Pixel
+
+        p = {**cfg["pixel"], **((case or {}).get("pixel", {}))}
+        lam = resolve_wavelength(p["wavelength_um"])
+        return Pixel(
+            n1=resolve_index(p["n1"], lam),
+            wavelength_um=lam,
+            lx_um=float(p.get("lx_um", 3000.0)),
+            ly_um=float(p.get("ly_um", 3000.0)),
+            lz_um=float(p.get("lz_um", 20000.0)),
+            n_group=p.get("n_group"),
+            abs_length_um=float(p["abs_length_um"]) if p.get("abs_length_um") else math.inf,
+        )
+
+    @staticmethod
+    def _walls(spec, lam):
+        from phcscint.montecarlo import Wall
+
+        specs = spec if isinstance(spec, list) else [spec] * 5
+        if len(specs) != 5:
+            raise ValueError("walls: one dict or five (-x, +x, -y, +y, back)")
+        return tuple(
+            Wall(
+                kind=w["kind"],
+                reflectivity=float(w.get("reflectivity", 1.0)),
+                n_outside=resolve_index(w.get("n_outside", "air"), lam),
+            )
+            for w in specs
+        )
+
+    @staticmethod
+    def lut_path(lut_spec: dict[str, Any]) -> Path:
+        """Local path of the case's LUT, downloading the artifact with gh if needed into
+        $PHC_INPUTS_DIR (default ./inputs, outside the uploaded output directory)."""
+        import subprocess
+
+        if "path" in lut_spec:
+            return Path(lut_spec["path"])
+        base = Path(os.environ.get("PHC_INPUTS_DIR", "inputs"))
+        dest = base / str(lut_spec["run_id"]) / lut_spec["artifact"]
+        target = dest / lut_spec["file"]
+        if not target.exists():
+            dest.mkdir(parents=True, exist_ok=True)
+            cmd = ["gh", "run", "download", str(lut_spec["run_id"]), "-n", lut_spec["artifact"]]
+            cmd += ["-D", str(dest)]
+            if os.environ.get("GITHUB_REPOSITORY"):
+                cmd += ["-R", os.environ["GITHUB_REPOSITORY"]]
+            subprocess.run(cmd, check=True)
+        return target
+
+    def _readout(self, spec, lam, n1):
+        from phcscint.lut import LUT
+        from phcscint.montecarlo import Readout
+
+        n_out = resolve_index(spec["n_out"], lam)
+        if "lut" not in spec:
+            return Readout(n_out), None
+        path = self.lut_path(spec["lut"])
+        lut = LUT.load(path)
+        if abs(lut.config.n1 - n1) > 1e-12:
+            raise ValueError("LUT built for a different scintillator index")
+        info = {
+            "lut_file": path.name,
+            "lut_key": lut.config.key(),
+            "lut_label": lut.config.label,
+            "lut_built_at_commits": lut.meta.get("built_at_commits"),
+            "lut_order": lut.config.order,
+            "lut_grid": [len(lut.config.theta_deg), len(lut.config.phi_deg)],
+            **{k: v for k, v in spec["lut"].items() if k != "path"},
+        }
+        return Readout(n_out, lut), info
+
+    def run(self, cfg, chunk, n_chunks, workdir, deadline) -> bool:
+        import numpy as np
+
+        from phcscint import montecarlo as mc
+
+        per = int(cfg.get("chunks_per_case", 1))
+        ci, si = divmod(chunk, per)
+        case = cfg["cases"][ci]
+        out = workdir / f"case{ci:02d}_part{si:02d}.npz"
+        if out.exists():
+            return True
+        if deadline.expired():
+            return False
+        pixel = self._pixel(cfg, case)
+        walls = self._walls(case["walls"], pixel.wavelength_um)
+        readout, lut_info = self._readout(case["readout"], pixel.wavelength_um, pixel.n1)
+        rng = np.random.default_rng(np.random.SeedSequence([int(cfg["seed"]), ci, si]))
+        t0 = time.perf_counter()
+        res = mc.run(
+            pixel,
+            walls,
+            readout,
+            int(cfg["n_photons_per_chunk"]),
+            rng,
+            t_max_ps=float(cfg["t_max_ps"]),
+        )
+        seconds = time.perf_counter() - t0
+        meta = {
+            "case": case["name"],
+            "case_index": ci,
+            "part": si,
+            "n_emitted": res.n_emitted,
+            "counts": res.counts,
+            "photon_steps": res.meta["photon_steps"],
+            "seconds": seconds,
+            "lut": lut_info,
+        }
+        tmp = workdir / (out.name + ".tmp.npz")
+        np.savez_compressed(
+            tmp, times_ps=res.times_ps, readout_hits=res.readout_hits, meta=json.dumps(meta)
+        )
+        os.replace(tmp, out)
+        print(json.dumps(meta), flush=True)
+        return True
+
+    def merge(self, cfg, chunk_dirs, out) -> dict[str, Any]:
+        import csv
+
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        from phcscint.timing import (
+            binomial_sigma,
+            cdf_from_times,
+            direct_transit_ps,
+            fresnel_R,
+            fresnel_T,
+            mirror,
+            specular_box_cdf,
+        )
+
+        pixel0 = self._pixel(cfg)
+        parts: dict[int, list] = {}
+        for d in chunk_dirs:
+            for f in sorted(d.glob("case*_part*.npz")):
+                if f.name.endswith(".tmp.npz"):
+                    continue
+                with np.load(f, allow_pickle=False) as z:
+                    meta = json.loads(str(z["meta"]))
+                    parts.setdefault(meta["case_index"], []).append(
+                        (meta, z["times_ps"].copy(), z["readout_hits"].copy())
+                    )
+        g = cfg.get("t_grid_ps", {})
+        t_grid = np.arange(
+            0.0, float(g.get("stop", cfg["t_max_ps"])) + 1e-9, float(g.get("step", 5))
+        )
+        taus = [float(t) for t in cfg.get("tau_ps", [50, 100, 200])]
+        cases_out = []
+        curves = {}
+        for ci, case in enumerate(cfg["cases"]):
+            if ci not in parts:
+                continue
+            pixel = self._pixel(cfg, case)
+            metas = [m for m, _, _ in parts[ci]]
+            times = np.concatenate([t for _, t, _ in parts[ci]])
+            hits = np.concatenate([h for _, _, h in parts[ci]])
+            n = sum(m["n_emitted"] for m in metas)
+            counts = {k: sum(m["counts"][k] for m in metas) for k in metas[0]["counts"]}
+            cdf = cdf_from_times(times, n, t_grid)
+            curves[case["name"]] = cdf
+            eff = counts["detected"] / n
+            row = {
+                "name": case["name"],
+                "walls": case["walls"],
+                "readout": {k: v for k, v in case["readout"].items() if k != "lut"},
+                "lut": metas[0].get("lut"),
+                "n_emitted": n,
+                "parts": len(metas),
+                "pixel_overrides": case.get("pixel", {}),
+                "counts": counts,
+                "efficiency_at_t_max": eff,
+                "efficiency_sigma": float(binomial_sigma(eff, n)),
+                "first_pass_fraction": float(np.count_nonzero(hits == 1) / n),
+                "early_yield": {
+                    f"{t:g}": {
+                        "value": float(np.count_nonzero(times <= t) / n),
+                        "sigma": float(binomial_sigma(np.count_nonzero(times <= t) / n, n)),
+                    }
+                    for t in taus
+                },
+                "median_detected_time_ps": float(np.median(times)) if times.size else None,
+                "runner_seconds": sum(m["seconds"] for m in metas),
+                "photon_steps": sum(m["photon_steps"] for m in metas),
+            }
+            an = case.get("analytic")
+            if an and an.get("type") == "specular_box":
+                n_out = resolve_index(case["readout"]["n_out"], pixel.wavelength_um)
+                back = mirror if an.get("back", "mirror") == "mirror" else fresnel_R(pixel.n1, 1.0)
+                check = t_grid[t_grid > 0]
+                exp = specular_box_cdf(
+                    check,
+                    n_group=pixel.ng,
+                    lz_um=pixel.lz_um,
+                    readout_T=fresnel_T(pixel.n1, n_out),
+                    back_R=back,
+                    abs_length_um=pixel.abs_length_um,
+                )
+                got = cdf_from_times(times, n, check)
+                sig = np.maximum(binomial_sigma(exp, n), 1e-12)
+                z = (got - exp) / sig
+                f_inf = None
+                if math.isinf(pixel.abs_length_um):
+                    f_inf = float(
+                        specular_box_cdf(
+                            math.inf,
+                            n_group=pixel.ng,
+                            lz_um=pixel.lz_um,
+                            readout_T=fresnel_T(pixel.n1, n_out),
+                            back_R=back,
+                        )[0]
+                    )
+                row["analytic"] = {
+                    "type": "specular_box",
+                    "back": an.get("back", "mirror"),
+                    "max_abs_z": float(np.max(np.abs(z))),
+                    "rms_z": float(np.sqrt(np.mean(z**2))),
+                    "points": int(check.size),
+                    "F_at_t_max_analytic": float(exp[-1]),
+                    "F_at_t_max_mc": float(got[-1]),
+                    "F_infinity_analytic": f_inf,
+                }
+                curves[case["name"] + " (analytic)"] = np.concatenate([[0.0], exp])
+            cases_out.append(row)
+
+        with (out / "mc_cdf.csv").open("w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            names = list(curves)
+            w.writerow(["t_ps", *names])
+            for i, t in enumerate(t_grid):
+                w.writerow([f"{t:g}", *[f"{curves[k][i]:.6g}" for k in names]])
+
+        fig, axes = plt.subplots(1, 2, figsize=(10, 3.9))
+        t_dir = direct_transit_ps(pixel0.lz_um, pixel0.ng)
+        for name, cdf in curves.items():
+            style = "--" if name.endswith("(analytic)") else "-"
+            for ax in axes:
+                ax.plot(t_grid, cdf, style, lw=1.4, label=name)
+        for ax in axes:
+            ax.axvline(t_dir, color="grey", ls=":", lw=1)
+            ax.set_xlabel("transport time [ps]")
+            ax.grid(True, alpha=0.3)
+        axes[0].set_xlim(0, min(t_grid[-1], 3 * t_dir))
+        axes[0].set_ylabel("detected per emitted photon, cumulative")
+        axes[0].set_title("early part (dotted line: direct transit)", fontsize=9)
+        axes[1].set_title(f"up to t_max = {cfg['t_max_ps']:g} ps", fontsize=9)
+        axes[1].legend(fontsize=7, loc="lower right")
+        fig.suptitle(cfg.get("description", "")[:110], fontsize=8)
+        fig.tight_layout()
+        fig.savefig(out / "mc_cdf.png", dpi=130)
+        return {
+            "pixel": {
+                "n1": pixel0.n1,
+                "n_group": pixel0.ng,
+                "size_um": [pixel0.lx_um, pixel0.ly_um, pixel0.lz_um],
+                "abs_length_um": None
+                if math.isinf(pixel0.abs_length_um)
+                else pixel0.abs_length_um,
+                "direct_transit_ps": t_dir,
+            },
+            "cases": cases_out,
+        }
+
+
+JOBS: dict[str, Job] = {j.name: j for j in (Benchmark(), Convergence(), LutJob(), MonteCarlo())}

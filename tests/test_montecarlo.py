@@ -8,8 +8,8 @@ import pytest
 
 from phcscint import montecarlo as mc
 from phcscint.fresnel import fresnel_power
-from phcscint.lut import LUT, LUTConfig, build_lut, inclusive_grid, midpoint_grid
-from phcscint.materials import LYSO, N_AIR, N_GREASE, n_si3n4_luke
+from phcscint.lut import LUT, LUTConfig, inclusive_grid, midpoint_grid
+from phcscint.materials import LYSO, N_AIR, N_GREASE
 from phcscint.rcwa import PhCLayer, order_window
 from phcscint.timing import (
     binomial_sigma,
@@ -36,6 +36,7 @@ def _assert_matches(res: mc.MCResult, expected: np.ndarray, extra: float = 5e-4)
 @pytest.mark.parametrize(
     "side", [mc.Wall("lambertian", 1.0), mc.Wall("specular", 0.95)], ids=["lambertian", "rho95"]
 )
+@pytest.mark.slow
 def test_negative_control_wrong_walls_fail_the_oracle(side, rng) -> None:
     """The oracle comparison must have power: wall models that do change |w| or lose
     light at the sides must deviate by far more than the tolerance (measured in the M3
@@ -98,6 +99,7 @@ SIDE_MODELS = [
 
 @pytest.mark.parametrize("side", SIDE_MODELS, ids=lambda w: f"{w.kind}-{w.reflectivity}")
 @pytest.mark.parametrize("back", ["mirror", "bare"])
+@pytest.mark.slow
 def test_specular_box_matches_analytic(side, back, rng) -> None:
     """Derivation 04, eq. (5) and 2h: for LYSO with grease readout, every side model
     with air outside (or a perfect mirror) gives the same detected-time CDF, because
@@ -121,6 +123,7 @@ def test_specular_box_matches_analytic(side, back, rng) -> None:
     _assert_matches(res, expected)
 
 
+@pytest.mark.slow
 def test_readout_into_air_matches_analytic(rng) -> None:
     res = mc.run(PIXEL, mc.Wall("bare"), mc.Readout(N_AIR), N, rng, t_max_ps=T_MAX)
     expected = specular_box_cdf(
@@ -133,6 +136,7 @@ def test_readout_into_air_matches_analytic(rng) -> None:
     _assert_matches(res, expected)
 
 
+@pytest.mark.slow
 def test_absorption_matches_analytic(rng) -> None:
     pix = mc.Pixel(n1=LYSO.n, wavelength_um=0.42, abs_length_um=50_000.0)
     res = mc.run(pix, mc.Wall("specular", 1.0), mc.Readout(N_GREASE), N, rng, t_max_ps=T_MAX)
@@ -162,6 +166,7 @@ def test_analytic_long_time_limit_is_two_eta() -> None:
     assert f_late == pytest.approx(f_inf, abs=2e-3)
 
 
+@pytest.mark.slow
 def test_lambertian_lossless_detects_everything(rng) -> None:
     """Derivation 04, 2g: lossless diffuse walls, the readout is the only sink."""
     res = mc.run(
@@ -212,6 +217,7 @@ def _fresnel_lut() -> LUT:
     return LUT(cfg, orders, T, R)
 
 
+@pytest.mark.slow
 def test_lut_readout_reproduces_bare_readout(rng) -> None:
     res = mc.run(
         PIXEL,
@@ -227,3 +233,14 @@ def test_lut_readout_reproduces_bare_readout(rng) -> None:
     _assert_matches(res, expected)
 
 
+def test_specular_box_smoke_fast(rng) -> None:
+    """Fast version of the oracle test for laptops: N = 6000, so sigma <= 6.5e-3 and the
+    4-sigma tolerance only catches gross errors. The full-statistics versions are
+    marked slow and run in CI."""
+    n = 6000
+    res = mc.run(PIXEL, mc.Wall("specular", 1.0), mc.Readout(N_GREASE), n, rng, t_max_ps=T_MAX)
+    expected = specular_box_cdf(
+        T_GRID, n_group=PIXEL.ng, lz_um=PIXEL.lz_um, readout_T=fresnel_T(LYSO.n, N_GREASE)
+    )
+    tol = 4 * binomial_sigma(expected, n) + 5e-4
+    assert np.all(np.abs(res.cdf(T_GRID) - expected) <= tol)
