@@ -246,10 +246,14 @@ timings in result files are informative only, never a result.
   Early-photon yields do not depend on it; totals by 5 ns do.
 - No bulk absorption in design comparisons until a LYSO absorption length is cited.
 
-## 2026-10-16 — Pull requests are merged with the noreply author email
+## 2026-10-16 — Pull requests are merged by fast-forward, never by a GitHub merge commit
 `gh pr merge` lets GitHub author the merge commit with the account's primary email,
-which put the Gmail address on the merge commits of PRs #2 and #3. Every merge now
-uses `gh pr merge <n> --merge --author-email 262705928+aziz-bek-coder@users.noreply.github.com`.
+which put the Gmail address on the merge commits of PRs #2 and #3. Asking for the
+noreply address (`gh pr merge --author-email ...`) was rejected by GitHub ("Invalid
+email address"), apparently because the account's email privacy setting is off. So
+merges are fast-forwards of the CI-green PR branch after merging `main` into it (agent
+author, noreply email); GitHub marks the PR merged (PR #4 was merged this way). No
+commit hashes change, so result provenance stays valid.
 
 ## Open
 - Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);

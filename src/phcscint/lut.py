@@ -295,6 +295,15 @@ class LUT:
             out["trapped_part"] = float(per_theta[~below].sum())
         return out
 
+    def weighted_single_pass(self, weight) -> float:
+        """Eq. (9) of derivation 03 with an angular weight w(theta) inside the integral,
+        e.g. derivation 05, eq. (1): the early-photon yield from the first pass."""
+        th, ph = self.theta, self.phi
+        dth = th[1] - th[0]
+        phi_int = np.trapezoid(self.T.sum(axis=-1), ph, axis=1)
+        w = np.array([weight(float(t)) for t in th])
+        return float(np.sum(8 * phi_int * w * np.sin(th) * dth / (4 * math.pi)))
+
 
 def build_lut(
     config: LUTConfig,

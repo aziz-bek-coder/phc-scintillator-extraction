@@ -1,0 +1,18 @@
+{
+  "description": "M4: Adam ascent of the single_pass objective (derivation 05), LYSO -> grease, Si3N4 pillars, order 5, 18 x 4 incidences; start 0 is the Knapitsch-style reference.",
+  "n1": "LYSO",
+  "n2": "grease",
+  "wavelength_um": "LYSO-peak",
+  "n_pillar": "Si3N4-Luke2015",
+  "objective": "single_pass",
+  "tau_ps": 100,
+  "lz_um": 20000,
+  "n_group": null,
+  "order": 5,
+  "grid": {"n_theta": 18, "n_phi": 4},
+  "bounds": {"period_um": [0.20, 1.00], "fill": [0.05, 0.60], "height_um": [0.05, 0.80]},
+  "steps": 30,
+  "lr": 0.15,
+  "starts": [[0.40, 0.2827, 0.30], [0.25, 0.30, 0.20], [0.32, 0.45, 0.45], [0.55, 0.20, 0.35]],
+  "recheck_order": 7
+}

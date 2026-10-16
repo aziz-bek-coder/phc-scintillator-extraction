@@ -45,10 +45,22 @@ The cosine weight is the whole difference between optimising for light yield and
 optimising for timing: a photon extracted at grazing angle (cos θ small) counts fully
 in η₁ but arrives late, because it needed a long path to reach the readout.
 
+Two consequences of (1). First, for every τ < t_dir we have s_τ < Lz, so the minimum
+is never 1 and E(τ) = (s_τ / Lz) (1/4π) ∫ dΩ T cos θ: the design that maximises early
+photons is the same for every τ below the direct transit time; τ only sets the scale.
+Second, the bounds. A readout that transmitted everything (T = 1) would reach
+E = s_τ / (4 Lz), which is 0.828 / 4 ≈ 20.7 % at 100 ps. Light from inside the
+escape cone can contribute at most (s_τ / Lz) sin²θc / 4 = (s_τ / Lz)(n2/n1)² / 4,
+about 13.5 % for grease and 6.3 % for air. The bare face already gets most of that, so
+any real gain must come from the trapped band, and there is far more room for an
+air-coupled readout than for a grease-coupled one.
+
 Scope of (1): exact for the side models above when absorption over ~20 mm is
 negligible. With `lambertian` or `wrapped_lambertian` side faces the sign of d_z can
 flip at a side face and (1) is only an approximation; the Monte Carlo evaluates the
-real thing. (1) is checked against the Monte Carlo in `tests/test_optimize.py`.
+real thing. (1) was checked against the M3 Monte Carlo by
+`scripts/check_early_yield.py` (results in `results/m4_early_yield_check.json`,
+quoted in docs/status.md).
 
 ### 2c. Differentiable evaluation
 By C4v symmetry, ∫ dΩ = 8 ∫_0^{π/4} dφ ∫_0^{π/2} sin θ dθ. On the optimisation grid
@@ -69,7 +81,17 @@ r centred in a square cell of side a (area fraction f),
 with the limit f at G = 0 (J₁ the Bessel function of the first kind). (4) is exact and
 smooth in r and a, unlike a pixelated disk whose FFT changes in steps as r crosses
 pixel edges. The code builds the convolution matrix from (4) directly and checks it
-against the real-space FFT path at fine grids.
+against the real-space FFT path at fine grids. J₁ itself is computed from
+J₁(x) = (1/2π) ∫_{−π}^{π} cos(τ − x sin τ) dτ with the trapezoid rule, which for a
+periodic integrand converges exponentially; torch's own Bessel function has no
+gradient.
+
+Two implementation details matter for the gradient. The calculation runs in units of
+the period (frequency a/λ, radius r/a, height h/a), so the period is a smooth input
+like the other two. And evanescent transmitted orders are left out of the sum before
+torcwa is called: they carry no power, but torcwa's power normalisation takes
+sqrt(k_z), whose derivative is infinite at k_z = 0, and a first version returned NaN
+gradients because of it. The gradient is tested against finite differences.
 
 ### 2d. Parameterisation and bounds
 Unconstrained variables x ∈ ℝ³ are mapped by sigmoids to

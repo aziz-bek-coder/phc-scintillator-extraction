@@ -1,0 +1,10 @@
+{
+  "description": "Tiny smoke version of the optimize job, used by tests/test_remote_job.py.",
+  "n1": "LYSO", "n2": "grease", "wavelength_um": "LYSO-peak", "n_pillar": "Si3N4-Luke2015",
+  "objective": "early", "tau_ps": 100, "lz_um": 20000, "n_group": null,
+  "order": 1, "grid": {"n_theta": 2, "n_phi": 1},
+  "bounds": {"period_um": [0.20, 1.00], "fill": [0.05, 0.60], "height_um": [0.05, 0.80]},
+  "steps": 2, "lr": 0.15,
+  "starts": [[0.40, 0.2827, 0.30], [0.30, 0.40, 0.20]],
+  "recheck_order": 2
+}

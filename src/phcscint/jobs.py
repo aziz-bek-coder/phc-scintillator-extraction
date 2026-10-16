@@ -1094,4 +1094,171 @@ class MonteCarlo(Job):
         }
 
 
-JOBS: dict[str, Job] = {j.name: j for j in (Benchmark(), Convergence(), LutJob(), MonteCarlo())}
+# ----------------------------------------------------------------------------- optimisation
+
+
+class Optimize(Job):
+    """Gradient ascent of the early-photon objective (derivation 05) or of the single-pass
+    extraction, from several starting designs (one chunk per start). Each step is
+    checkpointed to history.json; a resumed chunk continues from its last step.
+
+    Config keys: n1, n2, wavelength_um, n_pillar, objective ("early" | "single_pass"),
+    tau_ps, lz_um, n_group, order, grid {n_theta, n_phi}, bounds {period_um, fill,
+    height_um}, steps, lr, starts [[period_um, fill, height_um], ...], recheck_order."""
+
+    name = "optimize"
+
+    def n_chunks(self, cfg: dict[str, Any]) -> int:
+        return len(cfg["starts"])
+
+    @staticmethod
+    def _setup(cfg):
+        from phcscint import optimize as opt
+
+        lam = resolve_wavelength(cfg["wavelength_um"])
+        n1 = resolve_index(cfg["n1"], lam)
+        n2 = resolve_index(cfg["n2"], lam)
+        n_p = resolve_index(cfg["n_pillar"], lam)
+        b = cfg.get("bounds", {})
+        bounds = opt.Bounds(
+            period_um=tuple(b.get("period_um", (0.20, 1.00))),
+            fill=tuple(b.get("fill", (0.05, 0.60))),
+            height_um=tuple(b.get("height_um", (0.05, 0.80))),
+        )
+        if cfg["objective"] == "early":
+            ng = cfg.get("n_group") or n1
+            weight = opt.early_weight(float(cfg["tau_ps"]), float(cfg["lz_um"]), ng)
+        elif cfg["objective"] == "single_pass":
+
+            def weight(theta: float) -> float:  # derivation 03, eq. (9)
+                return 1.0
+
+        else:
+            raise ValueError(f"unknown objective {cfg['objective']!r}")
+        grid = opt.AngleGrid(**cfg.get("grid", {"n_theta": 18, "n_phi": 4}))
+        return opt, lam, n1, n2, n_p, bounds, weight, grid
+
+    def run(self, cfg, chunk, n_chunks, workdir, deadline) -> bool:
+        set_threads()
+        opt, lam, n1, n2, n_p, bounds, weight, grid = self._setup(cfg)
+        path = workdir / "history.json"
+        history = json.loads(path.read_text()) if path.exists() else []
+
+        def save(h):
+            write_json(path, h)
+            last = h[-1]
+            print(
+                f"start {chunk} step {last['step']}: J={last['objective']:.6f} "
+                f"a={last['period_um']:.4f} f={last['fill']:.4f} h={last['height_um']:.4f}",
+                flush=True,
+            )
+
+        history = opt.optimise(
+            cfg["starts"][chunk],
+            bounds,
+            weight,
+            n1,
+            n2,
+            lam,
+            n_p,
+            grid,
+            order=int(cfg["order"]),
+            steps=int(cfg["steps"]),
+            lr=float(cfg["lr"]),
+            history=history,
+            on_step=save,
+            should_stop=deadline.expired,
+        )
+        return len(history) >= int(cfg["steps"])
+
+    def merge(self, cfg, chunk_dirs, out) -> dict[str, Any]:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        opt, lam, n1, n2, n_p, bounds, weight, grid = self._setup(cfg)
+        runs = []
+        for d in chunk_dirs:
+            p = d / "history.json"
+            meta = d / "chunk.json"
+            if p.exists() and meta.exists():
+                runs.append((json.loads(meta.read_text())["chunk"], json.loads(p.read_text())))
+        runs.sort(key=lambda r: r[0])
+        if not runs:
+            return {}
+        best_c, best_s = max(
+            ((c, s) for c, h in runs for s in h), key=lambda cs: cs[1]["objective"]
+        )
+        keys = ("objective", "period_um", "fill", "height_um", "radius_um")
+        result: dict[str, Any] = {
+            "objective_kind": cfg["objective"],
+            "n1": n1,
+            "n2": n2,
+            "n_pillar": n_p,
+            "order": int(cfg["order"]),
+            "grid": {"n_theta": grid.n_theta, "n_phi": grid.n_phi},
+            "bare_objective_same_grid": opt.bare_objective(weight, n1, n2, grid),
+            "starts": [
+                {
+                    "chunk": c,
+                    "start": cfg["starts"][c],
+                    "steps": len(h),
+                    "initial_objective": h[0]["objective"],
+                    "final": {k: h[-1][k] for k in keys},
+                    "best_objective": max(s["objective"] for s in h),
+                }
+                for c, h in runs
+            ],
+            "best": {"start_chunk": best_c, "step": best_s["step"]} | {k: best_s[k] for k in keys},
+        }
+        recheck = cfg.get("recheck_order")
+        if recheck:
+            b = result["best"]
+            s0 = cfg["starts"][0]
+            result["recheck"] = {
+                "order": int(recheck),
+                "best_objective": opt.objective(
+                    weight,
+                    n1,
+                    n2,
+                    lam,
+                    n_p,
+                    b["period_um"],
+                    b["fill"],
+                    b["height_um"],
+                    grid,
+                    order=int(recheck),
+                ),  # fmt: skip
+                "start0": s0,
+                "start0_objective": opt.objective(
+                    weight, n1, n2, lam, n_p, *s0, grid, order=int(recheck)
+                ),
+            }
+
+        fig, axes = plt.subplots(1, 4, figsize=(15, 3.4))
+        for c, h in runs:
+            steps = [s["step"] for s in h]
+            axes[0].plot(steps, [100 * s["objective"] for s in h], label=f"start {c}")
+            axes[1].plot(steps, [s["period_um"] for s in h])
+            axes[2].plot(steps, [s["fill"] for s in h])
+            axes[3].plot(steps, [s["height_um"] for s in h])
+        axes[0].axhline(
+            100 * result["bare_objective_same_grid"], color="k", ls="--", lw=1, label="bare"
+        )
+        axes[0].set_ylabel("objective [%]")
+        titles = ("objective", "period [µm]", "fill factor", "height [µm]")
+        for ax, name in zip(axes, titles, strict=True):
+            ax.set_xlabel("Adam step")
+            ax.set_title(name, fontsize=9)
+            ax.grid(True, alpha=0.3)
+        axes[0].legend(fontsize=7)
+        fig.suptitle(cfg.get("description", "")[:120], fontsize=8)
+        fig.tight_layout()
+        fig.savefig(out / "optimize.png", dpi=130)
+        return result
+
+
+JOBS: dict[str, Job] = {
+    j.name: j for j in (Benchmark(), Convergence(), LutJob(), MonteCarlo(), Optimize())
+}

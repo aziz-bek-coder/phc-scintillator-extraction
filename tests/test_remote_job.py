@@ -168,3 +168,22 @@ def test_lut_job_chunks_merge_to_the_same_table_as_a_direct_build(tmp_path) -> N
 
     np.testing.assert_allclose(merged.T, direct.T, atol=1e-13)
     np.testing.assert_allclose(merged.R, direct.R, atol=1e-13)
+
+
+def test_optimize_job_runs_resumes_and_merges(tmp_path) -> None:
+    out = tmp_path / "out"
+    base = ["run", "--job", "optimize", "--config", "configs/smoke_optimize.json"]
+    remote_job.main([*base, "--chunk", "0", "--n-chunks", "2", "--out", str(out),
+                     "--deadline-min", "0"])  # fmt: skip
+    meta = json.loads((out / "optimize-chunk-0" / "chunk.json").read_text())
+    assert meta["complete"] is False
+    _run_all_chunks("optimize", "configs/smoke_optimize.json", out, 2)
+    final = tmp_path / "final"
+    remote_job.main(["merge", "--job", "optimize", "--config", "configs/smoke_optimize.json",
+                     "--in", str(out), "--out", str(final)])  # fmt: skip
+    s = json.loads((final / "summary.json").read_text())
+    assert s["complete"] is True
+    assert [st["steps"] for st in s["starts"]] == [2, 2]
+    assert s["best"]["objective"] >= max(st["initial_objective"] for st in s["starts"])
+    assert s["recheck"]["order"] == 2
+    assert (final / "optimize.png").exists()

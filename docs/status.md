@@ -23,8 +23,9 @@ recorded inside that file. Commit hashes from before 2026-10-16 are translated i
    `38bcdf6`) with your account's primary email. Removing them needs a second history
    rewrite, which you have not approved, so I have not done it. With the "recreate"
    option above, the fresh repository would get a clean history in one go (that
-   rewrite also needs your approval). From now on every merge uses
-   `gh pr merge --author-email <noreply>` (AGENTS.md). Worth knowing: your public
+   rewrite also needs your approval). GitHub rejected the noreply address as a merge
+   author, so from PR #4 on, pull requests are merged by fast-forward with no
+   GitHub-authored commit (AGENTS.md). Worth knowing: your public
    GitHub profile itself shows this Gmail address; enabling "Keep my email addresses
    private" in your GitHub account settings would prevent this class of leak.
 3. **Material constants are PROVISIONAL.** LYSO n = 1.81 at 420 nm, BGO n = 2.15 at

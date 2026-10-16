@@ -25,9 +25,12 @@ Mode since 2026-10-15: agents work autonomously, decide and log decisions in
 - CI (`pytest` on CPU, `ruff check`) must be green before merge.
 - An agent may merge its own PR into `main` only after CI passes and the review summary
   is written. Argon reviews Claude's PRs when available; a review is not a merge gate.
-- Merge with a merge commit and the noreply author email, never with GitHub's default
-  author (which is Aziz's primary email):
-  `gh pr merge <n> --merge --author-email 262705928+aziz-bek-coder@users.noreply.github.com`.
+- Never let GitHub author a merge commit: it uses Aziz's primary email. Merge by
+  fast-forward instead: merge `main` into the branch (agent author, noreply email),
+  wait for CI on the PR, check `git merge-base --is-ancestor origin/main origin/<branch>`,
+  then `git push origin origin/<branch>:refs/heads/main`. GitHub marks the PR merged.
+  (`gh pr merge --author-email <noreply>` is rejected while the account's email privacy
+  setting is off.)
 - Bring a branch up to date by merging `main` into it. Do not rebase a branch whose
   commits have been used by a remote run (their hashes are in result files). Never
   force-push or rewrite history.
