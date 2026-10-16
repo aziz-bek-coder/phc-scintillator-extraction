@@ -56,12 +56,38 @@ about 13.5 % for grease and 6.3 % for air. The bare face already gets most of th
 any real gain must come from the trapped band, and there is far more room for an
 air-coupled readout than for a grease-coupled one.
 
-Scope of (1): exact for the side models above when absorption over ~20 mm is
-negligible. With `lambertian` or `wrapped_lambertian` side faces the sign of d_z can
-flip at a side face and (1) is only an approximation; the Monte Carlo evaluates the
-real thing. (1) was checked against the M3 Monte Carlo by
-`scripts/check_early_yield.py` (results in `results/m4_early_yield_check.json`,
-quoted in docs/status.md).
+Scope of (1). Two things spoil it. First, side faces that can reverse d_z
+(`lambertian`, `wrapped_lambertian`): then (1) is only an approximation. Second, losses
+on the way to the readout: bulk absorption, and side faces that do not reflect
+perfectly. A `bare` or `wrapped_specular` side face loses light only when the photon
+hits it inside that face's escape cone, |d_x| > cos θc,s, with θc,s = 33.5° for an air
+gap. For the flat readout this never happens to a photon that can be transmitted,
+because the readout cone and the side cones are disjoint (cos²θc + cos²θc,s > 1,
+derivation 04). A photonic-crystal readout, however, also transmits light with
+θ > 90° − θc,s ≈ 56.5°. On its way, that light can lie in a side cone and lose about 5 %
+per side bounce (wrap reflectivity 0.95). Then (1) is an upper bound. The exact
+first-pass yield replaces the weight by a survival-weighted path integral:
+
+    w(θ, φ) = (cos θ / Lz) ∫_0^{s_τ} S_x(L) S_y(L) dL,                               (1a)
+
+    S_x(L) = P_x^⌊D⌋ (1 − f + f P_x),   D = L |d_x| / Lx,   f = D − ⌊D⌋.
+
+S_x is the probability of surviving the x faces after a path L, averaged over the
+uniform start position (the photon hits an x face ⌊D⌋ or ⌊D⌋ + 1 times). P_x is the
+return probability of an x face at incidence cosine |d_x|: 1 under total internal
+reflection, and R + T²ρ/(1 − ρR) for an air gap and a mirror of reflectivity ρ
+(derivation 04). S_y is the same for the y faces. With lossless mirrors, (1a) reduces
+to (1). The optimiser uses (1), not (1a). The difference only penalises light with
+θ > 56.5°, where the early weight cos θ is already small, so (1) slightly overvalues
+designs that transmit grazing light.
+
+Checks:
+- (1) against the M3 Monte Carlo for the bare face, where it is exact:
+  `scripts/check_early_yield.py`.
+- (1) and (1a) against the M4 Monte Carlo with the fine tables, with lossless mirror
+  walls and with the nominal wraps: `scripts/m4_table_checks.py`.
+
+The numbers are in docs/status.md.
 
 ### 2c. Differentiable evaluation
 By C4v symmetry, ∫ dΩ = 8 ∫_0^{π/4} dφ ∫_0^{π/2} sin θ dθ. On the optimisation grid
@@ -108,6 +134,7 @@ Optimiser: Adam on x, several starts, the best design re-checked at higher order
 | Coarse angle grid and order during optimisation | Optimum can shift slightly; the final design is re-evaluated on the fine grid at higher order and in the Monte Carlo. |
 | Local optimiser | May find a local optimum; several starts reduce, not remove, this risk. |
 | Single wavelength | Designs tuned at 420 nm; band-averaged performance is lower (03, 2m). |
+| Side-wall losses ignored (uses (1), not (1a)) | Overestimates E for designs that transmit light with θ > 56.5°: by 0.004 points for the grease early optimum and 0.095 for the single-pass optimum (2b, Monte Carlo with the nominal wraps). |
 
 ## Part 3 — Check
 

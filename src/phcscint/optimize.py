@@ -132,18 +132,6 @@ def transmission(
     f = torch.as_tensor(fill, dtype=torch.float64)
     h = torch.as_tensor(height_um, dtype=torch.float64)
     rho = torch.sqrt(f / math.pi)
-    sim = AnalyticLayerRCWA(
-        freq=a / wavelength_um,
-        order=[order, order],
-        L=[1.0, 1.0],
-        dtype=torch.complex128,
-        device=CPU,
-    )
-    sim.add_input_layer(eps=n1**2)
-    sim.add_output_layer(eps=n2**2)
-    sim.set_incident_angle(inc_ang=float(theta), azi_ang=float(phi), angle_layer="input")
-    sim.add_layer_conv(h / a, disk_convolution_matrix(order, rho, n_pillar**2, n2**2))
-    sim.solve_global_smatrix()
     # Only orders that propagate in the outside medium (derivation 03, eq. 3). Evanescent
     # orders carry no power, and asking torcwa for them puts sqrt(kz = 0) into the
     # power normalisation, whose derivative is infinite (0 * inf = NaN in backward).
@@ -156,7 +144,22 @@ def transmission(
     orders = orders[umn < n2 * (1 - 1e-9)]
     total = torch.zeros((), dtype=torch.float64)
     if orders.size == 0:
+        # T = 0 exactly. Return before building the solver: with no backward pass to free
+        # it, its autograd graph stayed in memory (about 20 MB per call at order 5), which
+        # filled the runner's memory in the first air optimisation runs.
         return total
+    sim = AnalyticLayerRCWA(
+        freq=a / wavelength_um,
+        order=[order, order],
+        L=[1.0, 1.0],
+        dtype=torch.complex128,
+        device=CPU,
+    )
+    sim.add_input_layer(eps=n1**2)
+    sim.add_output_layer(eps=n2**2)
+    sim.set_incident_angle(inc_ang=float(theta), azi_ang=float(phi), angle_layer="input")
+    sim.add_layer_conv(h / a, disk_convolution_matrix(order, rho, n_pillar**2, n2**2))
+    sim.solve_global_smatrix()
     for pol in ("ss", "ps", "sp", "pp"):
         s = sim.S_parameters(
             orders=torch.tensor(orders.copy(), dtype=torch.int64),

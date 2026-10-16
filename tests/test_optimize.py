@@ -149,3 +149,18 @@ def test_closed_incidences_give_zero_and_keep_the_gradient_finite() -> None:
     assert torch.all(torch.isfinite(g_open)) and torch.count_nonzero(g_open) > 0
     j_closed, g_closed, _ = opt.evaluate_with_gradient(*args, _Points([(*closed, 1.0)]), order=2)
     assert j_closed == 0.0 and torch.count_nonzero(g_closed) == 0
+
+
+def test_closed_incidence_builds_no_solver(monkeypatch) -> None:
+    """At a closed incidence T = 0 is returned before the RCWA is built. The unused
+    autograd graph of a built solver is never freed by a backward pass and kept about
+    20 MB per call, which filled the runner's memory in the M4 air runs."""
+
+    def boom(*args, **kwargs):
+        raise AssertionError("solver built for a closed incidence")
+
+    monkeypatch.setattr(opt, "AnalyticLayerRCWA", boom)
+    a = torch.tensor(0.2, dtype=torch.float64, requires_grad=True)
+    t = opt.transmission(LYSO.n, N_AIR, LAM, N_SIN, a, 0.3, 0.2, math.radians(45.0),
+                         math.radians(22.5), order=2)  # fmt: skip
+    assert float(t) == 0.0
