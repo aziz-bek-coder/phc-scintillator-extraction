@@ -1,0 +1,22 @@
+{
+  "description": "M4 fine lookup table (best single_pass design for grease, optimisation run in results/optimize/38905905490/summary.json): theta 1 deg x phi 5 deg, order 9.",
+  "lut": {
+    "n1": "LYSO",
+    "n2": "grease",
+    "wavelength_um": "LYSO-peak",
+    "layer": {
+      "period_um": 0.55895,
+      "radius_um": 0.22181,
+      "height_um": 0.2135,
+      "n_pillar": "Si3N4-Luke2015"
+    },
+    "order": 9,
+    "n_grid": 256,
+    "theta_step_deg": 1.0,
+    "phi_step_deg": 5.0,
+    "window": "auto",
+    "edge_sharpness": 1000.0,
+    "label": "opt_single_pass_lyso_grease_fine_M9"
+  },
+  "chunks": 4
+}

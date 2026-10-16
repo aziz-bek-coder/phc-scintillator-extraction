@@ -255,6 +255,22 @@ merges are fast-forwards of the CI-green PR branch after merging `main` into it 
 author, noreply email); GitHub marks the PR merged (PR #4 was merged this way). No
 commit hashes change, so result provenance stays valid.
 
+## 2026-10-16 — M4 final tables: order 9 on θ 1° × φ 5°; integrated order check instead of order 11
+- The fine tables for the final M4 comparison use order 9 on θ 1° (midpoints) × φ 5°
+  (inclusive): 900 solves, about 2.4 runner-hours each in 4 chunks. The M2 sizing was
+  1° × 2.5° (1710 solves, 4.5 h). Five final tables (reference and optimised designs,
+  grease and air) on that grid would need about 22 runner-hours, more than the private
+  repository's remaining monthly Actions minutes (about 590 of 2000 used by 16 October,
+  estimated from job durations). The angle-grid error is estimated by subsampling the
+  tables (φ 5° → 15°, θ 1° → 3°) and is reported with the results.
+- Air numbers stay at order 9, not 11 as decided in M2: an order-11 fine table would
+  take about 7 runner-hours. The M2 criterion was the worst single incidence; the
+  quantities reported are integrals over angle, which converge faster (the order-7
+  rechecks of the grease optimisation runs moved the integrated objectives by at most
+  1.2e-4, relative, against 0.54 % at the worst incidence). Instead, an order check
+  evaluates both integrated objectives of every final design at orders 7, 9 and 11 on a
+  9 × 2 angle grid, and its size is quoted next to the numbers.
+
 ## Open
 - Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
   M3 uses n_g = n and states the bias.
