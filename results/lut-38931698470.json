@@ -1,0 +1,268 @@
+{
+  "job": "lut",
+  "config_path": "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+  "config": {
+    "description": "M4 fine lookup table (Knapitsch-style reference): theta 1 deg x phi 5 deg, order 9.",
+    "lut": {
+      "n1": "LYSO",
+      "n2": "grease",
+      "wavelength_um": "LYSO-peak",
+      "layer": {
+        "period_um": 0.4,
+        "radius_um": 0.12,
+        "height_um": 0.3,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "order": 9,
+      "n_grid": 256,
+      "theta_step_deg": 1.0,
+      "phi_step_deg": 5.0,
+      "window": "auto",
+      "edge_sharpness": 1000.0,
+      "label": "ref_lyso_grease_fine_M9"
+    },
+    "chunks": 4
+  },
+  "merged_at_commit": "2bf04bf2922e",
+  "merged_utc": "2026-10-16T17:00:25+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "2bf04bf2922e",
+          "started_utc": "2026-10-16T16:25:34+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "2bf04bf2922e1573c769d2cbd0470560a0e36f6a",
+            "github_run_id": "38931698470",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000402",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T16:59:24+00:00",
+          "seconds": 2029.9127314470002,
+          "complete": true
+        }
+      ],
+      "seconds": 2029.9127314470002
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "2bf04bf2922e",
+          "started_utc": "2026-10-16T16:25:24+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "2bf04bf2922e1573c769d2cbd0470560a0e36f6a",
+            "github_run_id": "38931698470",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000403",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T16:54:17+00:00",
+          "seconds": 1733.59153061,
+          "complete": true
+        }
+      ],
+      "seconds": 1733.59153061
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "2bf04bf2922e",
+          "started_utc": "2026-10-16T16:25:33+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "2bf04bf2922e1573c769d2cbd0470560a0e36f6a",
+            "github_run_id": "38931698470",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000401",
+            "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C"
+          },
+          "ended_utc": "2026-10-16T16:43:56+00:00",
+          "seconds": 1103.75593654,
+          "complete": true
+        }
+      ],
+      "seconds": 1103.75593654
+    },
+    {
+      "chunk": 3,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "2bf04bf2922e",
+          "started_utc": "2026-10-16T16:25:25+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "2bf04bf2922e1573c769d2cbd0470560a0e36f6a",
+            "github_run_id": "38931698470",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000404",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T16:53:06+00:00",
+          "seconds": 1660.962763414,
+          "complete": true
+        }
+      ],
+      "seconds": 1660.962763414
+    }
+  ],
+  "total_runner_seconds": 6528.222962011,
+  "lut_file": "ref_lyso_grease_fine_M9_426c69943168.npz",
+  "lut_key": "426c69943168",
+  "lut_config": {
+    "edge_sharpness": 1000.0,
+    "label": "ref_lyso_grease_fine_M9",
+    "layer": {
+      "height_um": 0.3,
+      "n_pillar": 2.090638461956985,
+      "period_um": 0.4,
+      "radius_um": 0.12
+    },
+    "n1": 1.81,
+    "n2": 1.46,
+    "n_grid": 256,
+    "order": 9,
+    "phi_deg": [
+      0.0,
+      5.0,
+      10.0,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0
+    ],
+    "theta_deg": [
+      0.5,
+      1.5,
+      2.5,
+      3.5,
+      4.5,
+      5.5,
+      6.5,
+      7.5,
+      8.5,
+      9.5,
+      10.5,
+      11.5,
+      12.5,
+      13.5,
+      14.5,
+      15.5,
+      16.5,
+      17.5,
+      18.5,
+      19.5,
+      20.5,
+      21.5,
+      22.5,
+      23.5,
+      24.5,
+      25.5,
+      26.5,
+      27.5,
+      28.5,
+      29.5,
+      30.5,
+      31.5,
+      32.5,
+      33.5,
+      34.5,
+      35.5,
+      36.5,
+      37.5,
+      38.5,
+      39.5,
+      40.5,
+      41.5,
+      42.5,
+      43.5,
+      44.5,
+      45.5,
+      46.5,
+      47.5,
+      48.5,
+      49.5,
+      50.5,
+      51.5,
+      52.5,
+      53.5,
+      54.5,
+      55.5,
+      56.5,
+      57.5,
+      58.5,
+      59.5,
+      60.5,
+      61.5,
+      62.5,
+      63.5,
+      64.5,
+      65.5,
+      66.5,
+      67.5,
+      68.5,
+      69.5,
+      70.5,
+      71.5,
+      72.5,
+      73.5,
+      74.5,
+      75.5,
+      76.5,
+      77.5,
+      78.5,
+      79.5,
+      80.5,
+      81.5,
+      82.5,
+      83.5,
+      84.5,
+      85.5,
+      86.5,
+      87.5,
+      88.5,
+      89.5
+    ],
+    "wavelength_um": 0.42,
+    "window": 4
+  },
+  "lut_complete": true,
+  "theta_rows_filled": 90,
+  "theta_rows_total": 90,
+  "max_energy_error": 2.1345758494106803e-10,
+  "built_at_commits": [
+    "2bf04bf"
+  ],
+  "theta_c_deg": 53.767951955782436,
+  "eta_single_pass_phc": 0.2108288316664652,
+  "phc_in_cone_cells": 0.17363072783672287,
+  "phc_trapped_cells": 0.03719810382974237,
+  "eta_single_pass_bare_same_grid": 0.19262822019998377,
+  "eta_single_pass_bare_exact": 0.19198572452855242,
+  "note": "theta cells are classified by their centre; the cell containing theta_c counts as in-cone"
+}

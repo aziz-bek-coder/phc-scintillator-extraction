@@ -1,0 +1,268 @@
+{
+  "job": "optimize",
+  "config_path": "configs/m4_opt_grease_single_pass.json",
+  "config": {
+    "description": "M4: Adam ascent of the single_pass objective (derivation 05), LYSO -> grease, Si3N4 pillars, order 5, 18 x 4 incidences; start 0 is the Knapitsch-style reference.",
+    "n1": "LYSO",
+    "n2": "grease",
+    "wavelength_um": "LYSO-peak",
+    "n_pillar": "Si3N4-Luke2015",
+    "objective": "single_pass",
+    "tau_ps": 100,
+    "lz_um": 20000,
+    "n_group": null,
+    "order": 5,
+    "grid": {
+      "n_theta": 18,
+      "n_phi": 4
+    },
+    "bounds": {
+      "period_um": [
+        0.2,
+        1.0
+      ],
+      "fill": [
+        0.05,
+        0.6
+      ],
+      "height_um": [
+        0.05,
+        0.8
+      ]
+    },
+    "steps": 30,
+    "lr": 0.15,
+    "starts": [
+      [
+        0.4,
+        0.2827,
+        0.3
+      ],
+      [
+        0.25,
+        0.3,
+        0.2
+      ],
+      [
+        0.32,
+        0.45,
+        0.45
+      ],
+      [
+        0.55,
+        0.2,
+        0.35
+      ]
+    ],
+    "recheck_order": 7
+  },
+  "merged_at_commit": "e107a3b0c306",
+  "merged_utc": "2026-10-16T13:47:43+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "e107a3b0c306",
+          "started_utc": "2026-10-16T13:12:07+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "e107a3b0c3061861aa5d03bbe2bc6add9a2be040",
+            "github_run_id": "38905905490",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000379",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T13:40:52+00:00",
+          "seconds": 1725.840656985,
+          "complete": true
+        }
+      ],
+      "seconds": 1725.840656985
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "e107a3b0c306",
+          "started_utc": "2026-10-16T13:12:05+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "e107a3b0c3061861aa5d03bbe2bc6add9a2be040",
+            "github_run_id": "38905905490",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000378",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T13:40:45+00:00",
+          "seconds": 1720.257032102,
+          "complete": true
+        }
+      ],
+      "seconds": 1720.257032102
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "e107a3b0c306",
+          "started_utc": "2026-10-16T13:12:08+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "e107a3b0c3061861aa5d03bbe2bc6add9a2be040",
+            "github_run_id": "38905905490",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000377",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T13:41:08+00:00",
+          "seconds": 1739.962345375,
+          "complete": true
+        }
+      ],
+      "seconds": 1739.962345375
+    },
+    {
+      "chunk": 3,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "e107a3b0c306",
+          "started_utc": "2026-10-16T13:12:00+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "e107a3b0c3061861aa5d03bbe2bc6add9a2be040",
+            "github_run_id": "38905905490",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000376",
+            "cpu_model": "AMD EPYC 9V45 96-Core Processor"
+          },
+          "ended_utc": "2026-10-16T13:31:53+00:00",
+          "seconds": 1192.673771904,
+          "complete": true
+        }
+      ],
+      "seconds": 1192.673771904
+    }
+  ],
+  "total_runner_seconds": 6378.733806366,
+  "objective_kind": "single_pass",
+  "n1": 1.81,
+  "n2": 1.46,
+  "n_pillar": 2.090638461956985,
+  "order": 5,
+  "grid": {
+    "n_theta": 18,
+    "n_phi": 4
+  },
+  "bare_objective_same_grid": 0.19812541021917077,
+  "starts": [
+    {
+      "chunk": 0,
+      "start": [
+        0.4,
+        0.2827,
+        0.3
+      ],
+      "steps": 30,
+      "initial_objective": 0.21729041528296278,
+      "final": {
+        "objective": 0.23931992217757794,
+        "period_um": 0.5746153611562567,
+        "fill": 0.5018567488544906,
+        "height_um": 0.19888491859242663,
+        "radius_um": 0.22966360618091092
+      },
+      "best_objective": 0.24072471941135787
+    },
+    {
+      "chunk": 1,
+      "start": [
+        0.25,
+        0.3,
+        0.2
+      ],
+      "steps": 30,
+      "initial_objective": 0.20728956303429275,
+      "final": {
+        "objective": 0.2124562806378521,
+        "period_um": 0.2352413892151393,
+        "fill": 0.24719406856264103,
+        "height_um": 0.15552804573633183,
+        "radius_um": 0.06598691455723486
+      },
+      "best_objective": 0.21254945166624745
+    },
+    {
+      "chunk": 2,
+      "start": [
+        0.32,
+        0.45,
+        0.45
+      ],
+      "steps": 30,
+      "initial_objective": 0.21314515225549607,
+      "final": {
+        "objective": 0.2173243150316419,
+        "period_um": 0.34143695666954293,
+        "fill": 0.4187380076935764,
+        "height_um": 0.4452495247499801,
+        "radius_um": 0.12465416146724094
+      },
+      "best_objective": 0.21897479034209652
+    },
+    {
+      "chunk": 3,
+      "start": [
+        0.55,
+        0.2,
+        0.35
+      ],
+      "steps": 30,
+      "initial_objective": 0.20995590526963784,
+      "final": {
+        "objective": 0.24197079213695333,
+        "period_um": 0.566116355369671,
+        "fill": 0.4905828241880824,
+        "height_um": 0.20074657182403244,
+        "radius_um": 0.2237107919338425
+      },
+      "best_objective": 0.24263282293039884
+    }
+  ],
+  "best": {
+    "start_chunk": 3,
+    "step": 17,
+    "objective": 0.24263282293039884,
+    "period_um": 0.5589500911718175,
+    "fill": 0.4947171501085611,
+    "height_um": 0.21349589839526334,
+    "radius_um": 0.22180767932817075
+  },
+  "recheck": {
+    "order": 7,
+    "best_objective": 0.24266017293536485,
+    "start0": [
+      0.4,
+      0.2827,
+      0.3
+    ],
+    "start0_objective": 0.21726355761450813
+  }
+}

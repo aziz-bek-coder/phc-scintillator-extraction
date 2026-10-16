@@ -9,6 +9,15 @@ Light scripts (run on a laptop in seconds; results in `results/m1_*.json`):
 - `benchmark_rcwa.py` (M1, laptop era): kept so `results/m1_rcwa_benchmark.json` stays
   reproducible; superseded by the remote `benchmark` job.
 
+Light scripts that read downloaded remote results (seconds; M4):
+- `check_early_yield.py`: derivation 05, eq. (1), against the M3 Monte Carlo.
+- `make_m4_configs.py`: writes the fine-table and Monte Carlo configs from finished runs.
+- `recover_optimize_log.py`: rebuilds an optimisation start from the job log when its
+  checkpoint was lost.
+- `m4_table_checks.py`: fine-table integrals, angle-grid bounds, lookup-model integrals
+  with and without side-wall losses (eq. 1a), and the Monte Carlo against them.
+- `plot_angular_transmission.py`, `key_figure.py`: the M4 figures.
+
 Heavy work runs on GitHub Actions through `remote_job.py` (jobs in
 `src/phcscint/jobs.py`, configs in `configs/`):
 
@@ -16,7 +25,10 @@ Heavy work runs on GitHub Actions through `remote_job.py` (jobs in
 |---|---|---|
 | `benchmark` | `configs/benchmark.json` | time per RCWA solve vs Fourier order, backward-pass cost, grid budgets |
 | `convergence` | `configs/m2_convergence.json` | Fourier-order and grid convergence of the reference photonic crystal |
-| `lut` | `configs/m2_lut_ref_*_coarse_M7.json` | angle-resolved lookup tables (npz) with single-pass extraction |
+| `lut` | `configs/m2_lut_*.json`, `configs/m4_lut_*.json` | angle-resolved lookup tables (npz) with single-pass extraction |
+| `mc` | `configs/m3_*.json`, `configs/m4_mc_*.json` | Monte Carlo of the pixel: efficiency, time CDF, early yields, analytic oracle |
+| `optimize` | `configs/m4_opt_*.json` | Adam ascent of the early-photon or single-pass objective from several starts |
+| `ordercheck` | `configs/m4_ordercheck.json` | integrated objectives of the final designs vs Fourier order |
 
 ```bash
 gh workflow run compute.yml --ref <branch> -f job=<job> -f config=<config>
