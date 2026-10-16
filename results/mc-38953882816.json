@@ -1,0 +1,391 @@
+{
+  "job": "mc",
+  "config_path": "configs/m4_mc_air.json",
+  "config": {
+    "description": "M4 comparison, LYSO 3x3x20 mm -> air: bare face vs fine lookup tables (order 9); all five other faces polished + air gap + mirror film, ASSUMED reflectivity 0.95.",
+    "pixel": {
+      "n1": "LYSO",
+      "wavelength_um": "LYSO-peak",
+      "lx_um": 3000,
+      "ly_um": 3000,
+      "lz_um": 20000
+    },
+    "t_max_ps": 5000,
+    "n_photons_per_chunk": 500000,
+    "chunks_per_case": 2,
+    "seed": 20261019,
+    "tau_ps": [
+      50,
+      100,
+      200
+    ],
+    "t_grid_ps": {
+      "stop": 5000,
+      "step": 10
+    },
+    "cases": [
+      {
+        "name": "bare readout",
+        "walls": {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        "readout": {
+          "n_out": "air"
+        }
+      },
+      {
+        "name": "reference PhC",
+        "walls": {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        "readout": {
+          "n_out": "air",
+          "lut": {
+            "run_id": 38931726855,
+            "artifact": "lut-result",
+            "file": "ref_lyso_air_fine_M9_bd8287aab0a7.npz"
+          }
+        }
+      },
+      {
+        "name": "optimised: early photons",
+        "walls": {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        "readout": {
+          "n_out": "air",
+          "lut": {
+            "run_id": 38949348290,
+            "artifact": "lut-result",
+            "file": "opt_early_lyso_air_fine_M9_9c29b4bd43c5.npz"
+          }
+        }
+      }
+    ]
+  },
+  "merged_at_commit": "05f08b394563",
+  "merged_utc": "2026-10-16T19:20:59+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "05f08b394563",
+          "started_utc": "2026-10-16T19:19:07+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "05f08b39456387f2286bf1f84fa164422c5ff8c5",
+            "github_run_id": "38953882816",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000467",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:19:54+00:00",
+          "seconds": 46.406002255999994,
+          "complete": true
+        }
+      ],
+      "seconds": 46.406002255999994
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "05f08b394563",
+          "started_utc": "2026-10-16T19:18:52+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "05f08b39456387f2286bf1f84fa164422c5ff8c5",
+            "github_run_id": "38953882816",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000465",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:19:27+00:00",
+          "seconds": 34.208531819,
+          "complete": true
+        }
+      ],
+      "seconds": 34.208531819
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "05f08b394563",
+          "started_utc": "2026-10-16T19:18:59+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "05f08b39456387f2286bf1f84fa164422c5ff8c5",
+            "github_run_id": "38953882816",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000464",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:19:39+00:00",
+          "seconds": 39.413702044999994,
+          "complete": true
+        }
+      ],
+      "seconds": 39.413702044999994
+    },
+    {
+      "chunk": 3,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "05f08b394563",
+          "started_utc": "2026-10-16T19:18:58+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "05f08b39456387f2286bf1f84fa164422c5ff8c5",
+            "github_run_id": "38953882816",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000466",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:19:31+00:00",
+          "seconds": 32.92977811899999,
+          "complete": true
+        }
+      ],
+      "seconds": 32.92977811899999
+    },
+    {
+      "chunk": 4,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "05f08b394563",
+          "started_utc": "2026-10-16T19:19:01+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "05f08b39456387f2286bf1f84fa164422c5ff8c5",
+            "github_run_id": "38953882816",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000469",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:19:54+00:00",
+          "seconds": 53.418658844999996,
+          "complete": true
+        }
+      ],
+      "seconds": 53.418658844999996
+    },
+    {
+      "chunk": 5,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "05f08b394563",
+          "started_utc": "2026-10-16T19:18:57+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "05f08b39456387f2286bf1f84fa164422c5ff8c5",
+            "github_run_id": "38953882816",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000468",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:19:49+00:00",
+          "seconds": 52.27071343899999,
+          "complete": true
+        }
+      ],
+      "seconds": 52.27071343899999
+    }
+  ],
+  "total_runner_seconds": 258.64738652299997,
+  "pixel": {
+    "n1": 1.81,
+    "n_group": 1.81,
+    "size_um": [
+      3000.0,
+      3000.0,
+      20000.0
+    ],
+    "abs_length_um": null,
+    "direct_transit_ps": 120.75020246173104
+  },
+  "cases": [
+    {
+      "name": "bare readout",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "air"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 160486,
+        "absorbed_bulk": 0,
+        "lost_wall": 338832,
+        "escaped_wall": 0,
+        "capped": 500682
+      },
+      "efficiency_at_t_max": 0.160486,
+      "efficiency_sigma": 0.00036705618616773096,
+      "first_pass_fraction": 0.139294,
+      "early_yield": {
+        "50": {
+          "value": 0.027356,
+          "sigma": 0.00016311851294074502
+        },
+        "100": {
+          "value": 0.054726,
+          "sigma": 0.00022744464144929858
+        },
+        "200": {
+          "value": 0.107344,
+          "sigma": 0.0003095501020255041
+        }
+      },
+      "median_detected_time_ps": 147.74192617087232,
+      "runner_seconds": 77.34114767199999,
+      "photon_steps": 169452018
+    },
+    {
+      "name": "reference PhC",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "air"
+      },
+      "lut": {
+        "lut_file": "ref_lyso_air_fine_M9_bd8287aab0a7.npz",
+        "lut_key": "bd8287aab0a7",
+        "lut_label": "ref_lyso_air_fine_M9",
+        "lut_built_at_commits": [
+          "2bf04bf"
+        ],
+        "lut_order": 9,
+        "lut_grid": [
+          90,
+          10
+        ],
+        "run_id": 38931726855,
+        "artifact": "lut-result",
+        "file": "ref_lyso_air_fine_M9_bd8287aab0a7.npz"
+      },
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 533885,
+        "absorbed_bulk": 0,
+        "lost_wall": 364346,
+        "escaped_wall": 0,
+        "capped": 101769
+      },
+      "efficiency_at_t_max": 0.533885,
+      "efficiency_sigma": 0.000498850485391164,
+      "first_pass_fraction": 0.164241,
+      "early_yield": {
+        "50": {
+          "value": 0.027741,
+          "sigma": 0.00016422982956515542
+        },
+        "100": {
+          "value": 0.055362,
+          "sigma": 0.00022868548042234775
+        },
+        "200": {
+          "value": 0.109145,
+          "sigma": 0.0003118210528091392
+        }
+      },
+      "median_detected_time_ps": 731.2246543053847,
+      "runner_seconds": 67.06301356600001,
+      "photon_steps": 85845922
+    },
+    {
+      "name": "optimised: early photons",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "air"
+      },
+      "lut": {
+        "lut_file": "opt_early_lyso_air_fine_M9_9c29b4bd43c5.npz",
+        "lut_key": "9c29b4bd43c5",
+        "lut_label": "opt_early_lyso_air_fine_M9",
+        "lut_built_at_commits": [
+          "14f9f18"
+        ],
+        "lut_order": 9,
+        "lut_grid": [
+          90,
+          10
+        ],
+        "run_id": 38949348290,
+        "artifact": "lut-result",
+        "file": "opt_early_lyso_air_fine_M9_9c29b4bd43c5.npz"
+      },
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 378807,
+        "absorbed_bulk": 0,
+        "lost_wall": 350619,
+        "escaped_wall": 0,
+        "capped": 270574
+      },
+      "efficiency_at_t_max": 0.378807,
+      "efficiency_sigma": 0.00048508994707270527,
+      "first_pass_fraction": 0.155567,
+      "early_yield": {
+        "50": {
+          "value": 0.029191,
+          "sigma": 0.0001683415739471388
+        },
+        "100": {
+          "value": 0.058543,
+          "sigma": 0.00023476736815622394
+        },
+        "200": {
+          "value": 0.114427,
+          "sigma": 0.0003183291718818745
+        }
+      },
+      "median_detected_time_ps": 553.2478278807068,
+      "runner_seconds": 101.213313584,
+      "photon_steps": 128235504
+    }
+  ]
+}

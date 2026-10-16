@@ -35,6 +35,223 @@ recorded inside that file. Commit hashes from before 2026-10-16 are translated i
    found for mirror or diffuse wrapping films, so wall reflectivity 0.95 is an
    assumption in M3.
 5. **Argon** has not started. No independent cross-check exists yet.
+6. **GitHub Actions minutes.** This repository has used about 1,340 of the 2,000
+   free private-repository minutes this month. The quota is shared with your other
+   private repositories, which I cannot see; please check Settings → Billing →
+   Usage. Making the repository public (item 1) would make standard runners free.
+
+## M4 — optimisation and comparison (done 2026-10-16)
+
+### Done
+- Derivation 05, with predict exercise, 3 check questions and answers:
+  - for τ below the direct transit time, the early-photon yield is a cos θ-weighted
+    single-pass integral, eq. (1);
+  - the pillar layer is solved with differentiable RCWA, using the exact Fourier
+    coefficients of a disk, eq. (4);
+  - correction after the Monte Carlo check: (1) is an upper bound when grazing light
+    transmitted by the readout crosses a side escape cone on its way, and new eq. (1a)
+    adds those side-wall losses.
+- `optimize.py`: an analytic-disk layer on torcwa, the objective and its gradient, and
+  Adam on bounded parameters, resumable.
+- Remote jobs `optimize` and `ordercheck`.
+- Light scripts:
+  - `check_early_yield.py`, `make_m4_configs.py`, `recover_optimize_log.py`;
+  - `m4_table_checks.py`, `plot_angular_transmission.py`, `key_figure.py`.
+- Tests:
+  - J₁ and its derivative against scipy;
+  - the analytic disk against the pixel FFT, and the analytic layer against the FFT
+    layer;
+  - invisible pillars give Fresnel;
+  - the gradient against finite differences;
+  - exact resume;
+  - closed incidences: two regression tests (Open issues 1);
+  - smoke tests of the optimize and ordercheck jobs.
+
+### Numbers produced
+Setup:
+- LYSO pixel 3 × 3 × 20 mm, n = 1.81 at 420 nm.
+- Si₃N₄ pillars, n = 2.0906 (Luke 2015).
+- Early yield E taken at τ = 100 ps (direct transit 120.8 ps).
+- Monte Carlo: 10⁶ photons per case. Nominal walls: all five other faces polished +
+  air gap + mirror film, reflectivity 0.95 (assumed).
+
+**Eq. (1) against the M3 Monte Carlo, bare face** (`results/m4_early_yield_check.json`):
+- grease: 12.78 % from (1), 12.77 ± 0.03 % from the Monte Carlo (z = −0.3);
+- air: 5.46 % against 5.49 ± 0.02 % (z = +1.1).
+
+**Optimisation**: Fourier order 5, 18 × 4 incidences, 30 Adam steps, lr 0.15. All
+objectives are on that same angle grid.
+
+| Medium, objective | Run, starts | Best design: period / fill / height (pillar radius) | Best objective (order-7 recheck) | Bare face | Reference design |
+|---|---|---|---|---|---|
+| Grease, E(100 ps) | 38905901930, 6 | 0.234 µm / 0.117 / 0.217 µm (45 nm) | 13.58 % (13.58 %) | 13.09 % | 13.17 % |
+| Grease, single pass | 38905905490, 4 | 0.559 µm / 0.495 / 0.213 µm (222 nm) | 24.26 % (24.27 %) | 19.81 % | 21.73 % |
+| Air, E(100 ps) | 38905911733 and reruns, 4 | 0.232 µm / 0.248 / 0.266 µm (65 nm) | 6.26 % | 5.78 % | 5.63 % |
+
+Sources:
+- `results/optimize-38905901930.json`, `results/optimize-38905905490.json`;
+- `results/m4_opt_air_early_start1_recovered.json`;
+- figures `docs/figures/m4_opt_grease_*.png`.
+
+Per-start results:
+- Grease, E(100 ps): the other starts reach 12.96–13.27 %.
+- Grease, single pass: two starts reach the same design.
+- Air: the best start comes from the job logs (Open issues 1). The other air starts
+  reach at most 5.94 %.
+
+**Fine tables, first pass**:
+- Grid: order 9, θ 1° × φ 5°; node quadrature of (1) and of derivation 03, eq. 9.
+- Energy conserved to 7e-10.
+- ± is the angle-grid bound. For the flat face it exceeds the true grid error by 2–3 times
+  (grease) and much more for air.
+
+Sources: `results/m4_table_checks.json`, `results/lut-*.json`, figure
+`docs/figures/m4_angular_transmission.png`.
+
+| Readout | E(100 ps), eq. (1) | change from θ < θc | change from θ > θc | Single pass η₁ |
+|---|---|---|---|---|
+| Flat face, grease | 12.78 % | | | 19.20 % |
+| Reference, grease | 12.87 ± 0.03 % | −1.27 | +1.36 | 21.08 ± 0.11 % |
+| Optimised for E(100 ps), grease | 13.18 ± 0.06 % | +0.11 | +0.28 | 20.22 ± 0.14 % |
+| Optimised for single pass, grease | 12.65 ± 0.10 % | −2.55 | +2.42 | 23.70 ± 0.43 % |
+| Flat face, air | 5.46 % | | | 7.17 % |
+| Reference, air | 5.59 ± 0.13 % | −2.04 | +2.17 | 8.75 ± 0.26 % |
+| Optimised for E(100 ps), air | 5.88 ± 0.04 % | −0.37 | +0.79 | 8.16 ± 0.13 % |
+
+The changes are in points of E(100 ps), relative to the flat face.
+
+**Monte Carlo comparison**, with the gain relative to the bare face. Statistical σ of
+each fraction ≤ 0.05 points.
+
+Sources: `results/mc-38936853588.json`, `results/mc-38953882816.json`,
+`results/key_figure.json`, figure `docs/figures/key_figure.png`.
+
+| Readout | Detected by 100 ps | Gain | Detected by 5 ns | Gain | Median arrival |
+|---|---|---|---|---|---|
+| Bare, grease | 12.80 % | | 40.39 % | | 159 ps |
+| Reference, grease | 12.76 % | −0.3 ± 0.4 % | 59.18 % | +46.5 % | 234 ps |
+| Optimised for E(100 ps), grease | 13.16 % | **+2.9 ± 0.4 %** | 50.73 % | +25.6 % | 194 ps |
+| Optimised for single pass, grease | 12.53 % | −2.1 ± 0.4 % | 64.62 % | +60.0 % | 266 ps |
+| Bare, air | 5.47 % | | 16.05 % | | 148 ps |
+| Reference, air | 5.54 % | +1.2 ± 0.6 % | 53.39 % | +233 % | 731 ps |
+| Optimised for E(100 ps), air | 5.85 % | **+7.0 ± 0.6 %** | 37.88 % | +136 % | 553 ps |
+
+**Eq. (1) and (1a) against the Monte Carlo** (`results/m4_table_checks.json`):
+- The tables are integrated exactly as the Monte Carlo samples them.
+- With lossless mirror walls, run 38938178392 against (1): z = −1.0, −0.7, −0.5.
+- With the nominal wraps against (1a): z = −0.7, +1.7, −0.9 (grease) and +0.2, +0.7
+  (air).
+- Before (1a), the single-pass design with wraps was 3.8σ below (1). This finding led to
+  the correction in derivation 05.
+
+**Fourier order** (`results/ordercheck-38949360857.json`, figure
+`docs/figures/m4_ordercheck.png`):
+- Both integrated objectives of all five final designs were computed at orders 5, 7, 9
+  and 11.
+- Order 9 differs from 11 by at most 0.03 % (E) and 0.06 % (single pass), relative.
+- So order 9 suffices for air too (decision of 2026-10-16).
+
+### What this means
+- **Optimising for early photons works, and optimising for light yield does not help
+  timing.**
+  - The design optimised with eq. (1) puts more photons into the first 100 ps:
+    +2.9 ± 0.4 % with grease and +7.0 ± 0.6 % with air (Monte Carlo).
+  - It keeps that lead until two transit times (about 240 ps; key figure, left).
+  - The Knapitsch-style reference gives no early gain (−0.3 ± 0.4 %, grease;
+    +1.2 ± 0.6 %, air).
+  - The design optimised for single-pass extraction loses early photons (−2.1 ± 0.4 %)
+    while it collects the most light by 5 ns (+60 %).
+- **The two goals trade off** (key figure, right).
+  - The early design also raises the light by 5 ns: +26 % (grease) and +136 % (air).
+  - That is less than the reference (+46.5 %, +233 %) and the single-pass optimum (+60 %).
+  - Choosing a readout for timing is a different choice from choosing it for light
+    yield.
+- **Why** (`docs/figures/m4_angular_transmission.png`; the near-normal values are in
+  `results/m4_table_checks.json`):
+  - The early designs keep most of the transmission inside the flat-face escape cone,
+    where cos θ, and so the weight in (1), is largest.
+  - With grease the early design even adds 0.11 points there.
+  - With air it loses 0.37 points between about 20° and 33°, but acts as an
+    anti-reflection layer near normal incidence (T = 0.97 against 0.92).
+  - On top of that, the early designs open a band of transmission just beyond the
+    critical angle.
+  - The yield designs trade in-cone light for grazing light, which needs long paths and
+    arrives late. The reference with air even blocks near-normal light (T ≈ 0.03 below
+    2°).
+- **Both early optima** have a period of 0.232–0.234 µm, close to λ/n_LYSO = 0.232 µm,
+  and small pillars. Why the optimiser lands there has not been analysed yet.
+- **In absolute terms, coupling matters more than the photonic crystal.**
+  - Grease gives 13.2 % of the photons by 100 ps, air with the best crystal 5.9 %.
+  - The crystal is a correction of a few per cent on top of good optical coupling.
+- **Eq. (1) is a reliable fast objective.** Against the Monte Carlo it agrees to within
+  2σ in every case once the side-wall losses (1a) are included. Those losses matter
+  only for designs that transmit grazing light.
+
+### Open issues
+1. **The air optimisation needed three attempts.**
+   - First, one start crashed: at small periods some incidences transmit into no order
+     at all, and the code asked for a gradient of a constant. Fixed in dbbacf7, with a
+     test.
+   - That fix skipped the backward pass at such incidences but still built the solver.
+     Its autograd graph then stayed in memory, about 20 MB per call (measured on the
+     laptop: +1.2 GB for 60 calls, +0.9 MB after the fix). This filled the 7 GB runner
+     at step 27, twice (runs 38930990269, 38935236970); the runner was shut down before
+     the checkpoint upload. Fixed in c0be7cb, with a test.
+   - The start's steps 0–26 were recovered from the job logs, identical in both runs
+     (`scripts/recover_optimize_log.py`). The air design is its best step, 21,
+     parameters to 4 decimals.
+   - Rerun 38950528275 with the fix reproduces the start; its summary will be added
+     when it finishes.
+2. **Lookup-model error.** The Monte Carlo samples the tables with bilinear
+   interpolation, masking of closed orders and renormalisation. This changes E(100 ps)
+   by up to 0.07 points (0.5 % relative) against direct quadrature of the nodes.
+   - That is larger than the Monte Carlo σ.
+   - The bare face is exact, so gains relative to it carry this error in addition to
+     the quoted statistics.
+3. **The optimiser uses (1), not (1a).** It slightly overvalues designs that transmit
+   grazing light: 0.004 points for the grease early optimum, 0.095 for the single-pass
+   optimum.
+4. **Local optimiser, few steps.**
+   - The best grease early start was still improving at step 30, by about 0.005 points
+     per step.
+   - 4–6 starts per case. Better optima may exist.
+5. **Angle grid.**
+   - φ 5° instead of 2.5° (budget, docs/decisions.md). Grid bounds up to 0.13 points
+     (air reference).
+   - The optimisation grid (18 × 4) and the order check grid (9 × 2) are too coarse
+     for absolute values. On the 9 × 2 grid the air early design even scores below the
+     reference. Only the fine tables and the Monte Carlo give final numbers.
+6. **Same assumptions as M3.**
+   - Single wavelength. Sharp features near θc may make the early designs wavelength
+     sensitive, so a check over the LYSO emission band is needed.
+   - n_g = n.
+   - Ideal photodetector.
+   - Wall reflectivity 0.95 assumed. It affects the 5 ns totals, not the early yields.
+7. **Fabrication.**
+   - Grease early design: pillars 90 nm wide and 217 nm tall at a 234 nm pitch.
+   - Air design: 131 nm wide and 266 nm tall at 232 nm.
+   - Feasible with electron-beam or nanoimprint lithography, but not checked against
+     any process.
+
+### Actions usage so far
+- About 1,340 runner-minutes in this repository so far (compute 1,325, CI 18), of which
+  about 1,180 in M4.
+- Estimated from job durations, each job rounded up to a minute. The billing API needs
+  a token scope I do not have.
+- The 2,000 free minutes per month are shared by all private repositories of the
+  account (Needs Aziz, item 6).
+
+### Next
+M5:
+- Spectral check of the final designs over the LYSO emission band.
+- All figures regenerated by one command.
+- README limitations.
+- The technical note, written by Aziz.
+
+Optional, if minutes allow:
+- A longer early-photon run for grease.
+- A single-pass optimisation for air.
+- The Knapitsch geometry, once its parameters are read.
 
 ## M3 — Monte Carlo pixel model (done 2026-10-16)
 

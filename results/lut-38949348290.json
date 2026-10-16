@@ -1,0 +1,268 @@
+{
+  "job": "lut",
+  "config_path": "configs/m4_lut_opt_early_lyso_air_fine_M9.json",
+  "config": {
+    "description": "M4 fine lookup table (best early design for air, optimisation run in results/m4_opt_air_early_start1_recovered.json): theta 1 deg x phi 5 deg, order 9.",
+    "lut": {
+      "n1": "LYSO",
+      "n2": "air",
+      "wavelength_um": "LYSO-peak",
+      "layer": {
+        "period_um": 0.2324,
+        "radius_um": 0.06534,
+        "height_um": 0.266,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "order": 9,
+      "n_grid": 256,
+      "theta_step_deg": 1.0,
+      "phi_step_deg": 5.0,
+      "window": "auto",
+      "edge_sharpness": 1000.0,
+      "label": "opt_early_lyso_air_fine_M9"
+    },
+    "chunks": 4
+  },
+  "merged_at_commit": "14f9f18f1ac0",
+  "merged_utc": "2026-10-16T19:16:41+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "14f9f18f1ac0",
+          "started_utc": "2026-10-16T18:42:58+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "14f9f18f1ac0573672073f324a86a029ab5e7321",
+            "github_run_id": "38949348290",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000452",
+            "cpu_model": "AMD EPYC 9V45 96-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:05:55+00:00",
+          "seconds": 1376.8472940539998,
+          "complete": true
+        }
+      ],
+      "seconds": 1376.8472940539998
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "14f9f18f1ac0",
+          "started_utc": "2026-10-16T18:43:00+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "14f9f18f1ac0573672073f324a86a029ab5e7321",
+            "github_run_id": "38949348290",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000450",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:11:50+00:00",
+          "seconds": 1729.6886958060002,
+          "complete": true
+        }
+      ],
+      "seconds": 1729.6886958060002
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "14f9f18f1ac0",
+          "started_utc": "2026-10-16T18:43:10+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "14f9f18f1ac0573672073f324a86a029ab5e7321",
+            "github_run_id": "38949348290",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000451",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:15:14+00:00",
+          "seconds": 1924.541523427,
+          "complete": true
+        }
+      ],
+      "seconds": 1924.541523427
+    },
+    {
+      "chunk": 3,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "14f9f18f1ac0",
+          "started_utc": "2026-10-16T18:43:15+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "14f9f18f1ac0573672073f324a86a029ab5e7321",
+            "github_run_id": "38949348290",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000449",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:15:34+00:00",
+          "seconds": 1939.649076028,
+          "complete": true
+        }
+      ],
+      "seconds": 1939.649076028
+    }
+  ],
+  "total_runner_seconds": 6970.726589315,
+  "lut_file": "opt_early_lyso_air_fine_M9_9c29b4bd43c5.npz",
+  "lut_key": "9c29b4bd43c5",
+  "lut_config": {
+    "edge_sharpness": 1000.0,
+    "label": "opt_early_lyso_air_fine_M9",
+    "layer": {
+      "height_um": 0.266,
+      "n_pillar": 2.090638461956985,
+      "period_um": 0.2324,
+      "radius_um": 0.06534
+    },
+    "n1": 1.81,
+    "n2": 1.0,
+    "n_grid": 256,
+    "order": 9,
+    "phi_deg": [
+      0.0,
+      5.0,
+      10.0,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0
+    ],
+    "theta_deg": [
+      0.5,
+      1.5,
+      2.5,
+      3.5,
+      4.5,
+      5.5,
+      6.5,
+      7.5,
+      8.5,
+      9.5,
+      10.5,
+      11.5,
+      12.5,
+      13.5,
+      14.5,
+      15.5,
+      16.5,
+      17.5,
+      18.5,
+      19.5,
+      20.5,
+      21.5,
+      22.5,
+      23.5,
+      24.5,
+      25.5,
+      26.5,
+      27.5,
+      28.5,
+      29.5,
+      30.5,
+      31.5,
+      32.5,
+      33.5,
+      34.5,
+      35.5,
+      36.5,
+      37.5,
+      38.5,
+      39.5,
+      40.5,
+      41.5,
+      42.5,
+      43.5,
+      44.5,
+      45.5,
+      46.5,
+      47.5,
+      48.5,
+      49.5,
+      50.5,
+      51.5,
+      52.5,
+      53.5,
+      54.5,
+      55.5,
+      56.5,
+      57.5,
+      58.5,
+      59.5,
+      60.5,
+      61.5,
+      62.5,
+      63.5,
+      64.5,
+      65.5,
+      66.5,
+      67.5,
+      68.5,
+      69.5,
+      70.5,
+      71.5,
+      72.5,
+      73.5,
+      74.5,
+      75.5,
+      76.5,
+      77.5,
+      78.5,
+      79.5,
+      80.5,
+      81.5,
+      82.5,
+      83.5,
+      84.5,
+      85.5,
+      86.5,
+      87.5,
+      88.5,
+      89.5
+    ],
+    "wavelength_um": 0.42,
+    "window": 3
+  },
+  "lut_complete": true,
+  "theta_rows_filled": 90,
+  "theta_rows_total": 90,
+  "max_energy_error": 7.412230829118016e-10,
+  "built_at_commits": [
+    "14f9f18"
+  ],
+  "theta_c_deg": 33.53774359782298,
+  "eta_single_pass_phc": 0.08157898417120671,
+  "phc_in_cone_cells": 0.06652854383853975,
+  "phc_trapped_cells": 0.01505044033266696,
+  "eta_single_pass_bare_same_grid": 0.07165224597472589,
+  "eta_single_pass_bare_exact": 0.07165614359059826,
+  "note": "theta cells are classified by their centre; the cell containing theta_c counts as in-cone"
+}

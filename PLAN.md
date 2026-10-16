@@ -61,10 +61,14 @@ Dates revised 2026-10-15 (Aziz): pause 21 Dec 2026 to 3 Jan 2027.
       (remote runs 38902480681, 38903357645)
 
 ## M4 — optimisation and comparison (by 20 Dec 2026)
-- [ ] Derivation 05: the differentiable early-arrival objective
-- [ ] Gradient-based optimisation over period, fill factor, height (coarse grid)
-- [ ] Final designs evaluated with the Monte Carlo on the fine grid
-- [ ] Key figure: efficiency and time CDF, bare vs literature-style PhC vs optimised, LYSO
+- [x] Derivation 05: the differentiable early-arrival objective (corrected for side-wall
+      losses, eq. 1a, after the Monte Carlo check)
+- [x] Gradient-based optimisation over period, fill factor, height (coarse grid; remote
+      runs 38905901930, 38905905490, air start recovered from the logs)
+- [x] Final designs evaluated with the Monte Carlo on the fine grid (order 9, θ 1° × φ 5°;
+      remote runs 38936853588, 38953882816; order check 38949360857)
+- [x] Key figure: early vs total light, bare vs literature-style PhC vs optimised, LYSO
+      (`docs/figures/key_figure.png`)
 
 ## Pause — 21 Dec 2026 to 3 Jan 2027
 

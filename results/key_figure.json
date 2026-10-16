@@ -1,0 +1,186 @@
+{
+  "provenance": {
+    "git_commit": "05f08b3",
+    "started_utc": "2026-10-16T19:21:56+00:00",
+    "utc": "2026-10-16T19:21:56+00:00",
+    "python": "3.12.6",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "machine": "AMD64"
+  },
+  "panels": {
+    "grease": {
+      "mc_run": "38936853588",
+      "mc_merged_at_commit": "04f0aaecdab6",
+      "bare": {
+        "E100": {
+          "value": 0.127964,
+          "sigma": 0.0003340497189102245
+        },
+        "detected_by_5ns": 0.403907,
+        "sigma_5ns": 0.0004906792591408363
+      },
+      "designs": [
+        {
+          "name": "reference PhC",
+          "lut": {
+            "lut_file": "ref_lyso_grease_fine_M9_426c69943168.npz",
+            "lut_key": "426c69943168",
+            "lut_label": "ref_lyso_grease_fine_M9",
+            "lut_built_at_commits": [
+              "2bf04bf"
+            ],
+            "lut_order": 9,
+            "lut_grid": [
+              90,
+              10
+            ],
+            "run_id": 38931698470,
+            "artifact": "lut-result",
+            "file": "ref_lyso_grease_fine_M9_426c69943168.npz"
+          },
+          "gain_E100": -0.0027195148635552613,
+          "sigma_gain_E100": 0.0036846384178074827,
+          "gain_5ns": 0.4651689621620818,
+          "sigma_gain_5ns": 0.0021561395531457636,
+          "E100": {
+            "value": 0.127616,
+            "sigma": 0.00033366173970654777
+          },
+          "detected_by_5ns": 0.591792,
+          "sigma_5ns": 0.0004915020129521343
+        },
+        {
+          "name": "optimised: early photons",
+          "lut": {
+            "lut_file": "opt_early_lyso_grease_fine_M9_11257d45d072.npz",
+            "lut_key": "11257d45d072",
+            "lut_label": "opt_early_lyso_grease_fine_M9",
+            "lut_built_at_commits": [
+              "2bf04bf"
+            ],
+            "lut_order": 9,
+            "lut_grid": [
+              90,
+              10
+            ],
+            "run_id": 38931708295,
+            "artifact": "lut-result",
+            "file": "opt_early_lyso_grease_fine_M9_11257d45d072.npz"
+          },
+          "gain_E100": 0.028773717608077343,
+          "sigma_gain_E100": 0.0037674512301800888,
+          "gain_5ns": 0.2558484997784143,
+          "sigma_gain_5ns": 0.001964609306057807,
+          "E100": {
+            "value": 0.131646,
+            "sigma": 0.00033810550229772956
+          },
+          "detected_by_5ns": 0.507246,
+          "sigma_5ns": 0.0004999474927269862
+        },
+        {
+          "name": "optimised: single pass",
+          "lut": {
+            "lut_file": "opt_single_pass_lyso_grease_fine_M9_346245ba92e6.npz",
+            "lut_key": "346245ba92e6",
+            "lut_label": "opt_single_pass_lyso_grease_fine_M9",
+            "lut_built_at_commits": [
+              "2bf04bf"
+            ],
+            "lut_order": 9,
+            "lut_grid": [
+              90,
+              10
+            ],
+            "run_id": 38931717766,
+            "artifact": "lut-result",
+            "file": "opt_single_pass_lyso_grease_fine_M9_346245ba92e6.npz"
+          },
+          "gain_E100": -0.02098246381794877,
+          "sigma_gain_E100": 0.0036364777982222343,
+          "gain_5ns": 0.5998286734322504,
+          "sigma_gain_5ns": 0.0022756791471354354,
+          "E100": {
+            "value": 0.125279,
+            "sigma": 0.0003310350014107269
+          },
+          "detected_by_5ns": 0.646182,
+          "sigma_5ns": 0.00047815355574961477
+        }
+      ]
+    },
+    "air": {
+      "mc_run": "38953882816",
+      "mc_merged_at_commit": "05f08b394563",
+      "bare": {
+        "E100": {
+          "value": 0.054726,
+          "sigma": 0.00022744464144929858
+        },
+        "detected_by_5ns": 0.160486,
+        "sigma_5ns": 0.00036705618616773096
+      },
+      "designs": [
+        {
+          "name": "reference PhC",
+          "lut": {
+            "lut_file": "ref_lyso_air_fine_M9_bd8287aab0a7.npz",
+            "lut_key": "bd8287aab0a7",
+            "lut_label": "ref_lyso_air_fine_M9",
+            "lut_built_at_commits": [
+              "2bf04bf"
+            ],
+            "lut_order": 9,
+            "lut_grid": [
+              90,
+              10
+            ],
+            "run_id": 38931726855,
+            "artifact": "lut-result",
+            "file": "ref_lyso_air_fine_M9_bd8287aab0a7.npz"
+          },
+          "gain_E100": 0.011621532726674877,
+          "sigma_gain_E100": 0.005927772571443699,
+          "gain_5ns": 2.326676470221702,
+          "sigma_gain_5ns": 0.008219069543035768,
+          "E100": {
+            "value": 0.055362,
+            "sigma": 0.00022868548042234775
+          },
+          "detected_by_5ns": 0.533885,
+          "sigma_5ns": 0.000498850485391164
+        },
+        {
+          "name": "optimised: early photons",
+          "lut": {
+            "lut_file": "opt_early_lyso_air_fine_M9_9c29b4bd43c5.npz",
+            "lut_key": "9c29b4bd43c5",
+            "lut_label": "opt_early_lyso_air_fine_M9",
+            "lut_built_at_commits": [
+              "14f9f18"
+            ],
+            "lut_order": 9,
+            "lut_grid": [
+              90,
+              10
+            ],
+            "run_id": 38949348290,
+            "artifact": "lut-result",
+            "file": "opt_early_lyso_air_fine_M9_9c29b4bd43c5.npz"
+          },
+          "gain_E100": 0.06974746921024733,
+          "sigma_gain_E100": 0.006178133082071264,
+          "gain_5ns": 1.3603741136298497,
+          "sigma_gain_5ns": 0.006187125374157991,
+          "E100": {
+            "value": 0.058543,
+            "sigma": 0.00023476736815622394
+          },
+          "detected_by_5ns": 0.378807,
+          "sigma_5ns": 0.00048508994707270527
+        }
+      ]
+    }
+  }
+}

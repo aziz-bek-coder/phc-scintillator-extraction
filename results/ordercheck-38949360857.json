@@ -1,0 +1,358 @@
+{
+  "job": "ordercheck",
+  "config_path": "configs/m4_ordercheck.json",
+  "config": {
+    "description": "M4: Fourier-order check of the integrated early-photon objective and single-pass extraction of the five final designs, orders 5, 7, 9, 11 on a 9 x 2 angle grid, same solver path as the fine tables (decision of 2026-10-16). About 62 runner-minutes in 3 chunks.",
+    "designs": [
+      "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+      "configs/m4_lut_opt_early_lyso_grease_fine_M9.json",
+      "configs/m4_lut_opt_single_pass_lyso_grease_fine_M9.json",
+      "configs/m4_lut_ref_lyso_air_fine_M9.json",
+      "configs/m4_lut_opt_early_lyso_air_fine_M9.json"
+    ],
+    "orders": [
+      5,
+      7,
+      9,
+      11
+    ],
+    "grid": {
+      "n_theta": 9,
+      "n_phi": 2
+    },
+    "tau_ps": 100,
+    "lz_um": 20000,
+    "n_group": null,
+    "chunks": 3
+  },
+  "merged_at_commit": "14f9f18f1ac0",
+  "merged_utc": "2026-10-16T19:03:32+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "14f9f18f1ac0",
+          "started_utc": "2026-10-16T18:43:16+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "14f9f18f1ac0573672073f324a86a029ab5e7321",
+            "github_run_id": "38949360857",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000453",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:02:28+00:00",
+          "seconds": 1151.8461864459998,
+          "complete": true
+        }
+      ],
+      "seconds": 1151.8461864459998
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "14f9f18f1ac0",
+          "started_utc": "2026-10-16T18:43:09+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "14f9f18f1ac0573672073f324a86a029ab5e7321",
+            "github_run_id": "38949360857",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000455",
+            "cpu_model": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz"
+          },
+          "ended_utc": "2026-10-16T18:55:21+00:00",
+          "seconds": 731.783872815,
+          "complete": true
+        }
+      ],
+      "seconds": 731.783872815
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "14f9f18f1ac0",
+          "started_utc": "2026-10-16T18:43:15+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "14f9f18f1ac0573672073f324a86a029ab5e7321",
+            "github_run_id": "38949360857",
+            "github_ref_name": "claude/m4-optimisation",
+            "runner_name": "GitHub Actions 1000000454",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T19:02:10+00:00",
+          "seconds": 1135.2582713010001,
+          "complete": true
+        }
+      ],
+      "seconds": 1135.2582713010001
+    }
+  ],
+  "total_runner_seconds": 3018.888330562,
+  "grid": {
+    "n_theta": 9,
+    "n_phi": 2
+  },
+  "orders": [
+    5,
+    7,
+    9,
+    11
+  ],
+  "tau_ps": 100,
+  "designs": [
+    {
+      "label": "ref_lyso_grease_fine_M9",
+      "config": "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+      "n2": 1.46,
+      "layer": {
+        "period_um": 0.4,
+        "radius_um": 0.12,
+        "height_um": 0.3,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "bare_same_grid": {
+        "early": 0.11925164178758496,
+        "single_pass": 0.17433883374894496
+      },
+      "by_order": {
+        "5": {
+          "early": 0.12385528481870864,
+          "single_pass": 0.20189096544275284
+        },
+        "7": {
+          "early": 0.12386239530356598,
+          "single_pass": 0.2018975630101993
+        },
+        "9": {
+          "early": 0.12387228641574978,
+          "single_pass": 0.20191412493798283
+        },
+        "11": {
+          "early": 0.1238836443264645,
+          "single_pass": 0.20193723285705412
+        }
+      },
+      "rel_change_vs_top": {
+        "5": {
+          "early": 0.00022892051577948745,
+          "single_pass": 0.0002291177988658877
+        },
+        "7": {
+          "early": 0.00017152403785055653,
+          "single_pass": 0.0001964464219578053
+        },
+        "9": {
+          "early": 9.16820842369194e-05,
+          "single_pass": 0.00011443119599268352
+        }
+      }
+    },
+    {
+      "label": "opt_early_lyso_grease_fine_M9",
+      "config": "configs/m4_lut_opt_early_lyso_grease_fine_M9.json",
+      "n2": 1.46,
+      "layer": {
+        "period_um": 0.23396,
+        "radius_um": 0.04524,
+        "height_um": 0.21728,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "bare_same_grid": {
+        "early": 0.11925164178758496,
+        "single_pass": 0.17433883374894496
+      },
+      "by_order": {
+        "5": {
+          "early": 0.11969111256284935,
+          "single_pass": 0.17782784023940065
+        },
+        "7": {
+          "early": 0.1196724117599436,
+          "single_pass": 0.17775654768148022
+        },
+        "9": {
+          "early": 0.11966379918871445,
+          "single_pass": 0.17772218270267648
+        },
+        "11": {
+          "early": 0.11965918985713947,
+          "single_pass": 0.17770277100931242
+        }
+      },
+      "rel_change_vs_top": {
+        "5": {
+          "early": 0.0002667802259734121,
+          "single_pass": 0.0007038113664624705
+        },
+        "7": {
+          "early": 0.00011049634231951921,
+          "single_pass": 0.0003026214608942754
+        },
+        "9": {
+          "early": 3.8520497928170054e-05,
+          "single_pass": 0.00010923686363360259
+        }
+      }
+    },
+    {
+      "label": "opt_single_pass_lyso_grease_fine_M9",
+      "config": "configs/m4_lut_opt_single_pass_lyso_grease_fine_M9.json",
+      "n2": 1.46,
+      "layer": {
+        "period_um": 0.55895,
+        "radius_um": 0.22181,
+        "height_um": 0.2135,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "bare_same_grid": {
+        "early": 0.11925164178758496,
+        "single_pass": 0.17433883374894496
+      },
+      "by_order": {
+        "5": {
+          "early": 0.12399600075795746,
+          "single_pass": 0.22631372219048604
+        },
+        "7": {
+          "early": 0.12405853114798798,
+          "single_pass": 0.22643665719703826
+        },
+        "9": {
+          "early": 0.12409807378042896,
+          "single_pass": 0.22656743938058108
+        },
+        "11": {
+          "early": 0.12411374793065998,
+          "single_pass": 0.22662789917672188
+        }
+      },
+      "rel_change_vs_top": {
+        "5": {
+          "early": 0.0009487037066055201,
+          "single_pass": 0.0013863120444444956
+        },
+        "7": {
+          "early": 0.00044488852840736116,
+          "single_pass": 0.0008438589440150629
+        },
+        "9": {
+          "early": 0.0001262885900421944,
+          "single_pass": 0.00026678002293821295
+        }
+      }
+    },
+    {
+      "label": "ref_lyso_air_fine_M9",
+      "config": "configs/m4_lut_ref_lyso_air_fine_M9.json",
+      "n2": 1.0,
+      "layer": {
+        "period_um": 0.4,
+        "radius_um": 0.12,
+        "height_um": 0.3,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "bare_same_grid": {
+        "early": 0.04712648385177956,
+        "single_pass": 0.060736170264168804
+      },
+      "by_order": {
+        "5": {
+          "early": 0.057167390839008944,
+          "single_pass": 0.08948359707777997
+        },
+        "7": {
+          "early": 0.057120598411980736,
+          "single_pass": 0.08936989392000312
+        },
+        "9": {
+          "early": 0.057104567846893634,
+          "single_pass": 0.08932960020660569
+        },
+        "11": {
+          "early": 0.057097553193574374,
+          "single_pass": 0.08931119987963496
+        }
+      },
+      "rel_change_vs_top": {
+        "5": {
+          "early": 0.001223128514768465,
+          "single_pass": 0.0019302976376687282
+        },
+        "7": {
+          "early": 0.0004036113128741778,
+          "single_pass": 0.0006571856659329104
+        },
+        "9": {
+          "early": 0.0001228538339546369,
+          "single_pass": 0.00020602485461541453
+        }
+      }
+    },
+    {
+      "label": "opt_early_lyso_air_fine_M9",
+      "config": "configs/m4_lut_opt_early_lyso_air_fine_M9.json",
+      "n2": 1.0,
+      "layer": {
+        "period_um": 0.2324,
+        "radius_um": 0.06534,
+        "height_um": 0.266,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "bare_same_grid": {
+        "early": 0.04712648385177956,
+        "single_pass": 0.060736170264168804
+      },
+      "by_order": {
+        "5": {
+          "early": 0.049988056702817446,
+          "single_pass": 0.06781079490210602
+        },
+        "7": {
+          "early": 0.04995841731268859,
+          "single_pass": 0.0677061543783986
+        },
+        "9": {
+          "early": 0.04993818614298735,
+          "single_pass": 0.06764186960549812
+        },
+        "11": {
+          "early": 0.049924684178320244,
+          "single_pass": 0.06760039285267558
+        }
+      },
+      "rel_change_vs_top": {
+        "5": {
+          "early": 0.001269362551615722,
+          "single_pass": 0.003112438264803911
+        },
+        "7": {
+          "early": 0.0006756804759716937,
+          "single_pass": 0.001564510519243685
+        },
+        "9": {
+          "early": 0.0002704466716078989,
+          "single_pass": 0.0006135578666374188
+        }
+      }
+    }
+  ],
+  "max_energy_error": 7.37543359718984e-12
+}
