@@ -9,6 +9,8 @@ agree; the longest is kept.
 
 Run: python scripts/recover_optimize_log.py --config configs/<opt>.json --chunk <k>
          --run <run-id> [<run-id> ...] --out <name>
+With --others <run-id>, the finished starts of that run (their history.json artifacts)
+are summarised too, and the overall best design over all starts is reported.
 Writes results/<name>.json (steps, best step, bare objective on the same grid).
 """
 
@@ -54,6 +56,7 @@ def main() -> None:
     ap.add_argument("--chunk", type=int, required=True)
     ap.add_argument("--run", nargs="+", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--others", help="run whose other chunk artifacts hold finished starts")
     args = ap.parse_args()
     print(f"commit {git_commit()}")
     cfg = json.loads((REPO_ROOT / args.config).read_text(encoding="utf-8"))
@@ -69,6 +72,22 @@ def main() -> None:
         f"agree: {agree}; best step {best['step']}: J = {100 * best['objective']:.4f} %, "
         f"a = {best['period_um']} um, f = {best['fill']}, h = {best['height_um']} um"
     )
+    others = []
+    if args.others:
+        dest = REPO_ROOT / "results" / "optimize" / args.others
+        for k in range(len(cfg["starts"])):
+            if k == args.chunk:
+                continue
+            d = dest / f"chunk-{k}"
+            if not d.exists():
+                subprocess.run(["gh", "run", "download", args.others, "-n", f"optimize-chunk-{k}",
+                                "-D", str(d)], check=True)  # fmt: skip
+            h = json.loads(next(d.rglob("history.json")).read_text())
+            b = max(h, key=lambda s: s["objective"])
+            keys = ("step", "objective", "period_um", "fill", "height_um", "radius_um")
+            others.append({"chunk": k, "steps": len(h), "best": {key: b[key] for key in keys}})
+            print(f"start {k}: {len(h)} steps, best J = {100 * b['objective']:.4f} %")
+    overall = max([best] + [o["best"] for o in others], key=lambda b: b["objective"])
     path = save_results(args.out, {
         "what": f"start {args.chunk} of {args.config}, recovered from the job logs",
         "config_path": args.config, "chunk": args.chunk, "start": cfg["starts"][args.chunk],
@@ -76,6 +95,7 @@ def main() -> None:
         "steps_planned": cfg["steps"], "steps": longest, "best": best,
         "precision": "objective 6 decimals, parameters 4 decimals (as printed by the job)",
         "bare_objective_same_grid": opt.bare_objective(weight, n1, n2, grid),
+        "other_starts": {"run": args.others, "starts": others}, "overall_best": overall,
     })  # fmt: skip
     print(f"saved {path}")
 
