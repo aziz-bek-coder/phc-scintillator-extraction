@@ -156,8 +156,9 @@ and its long-time limit is
     F(∞) = ½ ∫_{−1}^{1} dw  T_r / (1 − R_r R_b) · (1 if w > 0, R_b if w < 0).        (6)
 
 With a mirror back face (R_b = 1) every photon with T_r > 0 is eventually detected,
-and (6) gives F(∞) = 1 − cos θc = 2 η₁: the answer to Predict 1, about 41 % for
-LYSO → grease (n = 1.46) [number: `results/m3_validation.json`].
+and (6) gives F(∞) = 1 − cos θc = 2 η₁: the answer to Predict 1. For LYSO → grease
+(n = 1.46), (6) gives 40.9 %, and the Monte Carlo detects 40.8 % by 2 ns
+[`results/mc-38902476498.json`, case "mirror walls"].
 
 With absorption, multiply each term in (5) by exp(−L_k / ℓ) inside the z-average.
 `timing.py` evaluates (5) and (6) by quadrature in w and z; these are the test
@@ -245,4 +246,5 @@ readout cone. But in a 3 × 3 × 20 mm bar most photons heading for the readout 
 its cone hit a side face first (lateral travel 20 mm × tan θ is larger than 3 mm for
 most θ in the cone), and a diffuse wall sends about half of them backward. They then
 arrive late. So the early yield E(100 ps) can drop while η rises. The Monte Carlo
-checks this (`results/m3_wall_models.json`).
+checks this: lossless contact-diffuse sides raise the fraction detected by 2 ns from
+40.8 % to 79.0 % but lower E(100 ps) from 12.76 % to 10.93 % [`results/mc-38902476498.json`].

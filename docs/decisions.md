@@ -232,6 +232,25 @@ GitHub's 2-vCPU runners came with different CPUs: AMD EPYC 9V74 (benchmark, orde
 73 s) and EPYC 7763 (convergence, order 13 in 48 s). Budgets use the slower machine;
 timings in result files are informative only, never a result.
 
+## 2026-10-16 — Monte Carlo conventions (M3)
+- Seeds: chunk part p of case c uses `SeedSequence([seed, c, p])`; every part is an
+  independent, reproducible stream.
+- Time cut-off 5 ns for efficiency numbers ("detected by 5 ns"); validation runs use
+  2 ns because the closed form holds at any time.
+- Nominal wall model for design comparisons: all five non-readout faces polished, thin
+  air gap, specular mirror film. It is the common choice for timing pixels and the one
+  under which early photons are insensitive to the wrap (they see only total internal
+  reflection at the sides).
+- Wall reflectivity 0.95 is an assumption: no citable value was found for mirror films
+  or diffuse wraps (searched 2026-10-16; publisher pages paywalled, 3M site timed out).
+  Early-photon yields do not depend on it; totals by 5 ns do.
+- No bulk absorption in design comparisons until a LYSO absorption length is cited.
+
+## 2026-10-16 — Pull requests are merged with the noreply author email
+`gh pr merge` lets GitHub author the merge commit with the account's primary email,
+which put the Gmail address on the merge commits of PRs #2 and #3. Every merge now
+uses `gh pr merge <n> --merge --author-email 262705928+aziz-bek-coder@users.noreply.github.com`.
+
 ## Open
 - Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
   M3 uses n_g = n and states the bias.

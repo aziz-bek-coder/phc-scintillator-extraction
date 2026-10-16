@@ -49,14 +49,16 @@ Dates revised 2026-10-15 (Aziz): pause 21 Dec 2026 to 3 Jan 2027.
       (θ 1° × φ 2.5°, order 9) planned for final evaluation
 - [x] Lookup-table format defined and documented in `docs/decisions.md`
 
-## M3 — Monte Carlo pixel model (by 6 Dec 2026)
-- [ ] Derivation 04: bare-face expectation per wall model, transport time from path length
-- [ ] 3×3×20 mm³ pixel, random emission points, isotropic directions
-- [ ] Bulk absorption; wall models: specular / Lambertian / wrapped
-- [ ] Readout face sampled from the RCWA lookup table incl. reflected orders
-- [ ] Path length → transport time (group-index assumption stated)
-- [ ] Bare face, no absorption reproduces the analytic expectation for the chosen wall model
-- [ ] Outputs: extraction efficiency, transport-time CDF, early-photon fraction
+## M3 — Monte Carlo pixel model (by 6 Dec 2026) — done 2026-10-16
+- [x] Derivation 04: bare-face expectation per wall model, transport time from path length
+- [x] 3×3×20 mm³ pixel, random emission points, isotropic directions
+- [x] Bulk absorption; wall models: specular / bare / air-gap mirror / air-gap diffuse / contact diffuse
+- [x] Readout face sampled from the RCWA lookup table incl. reflected orders
+- [x] Path length → transport time (group-index assumption stated)
+- [x] Bare face, no absorption reproduces the analytic expectation for every wall model
+      that keeps |w| (remote run 38902476498, all |z| < 2 at 1e6 photons)
+- [x] Outputs: extraction efficiency, transport-time CDF, early-photon fraction
+      (remote runs 38902480681, 38903357645)
 
 ## M4 — optimisation and comparison (by 20 Dec 2026)
 - [ ] Derivation 05: the differentiable early-arrival objective

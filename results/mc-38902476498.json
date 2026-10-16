@@ -1,0 +1,962 @@
+{
+  "job": "mc",
+  "config_path": "configs/m3_validation.json",
+  "config": {
+    "description": "M3 validation: Monte Carlo vs the analytic specular-box CDF (derivation 04, eq. 5) for wall models that keep |w|, plus a negative control. LYSO 3x3x20 mm, bare grease readout unless stated.",
+    "pixel": {
+      "n1": "LYSO",
+      "wavelength_um": "LYSO-peak",
+      "lx_um": 3000,
+      "ly_um": 3000,
+      "lz_um": 20000
+    },
+    "t_max_ps": 2000,
+    "n_photons_per_chunk": 500000,
+    "chunks_per_case": 2,
+    "seed": 20261016,
+    "tau_ps": [
+      50,
+      100,
+      200
+    ],
+    "t_grid_ps": {
+      "stop": 2000,
+      "step": 10
+    },
+    "cases": [
+      {
+        "name": "mirror walls",
+        "walls": {
+          "kind": "specular",
+          "reflectivity": 1.0
+        },
+        "readout": {
+          "n_out": "grease"
+        },
+        "analytic": {
+          "type": "specular_box",
+          "back": "mirror"
+        }
+      },
+      {
+        "name": "bare polished walls",
+        "walls": {
+          "kind": "bare"
+        },
+        "readout": {
+          "n_out": "grease"
+        },
+        "analytic": {
+          "type": "specular_box",
+          "back": "bare"
+        }
+      },
+      {
+        "name": "air-gap diffuse sides (rho 0.95), mirror back",
+        "walls": [
+          {
+            "kind": "wrapped_lambertian",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "wrapped_lambertian",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "wrapped_lambertian",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "wrapped_lambertian",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "specular",
+            "reflectivity": 1.0
+          }
+        ],
+        "readout": {
+          "n_out": "grease"
+        },
+        "analytic": {
+          "type": "specular_box",
+          "back": "mirror"
+        }
+      },
+      {
+        "name": "air-gap mirror sides (rho 0.95), mirror back",
+        "walls": [
+          {
+            "kind": "wrapped_specular",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "wrapped_specular",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "wrapped_specular",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "wrapped_specular",
+            "reflectivity": 0.95
+          },
+          {
+            "kind": "specular",
+            "reflectivity": 1.0
+          }
+        ],
+        "readout": {
+          "n_out": "grease"
+        },
+        "analytic": {
+          "type": "specular_box",
+          "back": "mirror"
+        }
+      },
+      {
+        "name": "mirror walls, absorption length 50 mm",
+        "pixel": {
+          "abs_length_um": 50000
+        },
+        "walls": {
+          "kind": "specular",
+          "reflectivity": 1.0
+        },
+        "readout": {
+          "n_out": "grease"
+        },
+        "analytic": {
+          "type": "specular_box",
+          "back": "mirror"
+        }
+      },
+      {
+        "name": "bare polished walls, readout into air",
+        "walls": {
+          "kind": "bare"
+        },
+        "readout": {
+          "n_out": "air"
+        },
+        "analytic": {
+          "type": "specular_box",
+          "back": "bare"
+        }
+      },
+      {
+        "name": "NEGATIVE CONTROL: contact diffuse sides (rho 1), mirror back",
+        "walls": [
+          {
+            "kind": "lambertian",
+            "reflectivity": 1.0
+          },
+          {
+            "kind": "lambertian",
+            "reflectivity": 1.0
+          },
+          {
+            "kind": "lambertian",
+            "reflectivity": 1.0
+          },
+          {
+            "kind": "lambertian",
+            "reflectivity": 1.0
+          },
+          {
+            "kind": "specular",
+            "reflectivity": 1.0
+          }
+        ],
+        "readout": {
+          "n_out": "grease"
+        },
+        "analytic": {
+          "type": "specular_box",
+          "back": "mirror"
+        }
+      }
+    ]
+  },
+  "merged_at_commit": "40c7f229433a",
+  "merged_utc": "2026-10-16T12:47:14+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:02+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000331",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:20+00:00",
+          "seconds": 18.524558653,
+          "complete": true
+        }
+      ],
+      "seconds": 18.524558653
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:54+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000332",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:11+00:00",
+          "seconds": 17.11704849099999,
+          "complete": true
+        }
+      ],
+      "seconds": 17.11704849099999
+    },
+    {
+      "chunk": 10,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:12+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000348",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:34+00:00",
+          "seconds": 21.794082999999986,
+          "complete": true
+        }
+      ],
+      "seconds": 21.794082999999986
+    },
+    {
+      "chunk": 11,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:13+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000350",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:30+00:00",
+          "seconds": 17.155188819000003,
+          "complete": true
+        }
+      ],
+      "seconds": 17.155188819000003
+    },
+    {
+      "chunk": 12,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:52+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000353",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:46:10+00:00",
+          "seconds": 18.17537884800001,
+          "complete": true
+        }
+      ],
+      "seconds": 18.17537884800001
+    },
+    {
+      "chunk": 13,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:46+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000354",
+            "cpu_model": "AMD EPYC 9V45 96-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:55+00:00",
+          "seconds": 8.739211284,
+          "complete": true
+        }
+      ],
+      "seconds": 8.739211284
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:47+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000330",
+            "cpu_model": "AMD EPYC 9V45 96-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:43:54+00:00",
+          "seconds": 6.802725139000003,
+          "complete": true
+        }
+      ],
+      "seconds": 6.802725139000003
+    },
+    {
+      "chunk": 3,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:03+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000335",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:17+00:00",
+          "seconds": 14.363394638999992,
+          "complete": true
+        }
+      ],
+      "seconds": 14.363394638999992
+    },
+    {
+      "chunk": 4,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:52+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000334",
+            "cpu_model": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz"
+          },
+          "ended_utc": "2026-10-16T12:44:09+00:00",
+          "seconds": 16.595037818999998,
+          "complete": true
+        }
+      ],
+      "seconds": 16.595037818999998
+    },
+    {
+      "chunk": 5,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:41+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000333",
+            "cpu_model": "AMD EPYC 9V45 96-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:43:51+00:00",
+          "seconds": 9.764485983,
+          "complete": true
+        }
+      ],
+      "seconds": 9.764485983
+    },
+    {
+      "chunk": 6,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:45+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000342",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:01+00:00",
+          "seconds": 15.809112548000002,
+          "complete": true
+        }
+      ],
+      "seconds": 15.809112548000002
+    },
+    {
+      "chunk": 7,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:46+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000343",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:00+00:00",
+          "seconds": 13.379748535999994,
+          "complete": true
+        }
+      ],
+      "seconds": 13.379748535999994
+    },
+    {
+      "chunk": 8,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:08+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000346",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:12+00:00",
+          "seconds": 4.7233513759999965,
+          "complete": true
+        }
+      ],
+      "seconds": 4.7233513759999965
+    },
+    {
+      "chunk": 9,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:03+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902476498",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000347",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:07+00:00",
+          "seconds": 4.218574157000006,
+          "complete": true
+        }
+      ],
+      "seconds": 4.218574157000006
+    }
+  ],
+  "total_runner_seconds": 187.161899292,
+  "pixel": {
+    "n1": 1.81,
+    "n_group": 1.81,
+    "size_um": [
+      3000.0,
+      3000.0,
+      20000.0
+    ],
+    "abs_length_um": null,
+    "direct_transit_ps": 120.75020246173104
+  },
+  "cases": [
+    {
+      "name": "mirror walls",
+      "walls": {
+        "kind": "specular",
+        "reflectivity": 1.0
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 407719,
+        "absorbed_bulk": 0,
+        "lost_wall": 0,
+        "escaped_wall": 0,
+        "capped": 592281
+      },
+      "efficiency_at_t_max": 0.407719,
+      "efficiency_sigma": 0.0004914104364367937,
+      "first_pass_fraction": 0.383842,
+      "early_yield": {
+        "50": {
+          "value": 0.063601,
+          "sigma": 0.00024404080150458446
+        },
+        "100": {
+          "value": 0.127551,
+          "sigma": 0.000333589182077297
+        },
+        "200": {
+          "value": 0.255265,
+          "sigma": 0.00043601006843305807
+        }
+      },
+      "median_detected_time_ps": 159.6192220153018,
+      "runner_seconds": 31.947039063999995,
+      "photon_steps": 85533547,
+      "analytic": {
+        "type": "specular_box",
+        "back": "mirror",
+        "max_abs_z": 1.488256989543829,
+        "rms_z": 0.638044901883363,
+        "points": 200,
+        "F_at_t_max_analytic": 0.40797767051989003,
+        "F_at_t_max_mc": 0.407719,
+        "F_infinity_analytic": 0.40895000000000004
+      }
+    },
+    {
+      "name": "bare polished walls",
+      "walls": {
+        "kind": "bare"
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 335574,
+        "absorbed_bulk": 0,
+        "lost_wall": 0,
+        "escaped_wall": 404815,
+        "capped": 259611
+      },
+      "efficiency_at_t_max": 0.335574,
+      "efficiency_sigma": 0.00047219073532207297,
+      "first_pass_fraction": 0.313559,
+      "early_yield": {
+        "50": {
+          "value": 0.063726,
+          "sigma": 0.00024426419492836035
+        },
+        "100": {
+          "value": 0.127695,
+          "sigma": 0.00033374988685391343
+        },
+        "200": {
+          "value": 0.218628,
+          "sigma": 0.00041331561501593427
+        }
+      },
+      "median_detected_time_ps": 132.91967757735154,
+      "runner_seconds": 18.21452262199999,
+      "photon_steps": 41594145,
+      "analytic": {
+        "type": "specular_box",
+        "back": "bare",
+        "max_abs_z": 1.0143838509399878,
+        "rms_z": 0.5385439015927771,
+        "points": 200,
+        "F_at_t_max_analytic": 0.3353054493134036,
+        "F_at_t_max_mc": 0.335574,
+        "F_infinity_analytic": 0.3362777787934992
+      }
+    },
+    {
+      "name": "air-gap diffuse sides (rho 0.95), mirror back",
+      "walls": [
+        {
+          "kind": "wrapped_lambertian",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "wrapped_lambertian",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "wrapped_lambertian",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "wrapped_lambertian",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "specular",
+          "reflectivity": 1.0
+        }
+      ],
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 408065,
+        "absorbed_bulk": 0,
+        "lost_wall": 331188,
+        "escaped_wall": 0,
+        "capped": 260747
+      },
+      "efficiency_at_t_max": 0.408065,
+      "efficiency_sigma": 0.0004914752850093278,
+      "first_pass_fraction": 0.384316,
+      "early_yield": {
+        "50": {
+          "value": 0.06419,
+          "sigma": 0.00024509109306541514
+        },
+        "100": {
+          "value": 0.128155,
+          "sigma": 0.0003342623161156519
+        },
+        "200": {
+          "value": 0.255858,
+          "sigma": 0.00043634239289347073
+        }
+      },
+      "median_detected_time_ps": 159.57971298206854,
+      "runner_seconds": 23.714862267,
+      "photon_steps": 49927711,
+      "analytic": {
+        "type": "specular_box",
+        "back": "mirror",
+        "max_abs_z": 1.3789085226164517,
+        "rms_z": 0.4898038379481454,
+        "points": 200,
+        "F_at_t_max_analytic": 0.40797767051989003,
+        "F_at_t_max_mc": 0.408065,
+        "F_infinity_analytic": 0.40895000000000004
+      }
+    },
+    {
+      "name": "air-gap mirror sides (rho 0.95), mirror back",
+      "walls": [
+        {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        {
+          "kind": "specular",
+          "reflectivity": 1.0
+        }
+      ],
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 408488,
+        "absorbed_bulk": 0,
+        "lost_wall": 330679,
+        "escaped_wall": 0,
+        "capped": 260833
+      },
+      "efficiency_at_t_max": 0.408488,
+      "efficiency_sigma": 0.0004915542227018297,
+      "first_pass_fraction": 0.384175,
+      "early_yield": {
+        "50": {
+          "value": 0.063983,
+          "sigma": 0.0002447226505883752
+        },
+        "100": {
+          "value": 0.127669,
+          "sigma": 0.00033372088103533466
+        },
+        "200": {
+          "value": 0.255298,
+          "sigma": 0.0004360285898837369
+        }
+      },
+      "median_detected_time_ps": 159.85300990229558,
+      "runner_seconds": 25.809122845999994,
+      "photon_steps": 50017003,
+      "analytic": {
+        "type": "specular_box",
+        "back": "mirror",
+        "max_abs_z": 1.0718206726391601,
+        "rms_z": 0.8047438085437161,
+        "points": 200,
+        "F_at_t_max_analytic": 0.40797767051989003,
+        "F_at_t_max_mc": 0.408488,
+        "F_infinity_analytic": 0.40895000000000004
+      }
+    },
+    {
+      "name": "mirror walls, absorption length 50 mm",
+      "walls": {
+        "kind": "specular",
+        "reflectivity": 1.0
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {
+        "abs_length_um": 50000
+      },
+      "counts": {
+        "detected": 245027,
+        "absorbed_bulk": 754225,
+        "lost_wall": 0,
+        "escaped_wall": 0,
+        "capped": 748
+      },
+      "efficiency_at_t_max": 0.245027,
+      "efficiency_sigma": 0.00043010320769671083,
+      "first_pass_fraction": 0.241373,
+      "early_yield": {
+        "50": {
+          "value": 0.059099,
+          "sigma": 0.00023580989843303862
+        },
+        "100": {
+          "value": 0.10858,
+          "sigma": 0.0003111115291981318
+        },
+        "200": {
+          "value": 0.186546,
+          "sigma": 0.00038954664660859295
+        }
+      },
+      "median_detected_time_ps": 115.57262250378912,
+      "runner_seconds": 5.584414286000012,
+      "photon_steps": 15434943,
+      "analytic": {
+        "type": "specular_box",
+        "back": "mirror",
+        "max_abs_z": 1.4953738054674426,
+        "rms_z": 0.8131882043799651,
+        "points": 200,
+        "F_at_t_max_analytic": 0.2453622972991569,
+        "F_at_t_max_mc": 0.245027,
+        "F_infinity_analytic": null
+      }
+    },
+    {
+      "name": "bare polished walls, readout into air",
+      "walls": {
+        "kind": "bare"
+      },
+      "readout": {
+        "n_out": "air"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 82923,
+        "absorbed_bulk": 0,
+        "lost_wall": 0,
+        "escaped_wall": 416258,
+        "capped": 500819
+      },
+      "efficiency_at_t_max": 0.082923,
+      "efficiency_sigma": 0.0002757657993134754,
+      "first_pass_fraction": 0.080498,
+      "early_yield": {
+        "50": {
+          "value": 0.027137,
+          "sigma": 0.00016248256285214115
+        },
+        "100": {
+          "value": 0.054502,
+          "sigma": 0.00022700557701519142
+        },
+        "200": {
+          "value": 0.075955,
+          "sigma": 0.00026492609908236673
+        }
+      },
+      "median_detected_time_ps": 76.40128993341672,
+      "runner_seconds": 35.25048363799999,
+      "photon_steps": 65230037,
+      "analytic": {
+        "type": "specular_box",
+        "back": "bare",
+        "max_abs_z": 1.8726496788951614,
+        "rms_z": 0.9917750839008254,
+        "points": 200,
+        "F_at_t_max_analytic": 0.08320773269839637,
+        "F_at_t_max_mc": 0.082923,
+        "F_infinity_analytic": 0.08325
+      }
+    },
+    {
+      "name": "NEGATIVE CONTROL: contact diffuse sides (rho 1), mirror back",
+      "walls": [
+        {
+          "kind": "lambertian",
+          "reflectivity": 1.0
+        },
+        {
+          "kind": "lambertian",
+          "reflectivity": 1.0
+        },
+        {
+          "kind": "lambertian",
+          "reflectivity": 1.0
+        },
+        {
+          "kind": "lambertian",
+          "reflectivity": 1.0
+        },
+        {
+          "kind": "specular",
+          "reflectivity": 1.0
+        }
+      ],
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 789827,
+        "absorbed_bulk": 0,
+        "lost_wall": 0,
+        "escaped_wall": 0,
+        "capped": 210173
+      },
+      "efficiency_at_t_max": 0.789827,
+      "efficiency_sigma": 0.0004074313562687585,
+      "first_pass_fraction": 0.607486,
+      "early_yield": {
+        "50": {
+          "value": 0.059918,
+          "sigma": 0.00023733485474325088
+        },
+        "100": {
+          "value": 0.109304,
+          "sigma": 0.0003120202486762678
+        },
+        "200": {
+          "value": 0.189514,
+          "sigma": 0.00039191637348291535
+        }
+      },
+      "median_detected_time_ps": 567.0449315572102,
+      "runner_seconds": 23.55363444599999,
+      "photon_steps": 57936835,
+      "analytic": {
+        "type": "specular_box",
+        "back": "mirror",
+        "max_abs_z": 776.9709684279256,
+        "rms_z": 434.0448866309485,
+        "points": 200,
+        "F_at_t_max_analytic": 0.40797767051989003,
+        "F_at_t_max_mc": 0.789827,
+        "F_infinity_analytic": 0.40895000000000004
+      }
+    }
+  ]
+}
