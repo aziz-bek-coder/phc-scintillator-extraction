@@ -1,0 +1,80 @@
+{
+  "description": "M4 comparison, LYSO 3x3x20 mm -> grease: bare face vs fine lookup tables (order 9); all five other faces polished + air gap + mirror film, ASSUMED reflectivity 0.95.",
+  "pixel": {
+    "n1": "LYSO",
+    "wavelength_um": "LYSO-peak",
+    "lx_um": 3000,
+    "ly_um": 3000,
+    "lz_um": 20000
+  },
+  "t_max_ps": 5000,
+  "n_photons_per_chunk": 500000,
+  "chunks_per_case": 2,
+  "seed": 20261019,
+  "tau_ps": [
+    50,
+    100,
+    200
+  ],
+  "t_grid_ps": {
+    "stop": 5000,
+    "step": 10
+  },
+  "cases": [
+    {
+      "name": "bare readout",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease"
+      }
+    },
+    {
+      "name": "reference PhC",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease",
+        "lut": {
+          "run_id": 38931698470,
+          "artifact": "lut-result",
+          "file": "ref_lyso_grease_fine_M9_426c69943168.npz"
+        }
+      }
+    },
+    {
+      "name": "optimised: early photons",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease",
+        "lut": {
+          "run_id": 38931708295,
+          "artifact": "lut-result",
+          "file": "opt_early_lyso_grease_fine_M9_11257d45d072.npz"
+        }
+      }
+    },
+    {
+      "name": "optimised: single pass",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease",
+        "lut": {
+          "run_id": 38931717766,
+          "artifact": "lut-result",
+          "file": "opt_single_pass_lyso_grease_fine_M9_346245ba92e6.npz"
+        }
+      }
+    }
+  ]
+}
