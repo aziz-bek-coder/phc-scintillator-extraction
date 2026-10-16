@@ -226,7 +226,8 @@ def objective(
             n1, n2, wavelength_um, n_pillar, period_um, fill, height_um, th, ph, order=order
         )
         term = w * t
-        if backward:
+        # no propagating transmitted order here: T = 0 exactly and has no graph
+        if backward and term.requires_grad:
             term.backward()
         total += float(term.detach())
     return total
@@ -280,7 +281,8 @@ def evaluate_with_gradient(
     j = objective(
         weight, n1, n2, wavelength_um, n_pillar, a_l, f_l, h_l, grid, order=order, backward=True
     )
-    g_phys = torch.stack([a_l.grad, f_l.grad, h_l.grad])
+    zero = torch.zeros((), dtype=torch.float64)  # .grad stays None if every incidence is closed
+    g_phys = torch.stack([zero if p.grad is None else p.grad for p in (a_l, f_l, h_l)])
     torch.autograd.backward(torch.stack([a, f, h]), g_phys)
     return j, xg.grad.detach().clone(), (float(a.detach()), float(f.detach()), float(h.detach()))
 

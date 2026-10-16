@@ -113,3 +113,39 @@ def test_optimise_resumes_exactly() -> None:
     resumed = opt.optimise((0.4, 0.28, 0.3), *args, order=1, steps=3, lr=0.2, history=part)
     assert [s["objective"] for s in resumed] == pytest.approx([s["objective"] for s in full])
     assert resumed[-1]["x_next"] == pytest.approx(full[-1]["x_next"])
+
+
+class _Points:
+    """Duck-typed angle grid with explicit (theta, phi, weight) points."""
+
+    def __init__(self, pts: list[tuple[float, float, float]]) -> None:
+        self.pts = pts
+
+    def points(self) -> list[tuple[float, float, float]]:
+        return self.pts
+
+
+def test_closed_incidences_give_zero_and_keep_the_gradient_finite() -> None:
+    """Air outside, a = 0.2 um: at theta 45 deg, phi 22.5 deg no transmitted order
+    propagates (|u + g(m, n)| > 1 for every m, n), so T = 0 and has no autograd graph.
+    The first M4 air run (38905911733, start 1) stopped on such an incidence."""
+    closed = (math.radians(45.0), math.radians(22.5))
+    open_ = (math.radians(20.0), math.radians(22.5))
+    t = opt.transmission(LYSO.n, N_AIR, LAM, N_SIN, 0.2, 0.3, 0.2, *closed, order=2)
+    assert float(t) == 0.0 and not t.requires_grad
+
+    def unit(theta: float) -> float:
+        return 1.0
+
+    bounds = opt.Bounds(period_um=(0.1, 0.3))
+    x = opt.to_unconstrained(0.2, 0.3, 0.2, bounds)
+    args = (x, bounds, unit, LYSO.n, N_AIR, LAM, N_SIN)
+    j_both, g_both, _ = opt.evaluate_with_gradient(
+        *args, _Points([(*closed, 0.5), (*open_, 0.5)]), order=2
+    )
+    j_open, g_open, _ = opt.evaluate_with_gradient(*args, _Points([(*open_, 0.5)]), order=2)
+    assert j_open > 0 and j_both == j_open
+    torch.testing.assert_close(g_both, g_open, rtol=0, atol=0)
+    assert torch.all(torch.isfinite(g_open)) and torch.count_nonzero(g_open) > 0
+    j_closed, g_closed, _ = opt.evaluate_with_gradient(*args, _Points([(*closed, 1.0)]), order=2)
+    assert j_closed == 0.0 and torch.count_nonzero(g_closed) == 0
