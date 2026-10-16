@@ -48,7 +48,7 @@ def cmd_luts(args) -> None:
     for spec in args.opt:
         medium, kind, path = spec.split(":", 2)
         s = json.loads(Path(path).read_text())
-        b = s["best"]
+        b = s.get("overall_best", s["best"])
         layer = {
             "period_um": round(b["period_um"], 5),
             "radius_um": round(b["period_um"] * math.sqrt(b["fill"] / math.pi), 5),

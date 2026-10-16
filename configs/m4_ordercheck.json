@@ -1,0 +1,24 @@
+{
+  "description": "M4: Fourier-order check of the integrated early-photon objective and single-pass extraction of the five final designs, orders 5, 7, 9, 11 on a 9 x 2 angle grid, same solver path as the fine tables (decision of 2026-10-16). About 62 runner-minutes in 3 chunks.",
+  "designs": [
+    "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+    "configs/m4_lut_opt_early_lyso_grease_fine_M9.json",
+    "configs/m4_lut_opt_single_pass_lyso_grease_fine_M9.json",
+    "configs/m4_lut_ref_lyso_air_fine_M9.json",
+    "configs/m4_lut_opt_early_lyso_air_fine_M9.json"
+  ],
+  "orders": [
+    5,
+    7,
+    9,
+    11
+  ],
+  "grid": {
+    "n_theta": 9,
+    "n_phi": 2
+  },
+  "tau_ps": 100,
+  "lz_um": 20000,
+  "n_group": null,
+  "chunks": 3
+}

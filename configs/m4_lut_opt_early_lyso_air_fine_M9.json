@@ -1,0 +1,22 @@
+{
+  "description": "M4 fine lookup table (best early design for air, optimisation run in results/m4_opt_air_early_start1_recovered.json): theta 1 deg x phi 5 deg, order 9.",
+  "lut": {
+    "n1": "LYSO",
+    "n2": "air",
+    "wavelength_um": "LYSO-peak",
+    "layer": {
+      "period_um": 0.2324,
+      "radius_um": 0.06534,
+      "height_um": 0.266,
+      "n_pillar": "Si3N4-Luke2015"
+    },
+    "order": 9,
+    "n_grid": 256,
+    "theta_step_deg": 1.0,
+    "phi_step_deg": 5.0,
+    "window": "auto",
+    "edge_sharpness": 1000.0,
+    "label": "opt_early_lyso_air_fine_M9"
+  },
+  "chunks": 4
+}
