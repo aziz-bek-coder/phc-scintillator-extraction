@@ -30,6 +30,7 @@ out/
 chunks/
 resume/
 final/
+inputs/
 
 # Editors / OS
 .vscode/

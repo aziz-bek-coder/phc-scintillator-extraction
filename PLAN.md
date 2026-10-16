@@ -37,26 +37,28 @@ Dates revised 2026-10-15 (Aziz): pause 21 Dec 2026 to 3 Jan 2027.
 - [x] Remote compute workflow (`compute.yml`) and job driver (`scripts/remote_job.py`)
 - [ ] Repository public (blocked: PR #1 ref still exposes old commits; docs/status.md)
 - [ ] Secret scanning push protection and branch protection (after publication)
-- [ ] First remote job: RCWA benchmark; grids sized from it
+- [x] First remote job: RCWA benchmark (run 38798175139); grids sized from it
 
-## M2 — angle-resolved RCWA for a reference photonic crystal (by 22 Nov 2026)
-- [ ] Derivation 03: k∥ + G, which orders propagate, trapped-mode escape
-- [ ] Square lattice of TiO₂ (or Si₃N₄) pillars on LYSO; outside medium grease (n≈1.5) or air
-- [ ] (θ, φ) sweep with C4v symmetry (φ in 0–45° for unpolarised light), both
+## M2 — angle-resolved RCWA for a reference photonic crystal (by 22 Nov 2026) — done 2026-10-16
+- [x] Derivation 03: k∥ + G, which orders propagate, trapped-mode escape
+- [x] Square lattice of Si₃N₄ pillars on LYSO; outside medium grease (n = 1.46) or air
+- [x] (θ, φ) sweep with C4v symmetry (φ in 0–45° for unpolarised light), both
       polarisations, T and R into each diffraction order
-- [ ] Convergence study in Fourier orders, plot saved under `docs/figures/`
-- [ ] Coarse grid for optimisation, fine grid for final evaluation; lookup tables cached
-      to disk and runs resumable; peak RAM under 4 GB
-- [ ] Lookup-table format defined and documented in `docs/decisions.md`
+- [x] Convergence study in Fourier orders (remote run 38901900762), plot in `docs/figures/`
+- [x] Coarse grid (θ 2° × φ 5°, order 7) built remotely in chunks, resumable; fine grid
+      (θ 1° × φ 2.5°, order 9) planned for final evaluation
+- [x] Lookup-table format defined and documented in `docs/decisions.md`
 
-## M3 — Monte Carlo pixel model (by 6 Dec 2026)
-- [ ] Derivation 04: bare-face expectation per wall model, transport time from path length
-- [ ] 3×3×20 mm³ pixel, random emission points, isotropic directions
-- [ ] Bulk absorption; wall models: specular / Lambertian / wrapped
-- [ ] Readout face sampled from the RCWA lookup table incl. reflected orders
-- [ ] Path length → transport time (group-index assumption stated)
-- [ ] Bare face, no absorption reproduces the analytic expectation for the chosen wall model
-- [ ] Outputs: extraction efficiency, transport-time CDF, early-photon fraction
+## M3 — Monte Carlo pixel model (by 6 Dec 2026) — done 2026-10-16
+- [x] Derivation 04: bare-face expectation per wall model, transport time from path length
+- [x] 3×3×20 mm³ pixel, random emission points, isotropic directions
+- [x] Bulk absorption; wall models: specular / bare / air-gap mirror / air-gap diffuse / contact diffuse
+- [x] Readout face sampled from the RCWA lookup table incl. reflected orders
+- [x] Path length → transport time (group-index assumption stated)
+- [x] Bare face, no absorption reproduces the analytic expectation for every wall model
+      that keeps |w| (remote run 38902476498, all |z| < 2 at 1e6 photons)
+- [x] Outputs: extraction efficiency, transport-time CDF, early-photon fraction
+      (remote runs 38902480681, 38903357645)
 
 ## M4 — optimisation and comparison (by 20 Dec 2026)
 - [ ] Derivation 05: the differentiable early-arrival objective

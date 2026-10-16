@@ -1,0 +1,551 @@
+{
+  "job": "mc",
+  "config_path": "configs/m3_wall_models.json",
+  "config": {
+    "description": "M3 wall-model study: LYSO 3x3x20 mm, bare grease readout, the same model on all five other faces. Reflectivity 0.95 is an ASSUMED value for comparison, not a measured one.",
+    "pixel": {
+      "n1": "LYSO",
+      "wavelength_um": "LYSO-peak",
+      "lx_um": 3000,
+      "ly_um": 3000,
+      "lz_um": 20000
+    },
+    "t_max_ps": 5000,
+    "n_photons_per_chunk": 500000,
+    "chunks_per_case": 2,
+    "seed": 20261017,
+    "tau_ps": [
+      50,
+      100,
+      200
+    ],
+    "t_grid_ps": {
+      "stop": 5000,
+      "step": 10
+    },
+    "cases": [
+      {
+        "name": "mirror in contact (rho 0.95)",
+        "walls": {
+          "kind": "specular",
+          "reflectivity": 0.95
+        },
+        "readout": {
+          "n_out": "grease"
+        }
+      },
+      {
+        "name": "bare polished, nothing outside",
+        "walls": {
+          "kind": "bare"
+        },
+        "readout": {
+          "n_out": "grease"
+        }
+      },
+      {
+        "name": "polished + air gap + mirror film (rho 0.95)",
+        "walls": {
+          "kind": "wrapped_specular",
+          "reflectivity": 0.95
+        },
+        "readout": {
+          "n_out": "grease"
+        }
+      },
+      {
+        "name": "polished + air gap + diffuse wrap (rho 0.95)",
+        "walls": {
+          "kind": "wrapped_lambertian",
+          "reflectivity": 0.95
+        },
+        "readout": {
+          "n_out": "grease"
+        }
+      },
+      {
+        "name": "diffuse in contact (rho 0.95)",
+        "walls": {
+          "kind": "lambertian",
+          "reflectivity": 0.95
+        },
+        "readout": {
+          "n_out": "grease"
+        }
+      }
+    ]
+  },
+  "merged_at_commit": "40c7f229433a",
+  "merged_utc": "2026-10-16T12:46:22+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:54+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000338",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:43:58+00:00",
+          "seconds": 3.786510278999998,
+          "complete": true
+        }
+      ],
+      "seconds": 3.786510278999998
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:56+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000337",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:00+00:00",
+          "seconds": 3.42916541000001,
+          "complete": true
+        }
+      ],
+      "seconds": 3.42916541000001
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:04+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000340",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:35+00:00",
+          "seconds": 30.422735474999996,
+          "complete": true
+        }
+      ],
+      "seconds": 30.422735474999996
+    },
+    {
+      "chunk": 3,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:01+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000339",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:22+00:00",
+          "seconds": 20.730601198000002,
+          "complete": true
+        }
+      ],
+      "seconds": 20.730601198000002
+    },
+    {
+      "chunk": 4,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:59+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000341",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:21+00:00",
+          "seconds": 22.317664285999996,
+          "complete": true
+        }
+      ],
+      "seconds": 22.317664285999996
+    },
+    {
+      "chunk": 5,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:43:58+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000336",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:44:21+00:00",
+          "seconds": 22.895454588000007,
+          "complete": true
+        }
+      ],
+      "seconds": 22.895454588000007
+    },
+    {
+      "chunk": 6,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:49+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000344",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:16+00:00",
+          "seconds": 27.771969851999998,
+          "complete": true
+        }
+      ],
+      "seconds": 27.771969851999998
+    },
+    {
+      "chunk": 7,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:44:53+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000345",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:25+00:00",
+          "seconds": 32.64471015800001,
+          "complete": true
+        }
+      ],
+      "seconds": 32.64471015800001
+    },
+    {
+      "chunk": 8,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:14+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000349",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:20+00:00",
+          "seconds": 5.4403338700000035,
+          "complete": true
+        }
+      ],
+      "seconds": 5.4403338700000035
+    },
+    {
+      "chunk": 9,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "40c7f229433a",
+          "started_utc": "2026-10-16T12:45:15+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "40c7f229433a79dbbeb28908ed275b99a72a294a",
+            "github_run_id": "38902480681",
+            "github_ref_name": "claude/m3-mc",
+            "runner_name": "GitHub Actions 1000000351",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:45:20+00:00",
+          "seconds": 5.01038345500001,
+          "complete": true
+        }
+      ],
+      "seconds": 5.01038345500001
+    }
+  ],
+  "total_runner_seconds": 174.44952857100003,
+  "pixel": {
+    "n1": 1.81,
+    "n_group": 1.81,
+    "size_um": [
+      3000.0,
+      3000.0,
+      20000.0
+    ],
+    "abs_length_um": null,
+    "direct_transit_ps": 120.75020246173104
+  },
+  "cases": [
+    {
+      "name": "mirror in contact (rho 0.95)",
+      "walls": {
+        "kind": "specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 286382,
+        "absorbed_bulk": 0,
+        "lost_wall": 713618,
+        "escaped_wall": 0,
+        "capped": 0
+      },
+      "efficiency_at_t_max": 0.286382,
+      "efficiency_sigma": 0.0004520700720861756,
+      "first_pass_fraction": 0.281419,
+      "early_yield": {
+        "50": {
+          "value": 0.061012,
+          "sigma": 0.00023935232577938323
+        },
+        "100": {
+          "value": 0.116575,
+          "sigma": 0.000320913180432029
+        },
+        "200": {
+          "value": 0.211127,
+          "sigma": 0.0004081083065449661
+        }
+      },
+      "median_detected_time_ps": 125.73199287262699,
+      "runner_seconds": 4.375413683000005,
+      "photon_steps": 14781024
+    },
+    {
+      "name": "bare polished, nothing outside",
+      "walls": {
+        "kind": "bare"
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 335311,
+        "absorbed_bulk": 0,
+        "lost_wall": 0,
+        "escaped_wall": 405973,
+        "capped": 258716
+      },
+      "efficiency_at_t_max": 0.335311,
+      "efficiency_sigma": 0.00047209907146593714,
+      "first_pass_fraction": 0.312387,
+      "early_yield": {
+        "50": {
+          "value": 0.063662,
+          "sigma": 0.00024414985102596317
+        },
+        "100": {
+          "value": 0.127674,
+          "sigma": 0.00033372645943047425
+        },
+        "200": {
+          "value": 0.218162,
+          "sigma": 0.00041299799243579865
+        }
+      },
+      "median_detected_time_ps": 133.19952008979237,
+      "runner_seconds": 47.326467927999985,
+      "photon_steps": 97344579
+    },
+    {
+      "name": "polished + air gap + mirror film (rho 0.95)",
+      "walls": {
+        "kind": "wrapped_specular",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 404571,
+        "absorbed_bulk": 0,
+        "lost_wall": 337233,
+        "escaped_wall": 0,
+        "capped": 258196
+      },
+      "efficiency_at_t_max": 0.404571,
+      "efficiency_sigma": 0.0004908088283221891,
+      "first_pass_fraction": 0.379789,
+      "early_yield": {
+        "50": {
+          "value": 0.063721,
+          "sigma": 0.00024425526434244976
+        },
+        "100": {
+          "value": 0.127696,
+          "sigma": 0.00033375100237152845
+        },
+        "200": {
+          "value": 0.252729,
+          "sigma": 0.00043457686611116336
+        }
+      },
+      "median_detected_time_ps": 159.36552011480902,
+      "runner_seconds": 42.25180538999999,
+      "photon_steps": 105712510
+    },
+    {
+      "name": "polished + air gap + diffuse wrap (rho 0.95)",
+      "walls": {
+        "kind": "wrapped_lambertian",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 404705,
+        "absorbed_bulk": 0,
+        "lost_wall": 336962,
+        "escaped_wall": 0,
+        "capped": 258333
+      },
+      "efficiency_at_t_max": 0.404705,
+      "efficiency_sigma": 0.0004908348632432297,
+      "first_pass_fraction": 0.380089,
+      "early_yield": {
+        "50": {
+          "value": 0.063837,
+          "sigma": 0.00024446234358485564
+        },
+        "100": {
+          "value": 0.127813,
+          "sigma": 0.0003338814715299428
+        },
+        "200": {
+          "value": 0.253626,
+          "sigma": 0.0004350860284173694
+        }
+      },
+      "median_detected_time_ps": 158.67447881189958,
+      "runner_seconds": 57.20316922900001,
+      "photon_steps": 105685710
+    },
+    {
+      "name": "diffuse in contact (rho 0.95)",
+      "walls": {
+        "kind": "lambertian",
+        "reflectivity": 0.95
+      },
+      "readout": {
+        "n_out": "grease"
+      },
+      "lut": null,
+      "n_emitted": 1000000,
+      "parts": 2,
+      "pixel_overrides": {},
+      "counts": {
+        "detected": 253220,
+        "absorbed_bulk": 0,
+        "lost_wall": 746780,
+        "escaped_wall": 0,
+        "capped": 0
+      },
+      "efficiency_at_t_max": 0.25322,
+      "efficiency_sigma": 0.0004348558745147638,
+      "first_pass_fraction": 0.210213,
+      "early_yield": {
+        "50": {
+          "value": 0.056147,
+          "sigma": 0.00023020537437470917
+        },
+        "100": {
+          "value": 0.097054,
+          "sigma": 0.00029603128396167865
+        },
+        "200": {
+          "value": 0.151403,
+          "sigma": 0.0003584412526356307
+        }
+      },
+      "median_detected_time_ps": 147.90142505728056,
+      "runner_seconds": 6.845969214999997,
+      "photon_steps": 15322424
+    }
+  ]
+}
