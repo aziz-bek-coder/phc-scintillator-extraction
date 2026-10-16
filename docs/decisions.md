@@ -213,6 +213,25 @@ their logic moved into the jobs, and the laptop-made `results/m2_convergence.jso
 its figure were removed: those numbers will come from the remote convergence job.
 Configs name materials ("LYSO", "grease", "Si3N4-Luke2015") instead of copying numbers.
 
+## 2026-10-16 — Fourier orders for final numbers, from the convergence study
+Convergence run 38901900762 (results/convergence-38901900762.json), worst case over 5
+incidences against order 15: grease 0.54 % at order 7, 0.30 % at 9, 0.18 % at 11; air
+1.7 % at 7, 0.83 % at 9, 0.43 % at 11. Decision: order 7 coarse tables for development
+and screening; order 9 fine tables for final grease numbers (target ≤ 0.3 %); order 11
+for any final air number (≤ 0.5 %). The real-space grid stays at 256 × 256 (doubling
+it changes T by ≤ 0.2 %).
+
+## 2026-10-16 — Branches cited by remote runs are merged, not rebased
+Every remote result records the commit that produced it. Rebasing a branch after its
+commits were used by a run would orphan those hashes. Such branches are merged into
+main with a merge commit (and main is merged into them when needed), never rebased.
+This overrides the "rebase before opening a PR" rule in AGENTS.md for those branches.
+
+## 2026-10-16 — Runner hardware varies between jobs
+GitHub's 2-vCPU runners came with different CPUs: AMD EPYC 9V74 (benchmark, order 13 in
+73 s) and EPYC 7763 (convergence, order 13 in 48 s). Budgets use the slower machine;
+timings in result files are informative only, never a result.
+
 ## Open
 - Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
   M3 uses n_g = n and states the bias.

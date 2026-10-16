@@ -24,6 +24,72 @@ recorded inside that file. Commit hashes from before 2026-10-16 are translated i
    read; thesis PDF is copy-protected), Carr Delgado 2024.
 4. **Argon** has not started. No independent cross-check exists yet.
 
+## M2 — angle-resolved RCWA for the reference photonic crystal (done 2026-10-16)
+
+All heavy runs on GitHub Actions; summaries committed under `results/`.
+
+### Done
+- Derivation 03 (grating orders, C4v symmetry, lookup table, thin-film check, choice of
+  the reference design), with predict exercise, 3 check questions and answers.
+- Patterned-layer RCWA (`rcwa.solve_phc`), validated in fast tests: thin-film limit
+  against the analytic Airy formula (1e-8), energy conservation (1e-9), open orders
+  equal to the grating-equation prediction, C4v symmetry (1e-10).
+- Lookup table with C4v reduction, bilinear interpolation, masking of closed orders,
+  renormalisation, resumable chunked builds (`lut.py`, `jobs.LutJob`). A table merged
+  from chunks equals a direct build (test).
+- Remote jobs `benchmark`, `convergence`, `lut`; grids sized from the benchmark
+  (docs/decisions.md).
+
+### Numbers produced
+Reference design: Si₃N₄ pillars (n = 2.0906 at 420 nm, Luke 2015), a = 0.40 µm,
+r = 0.12 µm, h = 0.30 µm, on LYSO (n = 1.81) at 420 nm.
+
+Convergence (`results/convergence-38901900762.json`, figure
+`docs/figures/m2_convergence.png`): worst relative change of total transmission over
+5 incidences, against order 15.
+
+| Order | Grease (n = 1.46) | Air |
+|---|---|---|
+| 7 | 0.54 % | 1.7 % |
+| 9 | 0.30 % | 0.83 % |
+| 11 | 0.18 % | 0.43 % |
+| 13 | 0.09 % | 0.19 % |
+
+Real-space grid 128 / 256 / 512 at order 9 changes T by at most 0.07 % (grease) and
+0.2 % (air). Energy conserved to 9e-13.
+
+Coarse lookup tables, order 7, θ 2° × φ 5° (`results/lut-38901905525.json`,
+`results/lut-38901911122.json`, figures `docs/figures/m2_lut_ref_lyso_*_coarse_M7.png`):
+single-pass extraction through the readout face, isotropic emission (derivation 03,
+eq. 9). Energy conserved to 3e-11.
+
+| Outside medium | Photonic crystal | of which θ < θc | of which θ > θc | Bare face, same grid | Bare face, exact |
+|---|---|---|---|---|---|
+| Grease (θc = 53.8°) | 21.10 % | 17.40 % | 3.70 % | 19.34 % | 19.20 % |
+| Air (θc = 33.5°) | 8.77 % | 4.55 % | 4.22 % | 7.29 % | 7.17 % |
+
+### Open issues
+1. **The photonic crystal costs light inside the escape cone.** With grease it
+   transmits 17.40 % from inside the cone where the bare face transmits 19.34 %; with
+   air 4.55 % against 7.29 %. The trapped light it adds more than compensates on a
+   single pass (+1.8 and +1.5 points). This is derivation 03, 2c, now measured. Whether
+   it also helps after many passes, and for early photons, is M3's question.
+2. **Grid discretisation near θc.** On the 2° grid the bare face integrates to 19.34 %
+   against 19.20 % exact (grease) and 7.29 % against 7.17 % (air): about 0.13 points
+   from the kink at θc. The photonic-crystal integrals carry a similar error. Final
+   numbers will use the 1° grid.
+3. **Air needs higher orders.** Order 7 is good to 0.5 % with grease but only to 1.7 %
+   with air (θ = 60°, φ = 0° is the worst case), and the air convergence oscillates at
+   θ = 60°, φ = 30°. Final air numbers need order 9 or 11.
+4. **Runner hardware varies.** The benchmark ran on an AMD EPYC 9V74 (order 13 in
+   73 s); the convergence chunks ran on an EPYC 7763 (order 13 in 48 s). Budgets in
+   docs/decisions.md use the slower machine.
+5. **Reference geometry is not Knapitsch's.** Still waiting for the published lattice
+   parameters (Needs Aziz, item 3).
+
+### Next
+M3: Monte Carlo of the pixel with the bare face and with these lookup tables.
+
 ## 2026-10-16 — Pre-public checklist
 
 | Item | State |
