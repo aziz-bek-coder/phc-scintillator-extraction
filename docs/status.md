@@ -86,18 +86,21 @@ objectives are on that same angle grid.
 |---|---|---|---|---|---|
 | Grease, E(100 ps) | 38905901930, 6 | 0.234 µm / 0.117 / 0.217 µm (45 nm) | 13.58 % (13.58 %) | 13.09 % | 13.17 % |
 | Grease, single pass | 38905905490, 4 | 0.559 µm / 0.495 / 0.213 µm (222 nm) | 24.26 % (24.27 %) | 19.81 % | 21.73 % |
-| Air, E(100 ps) | 38905911733 and reruns, 4 | 0.232 µm / 0.248 / 0.266 µm (65 nm) | 6.26 % | 5.78 % | 5.63 % |
+| Air, E(100 ps) | 38950528275 (after two failed attempts), 4 | 0.232 µm / 0.248 / 0.266 µm (65 nm), step 21 | 6.26 % | 5.78 % | 5.63 % |
 
 Sources:
 - `results/optimize-38905901930.json`, `results/optimize-38905905490.json`;
-- `results/m4_opt_air_early_start1_recovered.json`;
+- `results/optimize-38950528275.json`, `results/m4_opt_air_early_start1_recovered.json`;
 - figures `docs/figures/m4_opt_grease_*.png`.
 
 Per-start results:
 - Grease, E(100 ps): the other starts reach 12.96–13.27 %.
 - Grease, single pass: two starts reach the same design.
-- Air: the best start comes from the job logs (Open issues 1). The other air starts
-  reach at most 5.94 %.
+- Air: the evaluated design is step 21 of the best start, recovered from the job logs
+  before the fixed rerun finished (Open issues 1). The rerun's best, at step 29, is
+  6.262 % (order 7: 6.261 %) at 0.2317 µm / 0.2485 / 0.2716 µm. That is 0.004 points
+  above step 21, so the fine table and Monte Carlo of step 21 were kept. The other air
+  starts reach at most 5.94 %.
 
 **Fine tables, first pass**:
 - Grid: order 9, θ 1° × φ 5°; node quadrature of (1) and of derivation 03, eq. 9.
@@ -200,8 +203,9 @@ Sources: `results/mc-38936853588.json`, `results/mc-38953882816.json`,
    - The start's steps 0–26 were recovered from the job logs, identical in both runs
      (`scripts/recover_optimize_log.py`). The air design is its best step, 21,
      parameters to 4 decimals.
-   - Rerun 38950528275 with the fix reproduces the start; its summary will be added
-     when it finishes.
+   - Rerun 38950528275 with the fix completed all 30 steps. It reproduces steps 0–26
+     exactly. Its best point (step 29) is 0.004 points (0.06 % relative) above step 21
+     on the optimisation grid, far inside the Monte Carlo uncertainty.
 2. **Lookup-model error.** The Monte Carlo samples the tables with bilinear
    interpolation, masking of closed orders and renormalisation. This changes E(100 ps)
    by up to 0.07 points (0.5 % relative) against direct quadrature of the nodes.

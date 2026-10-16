@@ -142,7 +142,7 @@ Optimiser: Adam on x, several starts, the best design re-checked at higher order
 |---|---|---|---|
 | E(100 ps) from (1) vs Monte Carlo, bare face | | `scripts/check_early_yield.py` | Yes: grease 12.78 % from (1), 12.77 ± 0.03 % Monte Carlo (z = −0.3); air 5.46 % vs 5.49 ± 0.02 % (z = +1.1). |
 | E(100 ps) from (1) and (1a) vs Monte Carlo, photonic crystals | | `scripts/m4_table_checks.py` | Yes once side losses are included: lossless mirror walls vs (1), z = −1.0, −0.7, −0.5; nominal wraps vs (1a), z between −0.9 and +1.7. Against (1), the single-pass design with wraps was 3.8σ low (2b). |
-| Optimised period vs reference period | | `optimize` runs 38905901930, 38905905490; `scripts/recover_optimize_log.py` | Smaller for early photons: 0.234 µm (grease) and 0.232 µm (air), close to λ/n₁ = 0.232 µm; 0.559 µm for single-pass extraction (grease); reference 0.40 µm. |
+| Optimised period vs reference period | | `optimize` runs 38905901930, 38905905490, 38950528275 | Smaller for early photons: 0.234 µm (grease) and 0.232 µm (air), close to λ/n₁ = 0.232 µm; 0.559 µm for single-pass extraction (grease); reference 0.40 µm. |
 | E(100 ps) and η: bare / reference / optimised | | `mc` runs 38936853588, 38953882816; `scripts/key_figure.py` | Grease, by 100 ps: 12.80 / 12.76 / 13.16 % (early optimum) / 12.53 % (single-pass optimum); by 5 ns: 40.4 / 59.2 / 50.7 / 64.6 %. Air, by 100 ps: 5.47 / 5.54 / 5.85 %; by 5 ns: 16.0 / 53.4 / 37.9 %. |
 
 ## Part 4 — Check questions
