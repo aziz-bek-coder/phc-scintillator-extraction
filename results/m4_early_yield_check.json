@@ -1,0 +1,90 @@
+{
+  "provenance": {
+    "git_commit": "2b50905",
+    "started_utc": "2026-10-16T13:10:56+00:00",
+    "utc": "2026-10-16T13:10:56+00:00",
+    "python": "3.12.6",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cpu",
+    "machine": "AMD64"
+  },
+  "what": "derivation 05 eq. (1) vs Monte Carlo early yields (tau < t_dir)",
+  "inputs": {
+    "lut_runs": [
+      "38901905525",
+      "38901911122"
+    ],
+    "mc_run": "38903357645"
+  },
+  "note": "phc_eq1_grid_corrected subtracts the bare-face grid error on the same coarse theta grid; it is an estimate of the fine-grid value",
+  "rows": [
+    {
+      "tau_ps": 50.0,
+      "medium": "grease",
+      "bare_eq1_exact": 0.06390906892277715,
+      "bare_eq1_coarse_grid": 0.06425266386385135,
+      "grid_error_estimate": 0.0003435949410742073,
+      "phc_eq1_coarse_grid": 0.06440348408668388,
+      "phc_eq1_grid_corrected": 0.06405988914560967,
+      "bare_mc": 0.064003,
+      "bare_mc_sigma": 0.00024475828074040724,
+      "phc_mc": 0.063958,
+      "phc_mc_sigma": 0.000244678103303095,
+      "upper_bound_T1": 0.10351949516574586,
+      "in_cone_bound": 0.06735513442669756,
+      "bare_z": 0.3837707837247094,
+      "phc_z_corrected": -0.4164211845448868
+    },
+    {
+      "tau_ps": 50.0,
+      "medium": "air",
+      "bare_eq1_exact": 0.027319641333263395,
+      "bare_eq1_coarse_grid": 0.02775656695075273,
+      "grid_error_estimate": 0.00043692561748933517,
+      "phc_eq1_coarse_grid": 0.028025701383000777,
+      "phc_eq1_grid_corrected": 0.027588775765511442,
+      "bare_mc": 0.027445,
+      "bare_mc_sigma": 0.00016337616709606085,
+      "phc_mc": 0.027784,
+      "phc_mc_sigma": 0.00016435342814800062,
+      "upper_bound_T1": 0.10351949516574586,
+      "in_cone_bound": 0.03159839295679188,
+      "bare_z": 0.767300818502483,
+      "phc_z_corrected": 1.1878318370868297
+    },
+    {
+      "tau_ps": 100.0,
+      "medium": "grease",
+      "bare_eq1_exact": 0.1278181378455543,
+      "bare_eq1_coarse_grid": 0.1285053277277027,
+      "grid_error_estimate": 0.0006871898821484146,
+      "phc_eq1_coarse_grid": 0.12880696817336776,
+      "phc_eq1_grid_corrected": 0.12811977829121934,
+      "bare_mc": 0.127725,
+      "bare_mc_sigma": 0.00033378334945739877,
+      "phc_mc": 0.127881,
+      "phc_mc_sigma": 0.0003339572575031122,
+      "upper_bound_T1": 0.20703899033149173,
+      "in_cone_bound": 0.13471026885339513,
+      "bare_z": -0.27903682345357284,
+      "phc_z_corrected": -0.7149965627476265
+    },
+    {
+      "tau_ps": 100.0,
+      "medium": "air",
+      "bare_eq1_exact": 0.05463928266652679,
+      "bare_eq1_coarse_grid": 0.05551313390150546,
+      "grid_error_estimate": 0.0008738512349786703,
+      "phc_eq1_coarse_grid": 0.056051402766001554,
+      "phc_eq1_grid_corrected": 0.055177551531022884,
+      "bare_mc": 0.054884,
+      "bare_mc_sigma": 0.00022775369710281324,
+      "phc_mc": 0.055399,
+      "phc_mc_sigma": 0.00022875740599814467,
+      "upper_bound_T1": 0.20703899033149173,
+      "in_cone_bound": 0.06319678591358376,
+      "bare_z": 1.074482375417782,
+      "phc_z_corrected": 0.9680493971806501
+    }
+  ]
+}
