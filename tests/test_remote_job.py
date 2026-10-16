@@ -187,3 +187,45 @@ def test_optimize_job_runs_resumes_and_merges(tmp_path) -> None:
     assert s["best"]["objective"] >= max(st["initial_objective"] for st in s["starts"])
     assert s["recheck"]["order"] == 2
     assert (final / "optimize.png").exists()
+
+
+# ---------------------------------------------------------------- M4 jobs
+
+
+def test_ordercheck_job_integrates_both_objectives(tmp_path) -> None:
+    from phcscint.jobs import JOBS
+
+    cfg = json.loads((REPO / "configs" / "smoke_ordercheck.json").read_text())
+    pairs = JOBS["ordercheck"].assignment(cfg, 2)
+    assert len(pairs) == 2 * 2  # two orders x two incidences, one design
+    assert {owner for _, owner in pairs} == {0, 1}
+    out = tmp_path / "out"
+    _run_all_chunks("ordercheck", "configs/smoke_ordercheck.json", out, 2)
+    final = tmp_path / "final"
+    remote_job.main(["merge", "--job", "ordercheck", "--config", "configs/smoke_ordercheck.json",
+                     "--in", str(out), "--out", str(final)])  # fmt: skip
+    s = json.loads((final / "summary.json").read_text())
+    assert s["complete"] is True and s["max_energy_error"] < 1e-9
+    (d,) = s["designs"]
+    assert set(d["by_order"]) == {"1", "2"} and set(d["rel_change_vs_top"]) == {"1"}
+    for v in d["by_order"].values():
+        assert 0 < v["early"] < v["single_pass"] < 0.5
+    assert (final / "ordercheck.png").exists() and (final / "ordercheck.csv").exists()
+
+
+def test_ordercheck_with_invisible_pillars_reproduces_the_bare_face(tmp_path, monkeypatch) -> None:
+    """Pillars with the index of the outside medium: every order must give the flat-face
+    (Fresnel) value of both integrals, which checks the solve-to-integral bookkeeping."""
+    from phcscint.jobs import JOBS, Deadline, OrderCheck
+
+    lut = json.loads((REPO / "configs" / "smoke_lut.json").read_text())["lut"]
+    layer = {**lut["layer"], "n_pillar": "grease"}
+    invisible = {"config": "(test)", **lut, "label": "invisible", "layer": layer}
+    monkeypatch.setattr(OrderCheck, "_designs", staticmethod(lambda cfg: [invisible]))
+    cfg = json.loads((REPO / "configs" / "smoke_ordercheck.json").read_text())
+    job = JOBS["ordercheck"]
+    assert job.run(cfg, 0, 1, tmp_path, Deadline(60)) is True
+    (d,) = job.merge(cfg, [tmp_path], tmp_path)["designs"]
+    for v in d["by_order"].values():
+        for k in ("early", "single_pass"):
+            assert v[k] == pytest.approx(d["bare_same_grid"][k], rel=1e-10)

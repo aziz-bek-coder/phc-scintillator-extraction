@@ -21,6 +21,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+_REPO = Path(__file__).resolve().parents[2]
+
 # ----------------------------------------------------------------------------- utils
 
 
@@ -127,6 +129,17 @@ def _layer(spec: dict[str, Any], wavelength_um: float):
 def _rows(workdir: Path) -> list[dict[str, Any]]:
     p = workdir / "rows.json"
     return json.loads(p.read_text()) if p.exists() else []
+
+
+def _spread_by_cost(costs: list[float], n_chunks: int) -> list[int]:
+    """Chunk of each work item: largest cost first, each to the least-loaded chunk."""
+    load = [0.0] * n_chunks
+    owner = [0] * len(costs)
+    for i in sorted(range(len(costs)), key=lambda i: (-costs[i], i)):
+        c = min(range(n_chunks), key=lambda k: (load[k], k))
+        owner[i] = c
+        load[c] += costs[i]
+    return owner
 
 
 # ----------------------------------------------------------------------------- base
@@ -461,13 +474,7 @@ class Convergence(Job):
 
     def assignment(self, cfg: dict[str, Any], n_chunks: int) -> list[tuple[dict, int]]:
         items = self._items(cfg)
-        order = sorted(range(len(items)), key=lambda i: (-((2 * items[i]["order"] + 1) ** 6), i))
-        load = [0.0] * n_chunks
-        owner = [0] * len(items)
-        for i in order:
-            c = min(range(n_chunks), key=lambda k: (load[k], k))
-            owner[i] = c
-            load[c] += (2 * items[i]["order"] + 1) ** 6
+        owner = _spread_by_cost([(2 * it["order"] + 1) ** 6 for it in items], n_chunks)
         return list(zip(items, owner, strict=True))
 
     def run(self, cfg, chunk, n_chunks, workdir, deadline) -> bool:
@@ -1259,6 +1266,179 @@ class Optimize(Job):
         return result
 
 
+# ----------------------------------------------------------------------------- order check
+
+
+class OrderCheck(Job):
+    """Fourier-order check of the integrated quantities of finished designs: the
+    early-photon objective (derivation 05, eq. 3) and the single-pass extraction
+    (eq. 2), both from the same solves on one angle grid. Each design is read from its
+    lookup-table config and solved with the same pixelated-disk path as the table
+    (rcwa.solve_phc). Items (design, order, incidence) go to chunks by cost (2M+1)^6.
+
+    Config keys: designs [lookup-table configs under configs/], orders, grid {n_theta,
+    n_phi}, tau_ps, lz_um, n_group (null: n1), chunks."""
+
+    name = "ordercheck"
+
+    @staticmethod
+    def _designs(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+        designs = []
+        for path in cfg["designs"]:
+            p = (_REPO / path).resolve()
+            if _REPO / "configs" not in p.parents:
+                raise ValueError(f"design config must live under configs/: {path}")
+            designs.append({"config": path, **json.loads(p.read_text(encoding="utf-8"))["lut"]})
+        return designs
+
+    @staticmethod
+    def _points(cfg: dict[str, Any]) -> list[tuple[float, float, float]]:
+        from phcscint.optimize import AngleGrid
+
+        return AngleGrid(**cfg["grid"]).points()
+
+    def assignment(self, cfg: dict[str, Any], n_chunks: int) -> list[tuple[dict, int]]:
+        n_points = len(self._points(cfg))
+        items = [
+            {"design": d, "order": int(m), "i": i}
+            for d in range(len(cfg["designs"]))
+            for m in cfg["orders"]
+            for i in range(n_points)
+        ]
+        owner = _spread_by_cost([(2 * it["order"] + 1) ** 6 for it in items], n_chunks)
+        return list(zip(items, owner, strict=True))
+
+    def run(self, cfg, chunk, n_chunks, workdir, deadline) -> bool:
+        from phcscint.rcwa import solve_phc
+
+        set_threads()
+        designs = self._designs(cfg)
+        points = self._points(cfg)
+        rows = _rows(workdir)
+        done = {(r["label"], r["order"], r["i"]) for r in rows}
+        for it, owner in self.assignment(cfg, n_chunks):
+            d = designs[it["design"]]
+            if owner != chunk or (d["label"], it["order"], it["i"]) in done:
+                continue
+            if deadline.expired():
+                return False
+            lam = resolve_wavelength(d["wavelength_um"])
+            th, ph, _ = points[it["i"]]
+            t0 = time.perf_counter()
+            op = solve_phc(
+                resolve_index(d["n1"], lam),
+                resolve_index(d["n2"], lam),
+                lam,
+                _layer(d["layer"], lam),
+                th,
+                ph,
+                order=it["order"],
+                n_grid=int(d["n_grid"]),
+                edge_sharpness=float(d.get("edge_sharpness", 1000.0)),
+            )
+            row = {
+                "label": d["label"],
+                "order": it["order"],
+                "i": it["i"],
+                "theta_deg": math.degrees(th),
+                "phi_deg": math.degrees(ph),
+                "T_total": float(op.T.sum()),
+                "energy_error": abs(op.total - 1.0),
+                "seconds": time.perf_counter() - t0,
+            }
+            rows.append(row)
+            write_json(workdir / "rows.json", rows)
+            print(json.dumps(row), flush=True)
+        return True
+
+    def merge(self, cfg, chunk_dirs, out) -> dict[str, Any]:
+        import csv
+
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        from phcscint import optimize as opt
+
+        rows = [r for d in chunk_dirs for r in _rows(d)]
+        if not rows:
+            return {}
+        grid = opt.AngleGrid(**cfg["grid"])
+        points = grid.points()
+        orders = sorted(int(m) for m in cfg["orders"])
+        top = orders[-1]
+        designs = []
+        for d in self._designs(cfg):
+            lam = resolve_wavelength(d["wavelength_um"])
+            n1, n2 = resolve_index(d["n1"], lam), resolve_index(d["n2"], lam)
+            ng = cfg.get("n_group") or n1
+            weights = {
+                "early": opt.early_weight(float(cfg["tau_ps"]), float(cfg["lz_um"]), ng),
+                "single_pass": lambda theta: 1.0,
+            }
+            values = {}
+            for m in orders:
+                t = {
+                    r["i"]: r["T_total"]
+                    for r in rows
+                    if (r["label"], r["order"]) == (d["label"], m)
+                }
+                if len(t) == len(points):
+                    values[m] = {
+                        k: sum(wf(th) * w * t[i] for i, (th, _, w) in enumerate(points))
+                        for k, wf in weights.items()
+                    }
+            entry: dict[str, Any] = {
+                "label": d["label"],
+                "config": d["config"],
+                "n2": n2,
+                "layer": d["layer"],
+                "bare_same_grid": {
+                    k: opt.bare_objective(wf, n1, n2, grid) for k, wf in weights.items()
+                },
+                "by_order": {str(m): v for m, v in values.items()},
+            }
+            if top in values:
+                entry["rel_change_vs_top"] = {
+                    str(m): {k: abs(v[k] - values[top][k]) / values[top][k] for k in v}
+                    for m, v in values.items()
+                    if m != top
+                }
+            designs.append(entry)
+
+        with (out / "ordercheck.csv").open("w", newline="", encoding="utf-8") as f:
+            cols = ["label", "order", "i", "theta_deg", "phi_deg", "T_total", "energy_error",
+                    "seconds"]  # fmt: skip
+            w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+            w.writeheader()
+            w.writerows(sorted(rows, key=lambda r: (r["label"], r["order"], r["i"])))
+
+        fig, axes = plt.subplots(1, 2, figsize=(10, 3.6), sharey=True)
+        for ax, kind in zip(axes, ("early", "single_pass"), strict=True):
+            for e in designs:
+                rc = e.get("rel_change_vs_top", {})
+                ms = sorted(int(m) for m in rc)
+                ax.semilogy(ms, [max(rc[str(m)][kind], 1e-9) for m in ms], "o-", label=e["label"])
+            ax.set_title(f"{kind} objective", fontsize=9)
+            ax.set_xlabel("Fourier order M")
+            ax.grid(True, which="both", alpha=0.3)
+        axes[0].set_ylabel(f"|J(M) − J({top})| / J({top})")
+        axes[0].legend(fontsize=6)
+        fig.suptitle(f"Integrated objectives vs Fourier order ({grid.n_theta} × {grid.n_phi} "
+                     "incidences)", fontsize=9)  # fmt: skip
+        fig.tight_layout()
+        fig.savefig(out / "ordercheck.png", dpi=130)
+        return {
+            "grid": cfg["grid"],
+            "orders": orders,
+            "tau_ps": cfg["tau_ps"],
+            "designs": designs,
+            "max_energy_error": max(r["energy_error"] for r in rows),
+        }
+
+
 JOBS: dict[str, Job] = {
-    j.name: j for j in (Benchmark(), Convergence(), LutJob(), MonteCarlo(), Optimize())
+    j.name: j
+    for j in (Benchmark(), Convergence(), LutJob(), MonteCarlo(), Optimize(), OrderCheck())
 }
