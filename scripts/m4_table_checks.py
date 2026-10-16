@@ -176,6 +176,11 @@ def check_table(label: str, run: str) -> tuple[dict, LUT]:
             "eta1_in_cone": q["full"]["eta1_in_cone"] - b_exact["eta1"],
             "eta1_trapped": q["full"]["eta1"] - q["full"]["eta1_in_cone"],
         },
+        "T_near_normal": {  # phi-averaged first-pass T at the first two theta nodes
+            f"{th:g} deg": float(np.trapezoid(lut.T[i].sum(axis=-1), lut.phi) / (math.pi / 4))
+            for i, th in enumerate(c.theta_deg[:2])
+        },
+        "T_near_normal_flat": float(unpolarised_transmittance(c.n1, c.n2, lut.theta[0])),
         "lookup_model": model | {"rho_side_loss": RHO_NOMINAL},
         "lookup_model_minus_nodes": {k: model[k] - q["full"][k] for k in ("E100", "eta1")},
     }
