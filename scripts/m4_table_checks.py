@@ -50,10 +50,18 @@ def subsample(lut: LUT, ti: slice, pi: slice) -> LUT:
     return LUT(config=cfg, orders=lut.orders, T=lut.T[ti][:, pi], R=lut.R[ti][:, pi])
 
 
-def quantities(lut: LUT, weight) -> dict[str, float]:
+def quantities(lut: LUT, weight, theta_c_deg: float) -> dict[str, float]:
+    """Single pass and E(100 ps), with the parts from inside the flat-face escape cone."""
+    sp = lut.single_pass_extraction(theta_split_deg=theta_c_deg)
+
+    def in_cone(theta: float) -> float:
+        return weight(theta) if math.degrees(theta) < theta_c_deg else 0.0
+
     return {
-        "eta1": lut.single_pass_extraction()["eta_single_pass"],
+        "eta1": sp["eta_single_pass"],
+        "eta1_in_cone": sp["in_cone_part"],
         "E100": lut.weighted_single_pass(weight),
+        "E100_in_cone": lut.weighted_single_pass(in_cone),
     }
 
 
@@ -79,10 +87,11 @@ def check_table(label: str, run: str) -> dict:
     c = lut.config
     assert len(c.theta_deg) % 3 == 0 and (len(c.phi_deg) - 1) % 3 == 0, "grid not 3x-subsampled"
     weight = early_weight(TAU_PS, LZ_UM, c.n1)
+    theta_c = math.degrees(math.asin(c.n2 / c.n1))
     sub_t = subsample(lut, slice(1, None, 3), slice(None))  # 3x coarser theta midpoints
     sub_p = subsample(lut, slice(None), slice(None, None, 3))  # 3x coarser phi, same ends
-    q = {"full": quantities(lut, weight), "theta_3x": quantities(sub_t, weight),
-         "phi_3x": quantities(sub_p, weight)}  # fmt: skip
+    q = {"full": quantities(lut, weight, theta_c), "theta_3x": quantities(sub_t, weight, theta_c),
+         "phi_3x": quantities(sub_p, weight, theta_c)}  # fmt: skip
     q["grid_error_bound"] = bound(q["full"], q["theta_3x"], q["phi_3x"])
     # the same estimator on the flat face, whose exact value is known
     fine = (np.arange(400_000) + 0.5) * (math.pi / 2) / 400_000
@@ -104,10 +113,17 @@ def check_table(label: str, run: str) -> dict:
         "n2": c.n2,
         "layer": dataclasses.asdict(c.layer),
         "order": c.order,
+        "theta_c_deg": theta_c,
         "max_energy_error": float(np.max(np.abs(tot - 1))),
         "phc": q,
         "flat": flat,
         "gain_vs_flat": {k: q["full"][k] / b_exact[k] for k in b_exact},
+        "change_vs_flat_points": {
+            "E100_in_cone": q["full"]["E100_in_cone"] - b_exact["E100"],
+            "E100_trapped": q["full"]["E100"] - q["full"]["E100_in_cone"],
+            "eta1_in_cone": q["full"]["eta1_in_cone"] - b_exact["eta1"],
+            "eta1_trapped": q["full"]["eta1"] - q["full"]["eta1_in_cone"],
+        },
     }
 
 
