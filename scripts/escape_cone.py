@@ -10,15 +10,17 @@ import math
 
 from phcscint import analytic
 from phcscint.fresnel import escape_fraction_one_face_fresnel
-from phcscint.materials import BGO, LYSO, LYSO_N_EPIC, N_AIR, N_GREASE
+from phcscint.materials import BGO, LYSO, LYSO_N_EPIC, N_AIR, N_GREASE, N_GREASE_BRIEF
 from phcscint.provenance import git_commit, save_results
 
 CASES = [
     ("LYSO -> air", LYSO.n, N_AIR),
-    ("LYSO -> grease", LYSO.n, N_GREASE),
+    ("LYSO -> grease (EJ-550)", LYSO.n, N_GREASE),
     ("BGO -> air", BGO.n, N_AIR),
-    ("BGO -> grease", BGO.n, N_GREASE),
+    ("BGO -> grease (EJ-550)", BGO.n, N_GREASE),
     ("LYSO(n=1.82, Epic) -> air", LYSO_N_EPIC, N_AIR),
+    ("LYSO -> n=1.5 (brief)", LYSO.n, N_GREASE_BRIEF),
+    ("LYSO(n=1.82, Epic) -> n=1.5 (brief)", LYSO_N_EPIC, N_GREASE_BRIEF),
 ]
 
 

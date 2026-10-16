@@ -1,0 +1,17 @@
+{
+  "description": "Tiny smoke version of the lut job, used by tests/test_remote_job.py.",
+  "lut": {
+    "n1": "LYSO",
+    "n2": "grease",
+    "wavelength_um": "LYSO-peak",
+    "layer": {"period_um": 0.40, "radius_um": 0.12, "height_um": 0.30, "n_pillar": "Si3N4-Luke2015"},
+    "order": 3,
+    "n_grid": 48,
+    "theta_step_deg": 30.0,
+    "phi_step_deg": 22.5,
+    "window": 3,
+    "edge_sharpness": 1000.0,
+    "label": "smoke"
+  },
+  "chunks": 2
+}

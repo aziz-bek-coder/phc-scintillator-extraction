@@ -37,17 +37,17 @@ Dates revised 2026-10-15 (Aziz): pause 21 Dec 2026 to 3 Jan 2027.
 - [x] Remote compute workflow (`compute.yml`) and job driver (`scripts/remote_job.py`)
 - [ ] Repository public (blocked: PR #1 ref still exposes old commits; docs/status.md)
 - [ ] Secret scanning push protection and branch protection (after publication)
-- [ ] First remote job: RCWA benchmark; grids sized from it
+- [x] First remote job: RCWA benchmark (run 38798175139); grids sized from it
 
-## M2 — angle-resolved RCWA for a reference photonic crystal (by 22 Nov 2026)
-- [ ] Derivation 03: k∥ + G, which orders propagate, trapped-mode escape
-- [ ] Square lattice of TiO₂ (or Si₃N₄) pillars on LYSO; outside medium grease (n≈1.5) or air
-- [ ] (θ, φ) sweep with C4v symmetry (φ in 0–45° for unpolarised light), both
+## M2 — angle-resolved RCWA for a reference photonic crystal (by 22 Nov 2026) — done 2026-10-16
+- [x] Derivation 03: k∥ + G, which orders propagate, trapped-mode escape
+- [x] Square lattice of Si₃N₄ pillars on LYSO; outside medium grease (n = 1.46) or air
+- [x] (θ, φ) sweep with C4v symmetry (φ in 0–45° for unpolarised light), both
       polarisations, T and R into each diffraction order
-- [ ] Convergence study in Fourier orders, plot saved under `docs/figures/`
-- [ ] Coarse grid for optimisation, fine grid for final evaluation; lookup tables cached
-      to disk and runs resumable; peak RAM under 4 GB
-- [ ] Lookup-table format defined and documented in `docs/decisions.md`
+- [x] Convergence study in Fourier orders (remote run 38901900762), plot in `docs/figures/`
+- [x] Coarse grid (θ 2° × φ 5°, order 7) built remotely in chunks, resumable; fine grid
+      (θ 1° × φ 2.5°, order 9) planned for final evaluation
+- [x] Lookup-table format defined and documented in `docs/decisions.md`
 
 ## M3 — Monte Carlo pixel model (by 6 Dec 2026)
 - [ ] Derivation 04: bare-face expectation per wall model, transport time from path length

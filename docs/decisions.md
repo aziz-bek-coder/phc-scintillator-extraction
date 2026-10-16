@@ -74,6 +74,47 @@ so the fine-grid run must be resumable.
 So that every number quoted in docs has a file with the commit hash that produced it.
 Large arrays (lookup tables) stay in `data/` (git-ignored) and are regenerated.
 
+## 2026-10-16 — Grease index 1.46 (Eljen EJ-550) instead of the brief's 1.5
+Numbers must come from a source; 1.5 had none. EJ-550 lists 1.46 and Luxium BC-631
+lists 1.465. The brief's 1.5 is kept as `N_GREASE_BRIEF` only to reproduce the brief's
+21.7 % check. A first convergence run with 1.5 was stopped and redone with 1.46.
+
+## 2026-10-16 — Pillar material Si3N4 (Luke 2015), not TiO2
+Knapitsch et al. used silicon nitride (paper abstract). Two independent Si3N4 sources
+agree to 1.4 % at 420 nm (Luke 2.091, Philipp 2.062), while TiO2 thin-film records
+disagree by 0.3 in n (2.29 vs 2.62) and one shows absorption at 420 nm. TiO2 can be
+revisited in M4 as a higher-contrast option once a deposition-matched source exists.
+
+## 2026-10-16 — Reference design is "Knapitsch-style", not a replica
+The Knapitsch geometry is not in the abstracts, and the thesis PDF is copy-protected,
+so it was not text-extracted. Reference: square lattice of Si3N4 pillars, a = 0.40 µm,
+r = 0.12 µm (fill factor 0.28), h = 0.30 µm. Period chosen from the grating equation
+so that order (−1, 0) maps the middle of the trapped band into the escape cone
+(derivation 03, 2l); radius and height are typical single-etch values, not optimised.
+Replace with the published geometry if Aziz reads it from the thesis.
+
+## 2026-10-16 — Pillars sit directly on LYSO and are surrounded by the outside medium
+No residual Si3N4 layer under the pillars. Simplest structure that M4 can optimise
+with three parameters (period, radius, height).
+
+## 2026-10-16 — Light is treated as unpolarised at every interaction
+LUT stores the unpolarised order powers, eq. (7) of derivation 03. Bias discussed in
+derivation 03, 2g. Tracking polarisation is a possible extension, not planned.
+
+## 2026-10-16 — LUT grids and storage
+θ on a midpoint grid (no solve at exactly 90°, where the input kz vanishes), φ on an
+inclusive grid over the C4v wedge [0°, 45°]. Coarse: 2° × 5° (450 solves). Fine: 1° ×
+2.5° (1710 solves). Stored order window |m|, |n| ≤ ceil(2 n1 / g) = 4 for the
+reference (81 orders), which holds every order that can propagate in LYSO. Cached in
+`data/lut/` (git-ignored) under a hash of the full configuration; builds checkpoint
+every 60 s and resume.
+
+## 2026-10-16 — The M1 benchmark overstated solve times
+`scripts/benchmark_rcwa.py` timed the solve plus a Python loop calling `S_parameters`
+once per order (529 calls at order 11). With vectorised extraction (`rcwa.solve_phc`)
+the extraction step costs about 7 ms (remote benchmark below). The laptop numbers are
+superseded by `results/benchmark-38798175139.json`.
+
 ## 2026-10-16 — Heavy computation moves to GitHub Actions (Aziz's decision)
 The laptop overheated during about 50 minutes of RCWA runs (docs/status.md). Laptop:
 edit code, fast tests with 2 threads, plotting downloaded results. Everything else runs
@@ -130,7 +171,70 @@ JSONs at the top level of `results/` and final figures in `docs/figures/` are co
 torch and calls `torch.set_num_threads`. `pytest` skips `@pytest.mark.slow` by default
 (`-m 'not slow'` in pyproject); CI overrides with `-m "slow or not slow"`.
 
+## 2026-10-16 — Repository requires SHA-pinned actions
+Enabled the Actions setting `sha_pinning_required` (checklist item 4, "pin third-party
+actions"), so a workflow that references an action by tag fails instead of running.
+
+## 2026-10-16 — Grids sized from the remote benchmark (run 38798175139)
+Runner: GitHub-hosted, 2 vCPU AMD EPYC 9V74 (private-repository runner), torch on 2
+threads. Reference pillar lattice, θ = 60°, φ = 30°, complex128, n_grid 256, median of
+3 repeats (spread under 1 %); numbers in `results/benchmark-38798175139.json`, figure
+`docs/figures/benchmark_rcwa_remote.png`.
+
+| Order M | Harmonics | Forward solve | Backward pass |
+|---|---|---|---|
+| 5 | 121 | 0.44 s | 0.29 s |
+| 7 | 225 | 2.45 s | 1.76 s |
+| 9 | 361 | 9.5 s | 7.2 s |
+| 11 | 529 | 28.6 s | not measured |
+| 13 | 729 | 73 s | not measured |
+
+Time grows as (harmonics)^2.89 for M ≥ 7; extraction of all order powers costs 7 ms;
+peak memory 1.7 GB at M = 13; energy conserved to 4e-13. Choices, per runner:
+- Convergence study: orders 3–15 at 10 incidences plus a grid check, about 47
+  runner-minutes, 4 chunks. Order 15 is added so that order 13 has an error estimate.
+- Coarse LUT, order 7 (2° × 5°, 450 solves): 18 runner-minutes, 2 chunks. For M3
+  development and M4 screening.
+- Fine LUT, order 9 (1° × 2.5°, 1710 solves): 4.5 runner-hours, 4 chunks of about
+  70 minutes. For the final evaluation of each design.
+- Order 11 on the fine grid would take 13.6 runner-hours: not planned; order-11 spot
+  checks only.
+- M4 gradient steps at order 5 with 72 incidences: 0.9 runner-minutes per step, so 4
+  starts × 50 steps ≈ 3 runner-hours in 4 chunks; candidates re-checked at order 7
+  (about 5 minutes per evaluation) before the fine-grid Monte Carlo.
+Orders used for final numbers are confirmed by the remote convergence study. Public
+4-vCPU runners should be faster; rerun the benchmark after publication.
+
+## 2026-10-16 — Job code in `src/phcscint/jobs.py`; laptop-made M2 results removed
+The benchmark, convergence and lut jobs live in the package (standard-library imports at
+module level, so the plan step needs no installation); `scripts/remote_job.py` is the
+command line. `scripts/convergence.py` and `scripts/build_lut.py` were removed because
+their logic moved into the jobs, and the laptop-made `results/m2_convergence.json` and
+its figure were removed: those numbers will come from the remote convergence job.
+Configs name materials ("LYSO", "grease", "Si3N4-Luke2015") instead of copying numbers.
+
+## 2026-10-16 — Fourier orders for final numbers, from the convergence study
+Convergence run 38901900762 (results/convergence-38901900762.json), worst case over 5
+incidences against order 15: grease 0.54 % at order 7, 0.30 % at 9, 0.18 % at 11; air
+1.7 % at 7, 0.83 % at 9, 0.43 % at 11. Decision: order 7 coarse tables for development
+and screening; order 9 fine tables for final grease numbers (target ≤ 0.3 %); order 11
+for any final air number (≤ 0.5 %). The real-space grid stays at 256 × 256 (doubling
+it changes T by ≤ 0.2 %).
+
+## 2026-10-16 — Branches cited by remote runs are merged, not rebased
+Every remote result records the commit that produced it. Rebasing a branch after its
+commits were used by a run would orphan those hashes. Such branches are merged into
+main with a merge commit (and main is merged into them when needed), never rebased.
+This overrides the "rebase before opening a PR" rule in AGENTS.md for those branches.
+
+## 2026-10-16 — Runner hardware varies between jobs
+GitHub's 2-vCPU runners came with different CPUs: AMD EPYC 9V74 (benchmark, order 13 in
+73 s) and EPYC 7763 (convergence, order 13 in 48 s). Budgets use the slower machine;
+timings in result files are informative only, never a result.
+
 ## Open
-- Group index of LYSO at 420 nm: needs a dispersion source before M3.
+- Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
+  M3 uses n_g = n and states the bias.
 - Wavelength at which Epic Crystal quotes n = 1.82 for LYSO is not stated on its page.
+- Knapitsch geometry from the thesis, to replace the Knapitsch-style reference.
 - Publication: waiting on Aziz (docs/status.md).

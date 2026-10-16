@@ -1,0 +1,17 @@
+{
+  "description": "M2: coarse lookup table (theta 2 deg midpoints x phi 5 deg over the C4v wedge, 450 solves) of the reference Si3N4 pillar lattice on LYSO, outside medium air, Fourier order 7. About 18 runner-minutes (benchmark run 38798175139); 2 chunks.",
+  "lut": {
+    "n1": "LYSO",
+    "n2": "air",
+    "wavelength_um": "LYSO-peak",
+    "layer": {"period_um": 0.40, "radius_um": 0.12, "height_um": 0.30, "n_pillar": "Si3N4-Luke2015"},
+    "order": 7,
+    "n_grid": 256,
+    "theta_step_deg": 2.0,
+    "phi_step_deg": 5.0,
+    "window": "auto",
+    "edge_sharpness": 1000.0,
+    "label": "ref_lyso_air_coarse_M7"
+  },
+  "chunks": 2
+}

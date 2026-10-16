@@ -1,0 +1,245 @@
+{
+  "job": "benchmark",
+  "config_path": "configs/benchmark.json",
+  "config": {
+    "description": "Time per RCWA solve vs Fourier order for the reference Si3N4 pillar lattice (derivation 03, 2l), plus the cost of one backward pass. Sizes every grid in docs/decisions.md.",
+    "geometry": {
+      "n1": 1.81,
+      "n2": 1.46,
+      "wavelength_um": 0.42,
+      "period_um": 0.4,
+      "radius_um": 0.12,
+      "height_um": 0.3,
+      "n_pillar": 2.0906
+    },
+    "geometry_note": "n_pillar = Si3N4 (Luke 2015) at 420 nm, n2 = EJ-550 grease; the index values barely affect timing",
+    "incidence_deg": [
+      60.0,
+      30.0
+    ],
+    "orders": [
+      3,
+      5,
+      7,
+      9,
+      11,
+      13
+    ],
+    "repeats": 3,
+    "n_grid": 256,
+    "report_window": 4,
+    "fit_min_order": 7,
+    "grad_orders": [
+      5,
+      7,
+      9
+    ],
+    "grad_repeats": 2,
+    "grad_edge_sharpness": 50.0,
+    "planned_grids": {
+      "coarse_lut": {
+        "n_theta": 45,
+        "n_phi": 10,
+        "orders": [
+          5,
+          7,
+          9
+        ]
+      },
+      "fine_lut": {
+        "n_theta": 90,
+        "n_phi": 19,
+        "orders": [
+          7,
+          9,
+          11
+        ]
+      }
+    },
+    "planned_gradient_steps": {
+      "m4_step_M5_72_incidences": {
+        "order": 5,
+        "incidences": 72
+      },
+      "m4_step_M7_72_incidences": {
+        "order": 7,
+        "incidences": 72
+      }
+    }
+  },
+  "merged_at_commit": "c7e7621cf666",
+  "merged_utc": "2026-10-15T20:06:43+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "c7e7621cf666",
+          "started_utc": "2026-10-15T19:59:27+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "c7e7621cf666137f15aed2579b37b8459ddb83e6",
+            "github_run_id": "38798175139",
+            "github_ref_name": "main",
+            "runner_name": "GitHub Actions 1000000314",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-15T20:05:55+00:00",
+          "seconds": 388.105310915,
+          "complete": true
+        }
+      ],
+      "seconds": 388.105310915
+    }
+  ],
+  "total_runner_seconds": 388.105310915,
+  "forward": [
+    {
+      "order": 3,
+      "n_harmonics": 49,
+      "repeats": 3,
+      "median_s": 0.05237300599999628,
+      "min_s": 0.052118560000010916,
+      "max_s": 0.05993168499999513,
+      "median_layer_eig_s": 0.03008325100000775,
+      "median_smatrix_s": 0.010739067999992358,
+      "median_extract_s": 0.0065438090000071725,
+      "max_energy_error": 5.773159728050814e-15,
+      "T_total": 0.5064474168961561,
+      "peak_rss_mb": 256.1015625
+    },
+    {
+      "order": 5,
+      "n_harmonics": 121,
+      "repeats": 3,
+      "median_s": 0.43632012300000156,
+      "min_s": 0.43608131999999955,
+      "max_s": 0.4443868019999968,
+      "median_layer_eig_s": 0.26722039300000233,
+      "median_smatrix_s": 0.12741177300000572,
+      "median_extract_s": 0.007089825000008432,
+      "max_energy_error": 1.199040866595169e-14,
+      "T_total": 0.5048272389466333,
+      "peak_rss_mb": 304.54296875
+    },
+    {
+      "order": 7,
+      "n_harmonics": 225,
+      "repeats": 3,
+      "median_s": 2.449062072000004,
+      "min_s": 2.4364042589999997,
+      "max_s": 2.4824988849999983,
+      "median_layer_eig_s": 1.4591951129999927,
+      "median_smatrix_s": 0.7668927240000016,
+      "median_extract_s": 0.007160674000004974,
+      "max_energy_error": 1.2212453270876722e-14,
+      "T_total": 0.5025224674039791,
+      "peak_rss_mb": 443.08984375
+    },
+    {
+      "order": 9,
+      "n_harmonics": 361,
+      "repeats": 3,
+      "median_s": 9.481502728999999,
+      "min_s": 9.448901004000007,
+      "max_s": 9.481893589999999,
+      "median_layer_eig_s": 5.588158453999995,
+      "median_smatrix_s": 3.0851493339999934,
+      "median_extract_s": 0.007497201000006726,
+      "max_energy_error": 3.774758283725532e-14,
+      "T_total": 0.501310242664705,
+      "peak_rss_mb": 737.9609375
+    },
+    {
+      "order": 11,
+      "n_harmonics": 529,
+      "repeats": 3,
+      "median_s": 28.569229516999997,
+      "min_s": 28.477847698999994,
+      "max_s": 28.575508541999994,
+      "median_layer_eig_s": 16.56570629699999,
+      "median_smatrix_s": 9.573493301000013,
+      "median_extract_s": 0.007334308999986661,
+      "max_energy_error": 2.90878432451791e-13,
+      "T_total": 0.5006945398117167,
+      "peak_rss_mb": 1292.11328125
+    },
+    {
+      "order": 13,
+      "n_harmonics": 729,
+      "repeats": 3,
+      "median_s": 73.34815054699999,
+      "min_s": 73.10350984500002,
+      "max_s": 73.631193204,
+      "median_layer_eig_s": 42.14285370299996,
+      "median_smatrix_s": 24.932530920000033,
+      "median_extract_s": 0.006998090000024604,
+      "max_energy_error": 4.334310688136611e-13,
+      "T_total": 0.5002414724677997,
+      "peak_rss_mb": 1679.1640625
+    }
+  ],
+  "gradient": [
+    {
+      "order": 5,
+      "median_forward_s": 0.44988002550002193,
+      "median_backward_s": 0.29126651749999155,
+      "dT_dr": 13.381666887840556,
+      "dT_dh": 0.4740608849755403
+    },
+    {
+      "order": 7,
+      "median_forward_s": 2.46452892450003,
+      "median_backward_s": 1.7628909609999823,
+      "dT_dr": 13.34596090456879,
+      "dT_dh": 0.44992898016933347
+    },
+    {
+      "order": 9,
+      "median_forward_s": 9.384248702500003,
+      "median_backward_s": 7.147340590499965,
+      "dT_dr": 13.427172689525392,
+      "dT_dh": 0.4393085932188522
+    }
+  ],
+  "fit_exponent_time_vs_harmonics": 2.8898595551303696,
+  "budgets": {
+    "coarse_lut_M5": {
+      "solves": 450,
+      "hours_one_runner": 0.054540015375000195
+    },
+    "coarse_lut_M7": {
+      "solves": 450,
+      "hours_one_runner": 0.30613275900000053
+    },
+    "coarse_lut_M9": {
+      "solves": 450,
+      "hours_one_runner": 1.1851878411249999
+    },
+    "fine_lut_M7": {
+      "solves": 1710,
+      "hours_one_runner": 1.163304484200002
+    },
+    "fine_lut_M9": {
+      "solves": 1710,
+      "hours_one_runner": 4.503713796275
+    },
+    "fine_lut_M11": {
+      "solves": 1710,
+      "hours_one_runner": 13.570384020574998
+    },
+    "m4_step_M5_72_incidences": {
+      "incidences_per_step": 72,
+      "minutes_per_step_one_runner": 0.8893758516000162
+    },
+    "m4_step_M7_72_incidences": {
+      "incidences_per_step": 72,
+      "minutes_per_step_one_runner": 5.072903862600015
+    }
+  }
+}
