@@ -21,6 +21,8 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 REFERENCE = {"period_um": 0.40, "radius_um": 0.12, "height_um": 0.30}
+NAMES = {"ref": "reference PhC", "opt_early": "optimised: early photons",
+         "opt_single_pass": "optimised: single pass"}  # fmt: skip
 FINE = {"order": 9, "n_grid": 256, "theta_step_deg": 1.0, "phi_step_deg": 5.0}
 
 
@@ -70,7 +72,7 @@ def cmd_luts(args) -> None:
 
 def cmd_mc(args) -> None:
     walls = {"kind": "wrapped_specular", "reflectivity": 0.95}
-    cases = [{"name": f"bare readout, {args.medium}", "walls": walls,
+    cases = [{"name": "bare readout", "walls": walls,
               "readout": {"n_out": args.medium}}]  # fmt: skip
     for spec in args.lut:
         label, run = spec.split(":", 1)
@@ -78,7 +80,7 @@ def cmd_mc(args) -> None:
         fname = json.loads(summary.read_text())["lut_file"]
         cases.append(
             {
-                "name": label,
+                "name": NAMES[label.split("_lyso_")[0]],
                 "walls": walls,
                 "readout": {
                     "n_out": args.medium,
