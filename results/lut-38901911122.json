@@ -1,0 +1,173 @@
+{
+  "job": "lut",
+  "config_path": "configs/m2_lut_ref_air_coarse_M7.json",
+  "config": {
+    "description": "M2: coarse lookup table (theta 2 deg midpoints x phi 5 deg over the C4v wedge, 450 solves) of the reference Si3N4 pillar lattice on LYSO, outside medium air, Fourier order 7. About 18 runner-minutes (benchmark run 38798175139); 2 chunks.",
+    "lut": {
+      "n1": "LYSO",
+      "n2": "air",
+      "wavelength_um": "LYSO-peak",
+      "layer": {
+        "period_um": 0.4,
+        "radius_um": 0.12,
+        "height_um": 0.3,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "order": 7,
+      "n_grid": 256,
+      "theta_step_deg": 2.0,
+      "phi_step_deg": 5.0,
+      "window": "auto",
+      "edge_sharpness": 1000.0,
+      "label": "ref_lyso_air_coarse_M7"
+    },
+    "chunks": 2
+  },
+  "merged_at_commit": "49189f4f97a9",
+  "merged_utc": "2026-10-16T12:48:56+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "49189f4f97a9",
+          "started_utc": "2026-10-16T12:39:05+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "49189f4f97a9428d6cb6cf73541db0b36971cad4",
+            "github_run_id": "38901911122",
+            "github_ref_name": "claude/m2-reference-phc",
+            "runner_name": "GitHub Actions 1000000327",
+            "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C"
+          },
+          "ended_utc": "2026-10-16T12:43:48+00:00",
+          "seconds": 282.39491753,
+          "complete": true
+        }
+      ],
+      "seconds": 282.39491753
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "49189f4f97a9",
+          "started_utc": "2026-10-16T12:39:18+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 2,
+            "omp_num_threads": "4",
+            "github_sha": "49189f4f97a9428d6cb6cf73541db0b36971cad4",
+            "github_run_id": "38901911122",
+            "github_ref_name": "claude/m2-reference-phc",
+            "runner_name": "GitHub Actions 1000000326",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-16T12:48:01+00:00",
+          "seconds": 522.96407971,
+          "complete": true
+        }
+      ],
+      "seconds": 522.96407971
+    }
+  ],
+  "total_runner_seconds": 805.35899724,
+  "lut_file": "ref_lyso_air_coarse_M7_4db1fc0f59a7.npz",
+  "lut_key": "4db1fc0f59a7",
+  "lut_config": {
+    "edge_sharpness": 1000.0,
+    "label": "ref_lyso_air_coarse_M7",
+    "layer": {
+      "height_um": 0.3,
+      "n_pillar": 2.090638461956985,
+      "period_um": 0.4,
+      "radius_um": 0.12
+    },
+    "n1": 1.81,
+    "n2": 1.0,
+    "n_grid": 256,
+    "order": 7,
+    "phi_deg": [
+      0.0,
+      5.0,
+      10.0,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0
+    ],
+    "theta_deg": [
+      1.0,
+      3.0,
+      5.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      21.0,
+      23.0,
+      25.0,
+      27.0,
+      29.0,
+      31.0,
+      33.0,
+      35.0,
+      37.0,
+      39.0,
+      41.0,
+      43.0,
+      45.0,
+      47.0,
+      49.0,
+      51.0,
+      53.0,
+      55.0,
+      57.0,
+      59.0,
+      61.0,
+      63.0,
+      65.0,
+      67.0,
+      69.0,
+      71.0,
+      73.0,
+      75.0,
+      77.0,
+      79.0,
+      81.0,
+      83.0,
+      85.0,
+      87.0,
+      89.0
+    ],
+    "wavelength_um": 0.42,
+    "window": 4
+  },
+  "lut_complete": true,
+  "theta_rows_filled": 45,
+  "theta_rows_total": 45,
+  "max_energy_error": 9.972689340997931e-12,
+  "built_at_commits": [
+    "49189f4"
+  ],
+  "theta_c_deg": 33.53774359782298,
+  "eta_single_pass_phc": 0.08774416661246946,
+  "phc_in_cone_cells": 0.045511000777469564,
+  "phc_trapped_cells": 0.0422331658349999,
+  "eta_single_pass_bare_same_grid": 0.07291831629462142,
+  "eta_single_pass_bare_exact": 0.07165614359059826,
+  "note": "theta cells are classified by their centre; the cell containing theta_c counts as in-cone"
+}
