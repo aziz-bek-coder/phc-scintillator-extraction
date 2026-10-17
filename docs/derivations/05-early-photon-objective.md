@@ -86,8 +86,29 @@ Checks:
   `scripts/check_early_yield.py`.
 - (1) and (1a) against the M4 Monte Carlo with the fine tables, with lossless mirror
   walls and with the nominal wraps: `scripts/m4_table_checks.py`.
+- (1b) below at 50, 100 and 200 ps against the same Monte Carlo runs:
+  `scripts/m5_threshold_check.py`.
 
 The numbers are in docs/status.md.
+
+### 2b′. Up to two transit times
+For t_dir ≤ τ < 2 t_dir, photons emitted toward the back face can also be detected on
+their first readout hit, after one reflection at the back face. Their path is
+L = (Lz + z)/cos θ, between l₁ = Lz/cos θ and 2 l₁. A photon reflected by the readout
+still needs at least 2 Lz more and cannot arrive before 2 t_dir. So the yield is still
+a single-pass integral, with one more term:
+
+    E(τ) = (1/4π) ∫ dΩ T(θ, φ) (cos θ / Lz) [ ∫_0^{min(s_τ, l₁)} S dL
+                                    + P_b(cos θ) ∫_{l₁}^{min(s_τ, 2 l₁)} S dL ].     (1b)
+
+Here S = S_x S_y is the side survival of (1a) (S = 1 for lossless mirrors). P_b is the
+return probability of the back face at incidence cosine cos θ (1 for a lossless mirror).
+- For τ < t_dir the second term vanishes and (1b) is (1a).
+- Without losses, (1b) is the first-hit part of derivation 04, eq. (5).
+- Code: `src/phcscint/firstpass.py`. Tests against the closed form at 50, 150 and
+  230 ps: `tests/test_firstpass.py`.
+- Unlike (1), the relative gain of a design is no longer independent of τ beyond t_dir:
+  the weight of the second term grows with cos θ in a different way.
 
 ### 2c. Differentiable evaluation
 By C4v symmetry, ∫ dΩ = 8 ∫_0^{π/4} dφ ∫_0^{π/2} sin θ dθ. On the optimisation grid
