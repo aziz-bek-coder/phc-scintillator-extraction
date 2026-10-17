@@ -1,0 +1,220 @@
+{
+  "job": "optimize",
+  "config_path": "configs/m5_opt_air_early_restarts.json",
+  "config": {
+    "description": "M5 robustness: the early-photon optimisation of M4 (configs/m4_opt_air_early.json) rerun from three new starts, Latin hypercube over the same bounds (seed 20261017), 40 Adam steps.",
+    "n1": "LYSO",
+    "n2": "air",
+    "wavelength_um": "LYSO-peak",
+    "n_pillar": "Si3N4-Luke2015",
+    "objective": "early",
+    "tau_ps": 100,
+    "lz_um": 20000,
+    "n_group": null,
+    "order": 5,
+    "grid": {
+      "n_theta": 18,
+      "n_phi": 4
+    },
+    "bounds": {
+      "period_um": [
+        0.2,
+        1.0
+      ],
+      "fill": [
+        0.05,
+        0.6
+      ],
+      "height_um": [
+        0.05,
+        0.8
+      ]
+    },
+    "steps": 40,
+    "lr": 0.15,
+    "starts": [
+      [
+        0.246,
+        0.507,
+        0.561
+      ],
+      [
+        0.795,
+        0.316,
+        0.131
+      ],
+      [
+        0.636,
+        0.163,
+        0.482
+      ]
+    ],
+    "recheck_order": 7
+  },
+  "merged_at_commit": "647ff6bed469",
+  "merged_utc": "2026-10-17T09:17:54+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "647ff6bed469",
+          "started_utc": "2026-10-17T08:48:13+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "647ff6bed46927a10bee48aa245714663f6c2286",
+            "github_run_id": "39018677264",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000483",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:11:38+00:00",
+          "seconds": 1405.345244614,
+          "complete": true
+        }
+      ],
+      "seconds": 1405.345244614
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "647ff6bed469",
+          "started_utc": "2026-10-17T08:48:11+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "647ff6bed46927a10bee48aa245714663f6c2286",
+            "github_run_id": "39018677264",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000482",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:13:53+00:00",
+          "seconds": 1541.978096012,
+          "complete": true
+        }
+      ],
+      "seconds": 1541.978096012
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "647ff6bed469",
+          "started_utc": "2026-10-17T08:48:11+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "647ff6bed46927a10bee48aa245714663f6c2286",
+            "github_run_id": "39018677264",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000484",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:14:05+00:00",
+          "seconds": 1553.91552355,
+          "complete": true
+        }
+      ],
+      "seconds": 1553.91552355
+    }
+  ],
+  "total_runner_seconds": 4501.238864176,
+  "objective_kind": "early",
+  "n1": 1.81,
+  "n2": 1.0,
+  "n_pillar": 2.090638461956985,
+  "order": 5,
+  "grid": {
+    "n_theta": 18,
+    "n_phi": 4
+  },
+  "bare_objective_same_grid": 0.05781495886516513,
+  "starts": [
+    {
+      "chunk": 0,
+      "start": [
+        0.246,
+        0.507,
+        0.561
+      ],
+      "steps": 40,
+      "initial_objective": 0.0573429689573041,
+      "final": {
+        "objective": 0.05883461893037032,
+        "period_um": 0.22425929565862976,
+        "fill": 0.5194386015998722,
+        "height_um": 0.45602395871256696,
+        "radius_um": 0.09118903667064795
+      },
+      "best_objective": 0.058866279184135166
+    },
+    {
+      "chunk": 1,
+      "start": [
+        0.795,
+        0.316,
+        0.131
+      ],
+      "steps": 40,
+      "initial_objective": 0.056875664744105346,
+      "final": {
+        "objective": 0.05759534780525912,
+        "period_um": 0.820549871707817,
+        "fill": 0.30408091069883686,
+        "height_um": 0.1105098720919935,
+        "radius_um": 0.2552846043213735
+      },
+      "best_objective": 0.057843115831017665
+    },
+    {
+      "chunk": 2,
+      "start": [
+        0.636,
+        0.163,
+        0.482
+      ],
+      "steps": 40,
+      "initial_objective": 0.05759882885811722,
+      "final": {
+        "objective": 0.05987632080473374,
+        "period_um": 0.47706597764097636,
+        "fill": 0.11501675392752383,
+        "height_um": 0.6942482430409783,
+        "radius_um": 0.09128177206308642
+      },
+      "best_objective": 0.05995889527620781
+    }
+  ],
+  "best": {
+    "start_chunk": 2,
+    "step": 38,
+    "objective": 0.05995889527620781,
+    "period_um": 0.4844631162223365,
+    "fill": 0.11288320417173553,
+    "height_um": 0.6943175481632421,
+    "radius_um": 0.09183335399383213
+  },
+  "recheck": {
+    "order": 7,
+    "best_objective": 0.05989062892569089,
+    "start0": [
+      0.246,
+      0.507,
+      0.561
+    ],
+    "start0_objective": 0.05737747846798073
+  }
+}

@@ -160,6 +160,22 @@
    "milestone": "M5",
    "config": "configs/m5_spectral.json",
    "merged_at_commit": "1427e00"
+  },
+  {
+   "job": "optimize",
+   "run": 39018671447,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction",
+   "milestone": "M5",
+   "config": "configs/m5_opt_grease_early_restarts.json",
+   "merged_at_commit": "647ff6b"
+  },
+  {
+   "job": "optimize",
+   "run": 39018677264,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction",
+   "milestone": "M5",
+   "config": "configs/m5_opt_air_early_restarts.json",
+   "merged_at_commit": "647ff6b"
   }
  ]
 }
