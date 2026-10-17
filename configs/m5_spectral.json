@@ -1,0 +1,28 @@
+{
+  "description": "M5 spectral check: the integrated early-photon objective and single-pass extraction of the five final designs at seven wavelengths across the LYSO emission band, Fourier order 7 (order check: <= 0.16 % from order 11), on the 18 x 4 optimisation grid. LYSO, grease and air keep their 420 nm indices (no dispersion source); Si3N4 is dispersive (Luke 2015).",
+  "designs": [
+    "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+    "configs/m4_lut_opt_early_lyso_grease_fine_M9.json",
+    "configs/m4_lut_opt_single_pass_lyso_grease_fine_M9.json",
+    "configs/m4_lut_ref_lyso_air_fine_M9.json",
+    "configs/m4_lut_opt_early_lyso_air_fine_M9.json"
+  ],
+  "wavelengths_um": [
+    0.39,
+    0.405,
+    0.42,
+    0.435,
+    0.45,
+    0.465,
+    0.48
+  ],
+  "order": 7,
+  "grid": {
+    "n_theta": 18,
+    "n_phi": 4
+  },
+  "tau_ps": 100,
+  "lz_um": 20000,
+  "n_group": null,
+  "chunks": 6
+}

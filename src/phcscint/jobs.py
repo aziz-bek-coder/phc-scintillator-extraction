@@ -1315,14 +1315,14 @@ class OrderCheck(Job):
         designs = self._designs(cfg)
         points = self._points(cfg)
         rows = _rows(workdir)
-        done = {(r["label"], r["order"], r["i"]) for r in rows}
+        done = {(r["label"], r["order"], r.get("wavelength_um"), r["i"]) for r in rows}
         for it, owner in self.assignment(cfg, n_chunks):
             d = designs[it["design"]]
-            if owner != chunk or (d["label"], it["order"], it["i"]) in done:
+            lam = float(it.get("wavelength_um") or resolve_wavelength(d["wavelength_um"]))
+            if owner != chunk or (d["label"], it["order"], lam, it["i"]) in done:
                 continue
             if deadline.expired():
                 return False
-            lam = resolve_wavelength(d["wavelength_um"])
             th, ph, _ = points[it["i"]]
             t0 = time.perf_counter()
             op = solve_phc(
@@ -1339,6 +1339,7 @@ class OrderCheck(Job):
             row = {
                 "label": d["label"],
                 "order": it["order"],
+                "wavelength_um": lam,
                 "i": it["i"],
                 "theta_deg": math.degrees(th),
                 "phi_deg": math.degrees(ph),
@@ -1438,7 +1439,113 @@ class OrderCheck(Job):
         }
 
 
+class SpectralCheck(OrderCheck):
+    """The integrated objectives of finished designs across the emission band: each design
+    is kept fixed and the wavelength changes. Indices come from phcscint.materials at each
+    wavelength; LYSO and the outside media have no dispersion data there and keep their
+    420 nm values, Si3N4 follows Luke 2015. One Fourier order; otherwise the same solver
+    path and angle grid conventions as the order check.
+
+    Config keys: designs, wavelengths_um, order, grid {n_theta, n_phi}, tau_ps, lz_um,
+    n_group (null: n1), chunks."""
+
+    name = "spectral"
+
+    def assignment(self, cfg: dict[str, Any], n_chunks: int) -> list[tuple[dict, int]]:
+        n_points = len(self._points(cfg))
+        items = [
+            {"design": d, "order": int(cfg["order"]), "wavelength_um": float(w), "i": i}
+            for d in range(len(cfg["designs"]))
+            for w in cfg["wavelengths_um"]
+            for i in range(n_points)
+        ]
+        owner = _spread_by_cost([1.0] * len(items), n_chunks)
+        return list(zip(items, owner, strict=True))
+
+    def merge(self, cfg, chunk_dirs, out) -> dict[str, Any]:
+        import csv
+
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        from phcscint import optimize as opt
+
+        rows = [r for d in chunk_dirs for r in _rows(d)]
+        if not rows:
+            return {}
+        grid = opt.AngleGrid(**cfg["grid"])
+        points = grid.points()
+        wls = [float(w) for w in cfg["wavelengths_um"]]
+        designs = []
+        for d in self._designs(cfg):
+            per_wl = {}
+            for w in wls:
+                t = {
+                    r["i"]: r["T_total"]
+                    for r in rows
+                    if (r["label"], r["wavelength_um"]) == (d["label"], w)
+                }
+                if len(t) < len(points):
+                    continue
+                n1, n2 = resolve_index(d["n1"], w), resolve_index(d["n2"], w)
+                ng = cfg.get("n_group") or n1
+                weights = {
+                    "early": opt.early_weight(float(cfg["tau_ps"]), float(cfg["lz_um"]), ng),
+                    "single_pass": lambda theta: 1.0,
+                }
+                entry = {}
+                for k, wf in weights.items():
+                    v = sum(wf(th) * wt * t[i] for i, (th, _, wt) in enumerate(points))
+                    b = opt.bare_objective(wf, n1, n2, grid)
+                    entry |= {k: v, f"bare_{k}": b, f"gain_{k}": v / b - 1}
+                per_wl[f"{w:g}"] = entry
+            designs.append({"label": d["label"], "config": d["config"], "n2": d["n2"],
+                            "layer": d["layer"], "by_wavelength": per_wl})  # fmt: skip
+
+        with (out / "spectral.csv").open("w", newline="", encoding="utf-8") as f:
+            cols = ["label", "wavelength_um", "i", "theta_deg", "phi_deg", "T_total",
+                    "energy_error", "seconds"]  # fmt: skip
+            w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+            w.writeheader()
+            w.writerows(sorted(rows, key=lambda r: (r["label"], r["wavelength_um"], r["i"])))
+
+        fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
+        for ax, kind in zip(axes, ("early", "single_pass"), strict=True):
+            for e in designs:
+                ws = sorted(float(k) for k in e["by_wavelength"])
+                g = [100 * e["by_wavelength"][f"{x:g}"][f"gain_{kind}"] for x in ws]
+                ax.plot([1000 * x for x in ws], g, "o-", label=e["label"])
+            ax.axhline(0, color="k", lw=0.8)
+            ax.set_title(f"{kind} objective, relative to the flat face", fontsize=9)
+            ax.set_xlabel("wavelength [nm]")
+            ax.grid(True, alpha=0.3)
+        axes[0].set_ylabel("gain over the flat face [%]")
+        axes[0].legend(fontsize=6)
+        fig.suptitle(f"Final designs across the emission band (order {cfg['order']}, "
+                     f"{grid.n_theta} × {grid.n_phi} incidences)", fontsize=9)  # fmt: skip
+        fig.tight_layout()
+        fig.savefig(out / "spectral.png", dpi=130)
+        return {
+            "grid": cfg["grid"],
+            "order": int(cfg["order"]),
+            "wavelengths_um": wls,
+            "tau_ps": cfg["tau_ps"],
+            "designs": designs,
+            "max_energy_error": max(r["energy_error"] for r in rows),
+        }
+
+
 JOBS: dict[str, Job] = {
     j.name: j
-    for j in (Benchmark(), Convergence(), LutJob(), MonteCarlo(), Optimize(), OrderCheck())
+    for j in (
+        Benchmark(),
+        Convergence(),
+        LutJob(),
+        MonteCarlo(),
+        Optimize(),
+        OrderCheck(),
+        SpectralCheck(),
+    )
 }

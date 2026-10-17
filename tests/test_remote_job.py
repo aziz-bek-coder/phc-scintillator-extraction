@@ -229,3 +229,29 @@ def test_ordercheck_with_invisible_pillars_reproduces_the_bare_face(tmp_path, mo
     for v in d["by_order"].values():
         for k in ("early", "single_pass"):
             assert v[k] == pytest.approx(d["bare_same_grid"][k], rel=1e-10)
+
+
+def test_spectral_job_agrees_with_the_order_check_at_the_design_wavelength(tmp_path) -> None:
+    """Same design, order and grid: at the table's own wavelength (420 nm) the spectral
+    job must reproduce the order check exactly; at 400 nm it must differ."""
+    from phcscint.jobs import JOBS
+
+    cfg = json.loads((REPO / "configs" / "smoke_spectral.json").read_text())
+    pairs = JOBS["spectral"].assignment(cfg, 2)
+    assert len(pairs) == 2 * 2 and {owner for _, owner in pairs} == {0, 1}
+    results = {}
+    for job, config in (("spectral", "configs/smoke_spectral.json"),
+                        ("ordercheck", "configs/smoke_ordercheck.json")):  # fmt: skip
+        out, final = tmp_path / f"{job}-out", tmp_path / f"{job}-final"
+        _run_all_chunks(job, config, out, 2)
+        remote_job.main(["merge", "--job", job, "--config", config, "--in", str(out),
+                         "--out", str(final)])  # fmt: skip
+        results[job] = json.loads((final / "summary.json").read_text())
+        assert results[job]["complete"] is True
+    (spec,) = results["spectral"]["designs"]
+    (oc,) = results["ordercheck"]["designs"]
+    assert set(spec["by_wavelength"]) == {"0.4", "0.42"}
+    for k in ("early", "single_pass"):
+        assert spec["by_wavelength"]["0.42"][k] == pytest.approx(oc["by_order"]["2"][k], rel=1e-12)
+        assert spec["by_wavelength"]["0.4"][k] != pytest.approx(oc["by_order"]["2"][k], rel=1e-6)
+    assert (tmp_path / "spectral-final" / "spectral.png").exists()
