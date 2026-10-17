@@ -37,6 +37,7 @@ REMOTE_FIGURES = {
     "m4_opt_grease_single_pass.png": ("optimize", 38905905490, "optimize.png"),
     "m4_opt_air_early.png": ("optimize", 38950528275, "optimize.png"),
     "m4_ordercheck.png": ("ordercheck", 38949360857, "ordercheck.png"),
+    "m5_spectral.png": ("spectral", 39019077411, "spectral.png"),
 }
 
 LIGHT_SCRIPTS = [

@@ -1,0 +1,551 @@
+{
+  "job": "spectral",
+  "config_path": "configs/m5_spectral.json",
+  "config": {
+    "description": "M5 spectral check: the integrated early-photon objective and single-pass extraction of the five final designs at seven wavelengths across the LYSO emission band, Fourier order 7 (order check: <= 0.16 % from order 11), on the 18 x 4 optimisation grid. LYSO, grease and air keep their 420 nm indices (no dispersion source); Si3N4 is dispersive (Luke 2015).",
+    "designs": [
+      "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+      "configs/m4_lut_opt_early_lyso_grease_fine_M9.json",
+      "configs/m4_lut_opt_single_pass_lyso_grease_fine_M9.json",
+      "configs/m4_lut_ref_lyso_air_fine_M9.json",
+      "configs/m4_lut_opt_early_lyso_air_fine_M9.json"
+    ],
+    "wavelengths_um": [
+      0.39,
+      0.405,
+      0.42,
+      0.435,
+      0.45,
+      0.465,
+      0.48
+    ],
+    "order": 7,
+    "grid": {
+      "n_theta": 18,
+      "n_phi": 4
+    },
+    "tau_ps": 100,
+    "lz_um": 20000,
+    "n_group": null,
+    "chunks": 6
+  },
+  "merged_at_commit": "1427e0075aa7",
+  "merged_utc": "2026-10-17T09:06:06+00:00",
+  "complete": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "1427e0075aa7",
+          "started_utc": "2026-10-17T08:54:27+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "1427e0075aa790d0ffe2991db2e8b60e349c113c",
+            "github_run_id": "39019077411",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000490",
+            "cpu_model": "AMD EPYC 9V45 96-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:01:30+00:00",
+          "seconds": 423.132804999,
+          "complete": true
+        }
+      ],
+      "seconds": 423.132804999
+    },
+    {
+      "chunk": 1,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "1427e0075aa7",
+          "started_utc": "2026-10-17T08:54:41+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "1427e0075aa790d0ffe2991db2e8b60e349c113c",
+            "github_run_id": "39019077411",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000487",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:05:06+00:00",
+          "seconds": 624.854276086,
+          "complete": true
+        }
+      ],
+      "seconds": 624.854276086
+    },
+    {
+      "chunk": 2,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "1427e0075aa7",
+          "started_utc": "2026-10-17T08:54:45+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "1427e0075aa790d0ffe2991db2e8b60e349c113c",
+            "github_run_id": "39019077411",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000489",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:05:06+00:00",
+          "seconds": 620.7857558549999,
+          "complete": true
+        }
+      ],
+      "seconds": 620.7857558549999
+    },
+    {
+      "chunk": 3,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "1427e0075aa7",
+          "started_utc": "2026-10-17T08:54:43+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "1427e0075aa790d0ffe2991db2e8b60e349c113c",
+            "github_run_id": "39019077411",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000488",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:05:10+00:00",
+          "seconds": 626.8497792549999,
+          "complete": true
+        }
+      ],
+      "seconds": 626.8497792549999
+    },
+    {
+      "chunk": 4,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "1427e0075aa7",
+          "started_utc": "2026-10-17T08:54:37+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "1427e0075aa790d0ffe2991db2e8b60e349c113c",
+            "github_run_id": "39019077411",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000486",
+            "cpu_model": "AMD EPYC 9V74 80-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:03:27+00:00",
+          "seconds": 529.6684901120001,
+          "complete": true
+        }
+      ],
+      "seconds": 529.6684901120001
+    },
+    {
+      "chunk": 5,
+      "complete": true,
+      "segments": [
+        {
+          "git_commit": "1427e0075aa7",
+          "started_utc": "2026-10-17T08:54:44+00:00",
+          "runner": {
+            "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+            "python": "3.12.15",
+            "cpu_count": 4,
+            "omp_num_threads": "4",
+            "github_sha": "1427e0075aa790d0ffe2991db2e8b60e349c113c",
+            "github_run_id": "39019077411",
+            "github_ref_name": "claude/m5-robustness",
+            "runner_name": "GitHub Actions 1000000491",
+            "cpu_model": "AMD EPYC 7763 64-Core Processor"
+          },
+          "ended_utc": "2026-10-17T09:05:10+00:00",
+          "seconds": 626.850169137,
+          "complete": true
+        }
+      ],
+      "seconds": 626.850169137
+    }
+  ],
+  "total_runner_seconds": 3452.141275444,
+  "grid": {
+    "n_theta": 18,
+    "n_phi": 4
+  },
+  "order": 7,
+  "wavelengths_um": [
+    0.39,
+    0.405,
+    0.42,
+    0.435,
+    0.45,
+    0.465,
+    0.48
+  ],
+  "tau_ps": 100,
+  "designs": [
+    {
+      "label": "ref_lyso_grease_fine_M9",
+      "config": "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+      "n2": "grease",
+      "layer": {
+        "period_um": 0.4,
+        "radius_um": 0.12,
+        "height_um": 0.3,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "by_wavelength": {
+        "0.39": {
+          "early": 0.12944255304859248,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.010880168445040028,
+          "single_pass": 0.21357002851502518,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.07795374797593713
+        },
+        "0.405": {
+          "early": 0.13000819826295806,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.006557857999392902,
+          "single_pass": 0.21395230617324362,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.07988322112022272
+        },
+        "0.42": {
+          "early": 0.13170739438450818,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.006426346514060599,
+          "single_pass": 0.217268441543671,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.09662077824002369
+        },
+        "0.435": {
+          "early": 0.13083076512990077,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.0002723113865442661,
+          "single_pass": 0.21493967459103772,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.0848667737937634
+        },
+        "0.45": {
+          "early": 0.12960560064677654,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.009634259668884204,
+          "single_pass": 0.21127963566498076,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.0663934294508639
+        },
+        "0.465": {
+          "early": 0.12940197875228074,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.011190212091338192,
+          "single_pass": 0.2094500238233952,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.05715881467044981
+        },
+        "0.48": {
+          "early": 0.1307420780308891,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.0009500032766492916,
+          "single_pass": 0.21123545332356977,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.06617042755846603
+        }
+      }
+    },
+    {
+      "label": "opt_early_lyso_grease_fine_M9",
+      "config": "configs/m4_lut_opt_early_lyso_grease_fine_M9.json",
+      "n2": "grease",
+      "layer": {
+        "period_um": 0.23396,
+        "radius_um": 0.04524,
+        "height_um": 0.21728,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "by_wavelength": {
+        "0.39": {
+          "early": 0.13382283188417818,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.02259120987667651,
+          "single_pass": 0.2067678908097045,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.04362126282021683
+        },
+        "0.405": {
+          "early": 0.1354468551529637,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.03500099000098733,
+          "single_pass": 0.20953408745519586,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.05758310972532277
+        },
+        "0.42": {
+          "early": 0.1358055772053546,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.03774212178245584,
+          "single_pass": 0.21003929083497985,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.06013302686732458
+        },
+        "0.435": {
+          "early": 0.13419092446050726,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.025403945399272043,
+          "single_pass": 0.2067630434410164,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.04359679665667571
+        },
+        "0.45": {
+          "early": 0.13441066620091258,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.027083075701760162,
+          "single_pass": 0.20734206221230053,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.04651928282664053
+        },
+        "0.465": {
+          "early": 0.13502517598336006,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.03177877891672343,
+          "single_pass": 0.20826328718368972,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.051168989143311805
+        },
+        "0.48": {
+          "early": 0.135495971154446,
+          "bare_early": 0.1308664015411565,
+          "gain_early": 0.035376304068646114,
+          "single_pass": 0.2091632511723777,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.05571138472847381
+        }
+      }
+    },
+    {
+      "label": "opt_single_pass_lyso_grease_fine_M9",
+      "config": "configs/m4_lut_opt_single_pass_lyso_grease_fine_M9.json",
+      "n2": "grease",
+      "layer": {
+        "period_um": 0.55895,
+        "radius_um": 0.22181,
+        "height_um": 0.2135,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "by_wavelength": {
+        "0.39": {
+          "early": 0.12680392605015553,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.031042921965905412,
+          "single_pass": 0.24018174497460987,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.2122712816539556
+        },
+        "0.405": {
+          "early": 0.12629089400145277,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.03496319518088664,
+          "single_pass": 0.23816989348174247,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.20211684719427758
+        },
+        "0.42": {
+          "early": 0.12845964636209384,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.01839093266659253,
+          "single_pass": 0.24266109238535108,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.22478531207538666
+        },
+        "0.435": {
+          "early": 0.12837527814262495,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.019035622353749115,
+          "single_pass": 0.23841112112301327,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.20333439743684334
+        },
+        "0.45": {
+          "early": 0.127554349500646,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.025308650665915033,
+          "single_pass": 0.23465257226936304,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.1843638431324135
+        },
+        "0.465": {
+          "early": 0.12770416751021382,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.024163834213384305,
+          "single_pass": 0.23263168604282267,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.17416380758773076
+        },
+        "0.48": {
+          "early": 0.1283211680095162,
+          "bare_early": 0.1308664015411565,
+          "gain_early": -0.019449098482621885,
+          "single_pass": 0.23058989169108024,
+          "bare_single_pass": 0.19812541021917077,
+          "gain_single_pass": 0.16385824229207424
+        }
+      }
+    },
+    {
+      "label": "ref_lyso_air_fine_M9",
+      "config": "configs/m4_lut_ref_lyso_air_fine_M9.json",
+      "n2": "air",
+      "layer": {
+        "period_um": 0.4,
+        "radius_um": 0.12,
+        "height_um": 0.3,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "by_wavelength": {
+        "0.39": {
+          "early": 0.059188360537075484,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.023755126681199945,
+          "single_pass": 0.09698492782503391,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.27203021298349017
+        },
+        "0.405": {
+          "early": 0.05719353743175693,
+          "bare_early": 0.05781495886516513,
+          "gain_early": -0.010748454130313556,
+          "single_pass": 0.09146821184124056,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.19967433702208393
+        },
+        "0.42": {
+          "early": 0.056327154691583295,
+          "bare_early": 0.05781495886516513,
+          "gain_early": -0.02573389660367409,
+          "single_pass": 0.08777112816281352,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.15118430620645618
+        },
+        "0.435": {
+          "early": 0.05605505326639914,
+          "bare_early": 0.05781495886516513,
+          "gain_early": -0.0304403156779961,
+          "single_pass": 0.08612010092836238,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.12952984327311023
+        },
+        "0.45": {
+          "early": 0.05591277030277943,
+          "bare_early": 0.05781495886516513,
+          "gain_early": -0.032901321729242206,
+          "single_pass": 0.08546111410953858,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.12088673591302657
+        },
+        "0.465": {
+          "early": 0.057192232862021186,
+          "bare_early": 0.05781495886516513,
+          "gain_early": -0.010771018701167812,
+          "single_pass": 0.0873346234651563,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.14545921906166925
+        },
+        "0.48": {
+          "early": 0.058667903688697454,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.01475301271979701,
+          "single_pass": 0.08931956713055442,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.17149324692640766
+        }
+      }
+    },
+    {
+      "label": "opt_early_lyso_air_fine_M9",
+      "config": "configs/m4_lut_opt_early_lyso_air_fine_M9.json",
+      "n2": "air",
+      "layer": {
+        "period_um": 0.2324,
+        "radius_um": 0.06534,
+        "height_um": 0.266,
+        "n_pillar": "Si3N4-Luke2015"
+      },
+      "by_wavelength": {
+        "0.39": {
+          "early": 0.05898116162990021,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.02017129801051798,
+          "single_pass": 0.08414433600804042,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.10361620154790874
+        },
+        "0.405": {
+          "early": 0.06149677593172933,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.06368277585651949,
+          "single_pass": 0.08650785033019799,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.13461546807339864
+        },
+        "0.42": {
+          "early": 0.06256021461202452,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.08207660854565657,
+          "single_pass": 0.08714563732276802,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.1429805237804107
+        },
+        "0.435": {
+          "early": 0.06205404166413844,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.07332155694964038,
+          "single_pass": 0.08608430116350824,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.12906030245338296
+        },
+        "0.45": {
+          "early": 0.061869058978929366,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.07012199253171025,
+          "single_pass": 0.08556185874966636,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.12220807757829921
+        },
+        "0.465": {
+          "early": 0.060341127305953396,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.04369402816111578,
+          "single_pass": 0.08281402863140801,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.0861682205721015
+        },
+        "0.48": {
+          "early": 0.060324999291032036,
+          "bare_early": 0.05781495886516513,
+          "gain_early": 0.0434150689568209,
+          "single_pass": 0.08236522926708709,
+          "bare_single_pass": 0.07624420146244804,
+          "gain_single_pass": 0.08028187963452926
+        }
+      }
+    }
+  ],
+  "max_energy_error": 1.106448266341431e-11
+}
