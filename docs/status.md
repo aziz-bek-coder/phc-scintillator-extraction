@@ -626,23 +626,30 @@ Actions before any number is quoted.
 ## M1 — analytic baseline + flat-interface RCWA (done 2026-10-15, PR #1)
 
 ### Numbers produced
-From `results/m1_escape_cone.json` (`scripts/escape_cone.py`), produced before the
-grease index was changed to 1.46 (that change is in the M2 branch):
+From `results/m1_escape_cone.json` (`scripts/escape_cone.py`):
+- Regenerated on 2026-10-17 (M5) with the current materials: grease is EJ-550,
+  n = 1.46, since M2.
+- The values first reported in M1 used the brief's n = 1.5. Those rows are kept for
+  comparison.
 
 | Case | n1 | n2 | θc [deg] | η₁ | η₁ with Fresnel |
 |---|---|---|---|---|---|
 | LYSO → air | 1.81 | 1.0 | 33.54 | 8.32 % | 7.17 % |
-| LYSO → n = 1.5 | 1.81 | 1.5 | 55.97 | 22.02 % | 20.79 % |
+| LYSO → grease (EJ-550) | 1.81 | 1.46 | 53.77 | 20.45 % | 19.20 % |
 | BGO → air | 2.15 | 1.0 | 27.72 | 5.74 % | 4.69 % |
-| BGO → n = 1.5 | 2.15 | 1.5 | 44.24 | 14.18 % | 12.92 % |
+| BGO → grease (EJ-550) | 2.15 | 1.46 | 42.77 | 13.30 % | 12.04 % |
 | LYSO (Epic, 1.82) → air | 1.82 | 1.0 | 33.33 | 8.22 % | 7.07 % |
+| LYSO → n = 1.5 (brief) | 1.81 | 1.5 | 55.97 | 22.02 % | 20.79 % |
+| LYSO (Epic, 1.82) → n = 1.5 (brief) | 1.82 | 1.5 | 55.51 | 21.68 % | 20.45 % |
 
-Specular LYSO cuboid, fraction of directions that can ever escape: 49.94 % with six
-bare faces into air, 63.64 % with n = 1.5 on the readout face and air elsewhere.
+In a specular LYSO cuboid, the fraction of directions that can ever escape is:
+- 49.94 % with six bare faces into air;
+- 62.07 % with grease (1.46) on the readout face and air elsewhere (63.64 % with the
+  brief's 1.5).
 
-From `results/m1_fresnel_vs_rcwa.json`: torcwa at order [0,0] matches analytic Fresnel
-R and T, s and p, to at most 3e-14 over 0–89.5°. Figure:
-`docs/figures/m1_fresnel_vs_rcwa.png`.
+From `results/m1_fresnel_vs_rcwa.json` (regenerated 2026-10-17, grease 1.46): torcwa at
+order [0,0] matches analytic Fresnel R and T, s and p, to at most 3e-14 over
+0–89.5°. Figure: `docs/figures/m1_fresnel_vs_rcwa.png`.
 
 From `results/m1_rcwa_benchmark.json` (laptop, superseded by the remote benchmark):
 order 7 about 4 s, order 9 about 12 s, order 11 about 50 s per solve.

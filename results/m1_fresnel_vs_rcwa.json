@@ -1,7 +1,8 @@
 {
   "provenance": {
-    "git_commit": "c85772f",
-    "utc": "2026-10-15T18:56:10+00:00",
+    "git_commit": "62b7da3",
+    "started_utc": "2026-10-17T09:26:04+00:00",
+    "utc": "2026-10-17T09:26:11+00:00",
     "python": "3.12.6",
     "numpy": "2.5.4",
     "torch": "2.14.1+cpu",
@@ -33,22 +34,22 @@
     {
       "case": "LYSO -> grease",
       "n1": 1.81,
-      "n2": 1.5,
+      "n2": 1.46,
       "wavelength_um": 0.42,
-      "R_normal_incidence": 0.00877136937413861,
-      "brewster_deg": 39.64953722006908,
-      "critical_deg": 55.96842494093398,
+      "R_normal_incidence": 0.011456199908350404,
+      "brewster_deg": 38.89068321476312,
+      "critical_deg": 53.767951955782436,
       "max_abs_dev_rcwa_vs_fresnel": {
-        "R_s": 3.774758283725532e-15,
-        "R_p": 2.842170943040401e-14,
-        "T_s": 3.497202527569243e-15,
-        "T_p": 6.106226635438361e-15,
-        "cross_pol_max": 6.480615595907054e-28,
-        "R_plus_T_minus_1_max": 2.842170943040401e-14
+        "R_s": 1.5210055437364645e-14,
+        "R_p": 2.930988785010413e-14,
+        "T_s": 1.684763439868675e-14,
+        "T_p": 2.3592239273284576e-14,
+        "cross_pol_max": 3.451389719858367e-28,
+        "R_plus_T_minus_1_max": 2.886579864025407e-14
       },
-      "eta_1_analytic": 0.2201751540961882,
-      "eta_1_geometric_from_rcwa_grid": 0.21994752812948148,
-      "eta_1_fresnel_weighted_from_rcwa_grid": 0.2079392102122269,
+      "eta_1_analytic": 0.20447152823664655,
+      "eta_1_geometric_from_rcwa_grid": 0.20574062499194912,
+      "eta_1_fresnel_weighted_from_rcwa_grid": 0.192155223474697,
       "n_theta": 181
     },
     {

@@ -1,7 +1,8 @@
 {
   "provenance": {
-    "git_commit": "c85772f",
-    "utc": "2026-10-15T18:55:39+00:00",
+    "git_commit": "62b7da3",
+    "started_utc": "2026-10-17T09:26:01+00:00",
+    "utc": "2026-10-17T09:26:01+00:00",
     "python": "3.12.6",
     "numpy": "2.5.4",
     "torch": "2.14.1+cpu",
@@ -19,12 +20,12 @@
       "cones_overlap_same_n2": false
     },
     {
-      "case": "LYSO -> grease",
+      "case": "LYSO -> grease (EJ-550)",
       "n1": 1.81,
-      "n2": 1.5,
-      "theta_c_deg": 55.96842494093398,
-      "eta_1": 0.2201751540961882,
-      "eta_1_fresnel": 0.20786920220307928,
+      "n2": 1.46,
+      "theta_c_deg": 53.767951955782436,
+      "eta_1": 0.20447152823664655,
+      "eta_1_fresnel": 0.19198572452855242,
       "cones_overlap_same_n2": true
     },
     {
@@ -37,12 +38,12 @@
       "cones_overlap_same_n2": false
     },
     {
-      "case": "BGO -> grease",
+      "case": "BGO -> grease (EJ-550)",
       "n1": 2.15,
-      "n2": 1.5,
-      "theta_c_deg": 44.24071879020048,
-      "eta_1": 0.14179251626164274,
-      "eta_1_fresnel": 0.1291794825197708,
+      "n2": 1.46,
+      "theta_c_deg": 42.77099408772729,
+      "eta_1": 0.1329631316385037,
+      "eta_1_fresnel": 0.1204176683389273,
       "cones_overlap_same_n2": false
     },
     {
@@ -53,8 +54,26 @@
       "eta_1": 0.08223688120284917,
       "eta_1_fresnel": 0.07068750462979292,
       "cones_overlap_same_n2": false
+    },
+    {
+      "case": "LYSO -> n=1.5 (brief)",
+      "n1": 1.81,
+      "n2": 1.5,
+      "theta_c_deg": 55.96842494093398,
+      "eta_1": 0.2201751540961882,
+      "eta_1_fresnel": 0.20786920220307928,
+      "cones_overlap_same_n2": true
+    },
+    {
+      "case": "LYSO(n=1.82, Epic) -> n=1.5 (brief)",
+      "n1": 1.82,
+      "n2": 1.5,
+      "theta_c_deg": 55.50502128842514,
+      "eta_1": 0.21683299501703018,
+      "eta_1_fresnel": 0.20448403639696647,
+      "cones_overlap_same_n2": true
     }
   ],
   "lyso_six_faces_air_specular": 0.4994338420746649,
-  "lyso_grease_readout_air_sides_specular": 0.6363700224917423
+  "lyso_grease_readout_air_sides_specular": 0.6206663966322006
 }
