@@ -2,32 +2,22 @@
 
 Updated by the agents. Newest first. Every number below comes from a file in
 `results/` (named next to it), produced by the script named there, at the commit
-recorded inside that file. Commit hashes from before 2026-10-16 are translated in
-[history-rewrite.md](history-rewrite.md).
+recorded inside that file. Commit hashes and run IDs from before 2026-10-17 belong to the
+private archive repository; [history-rewrite.md](history-rewrite.md) maps the hashes to this
+repository.
 
 ## Needs Aziz
 
-1. **Publication is blocked (one decision needed).** The history rewrite worked, but
-   GitHub still serves the old commits, with your Gmail address, through the merged
-   pull request #1. Users cannot delete pull-request refs. Two ways out, either is
-   enough; I will finish the checklist and publish as soon as one is done:
-   - *Recreate (fastest, nothing lost):* approve renaming this repository to
-     `phc-scintillator-extraction-archive` (it stays private, untouched) and creating a
-     fresh `phc-scintillator-extraction` with the clean history. I need approval because
-     a rename is a settings change and creating repositories was not in the approved
-     list.
-   - *Purge:* ask GitHub Support to remove `refs/pull/1/*` and cached views of the old
-     commits for this repository, then tell me it is done.
-2. **My mistake: two merge commits on main carry your Gmail again.** I merged PRs #2
-   and #3 with `gh pr merge`, and GitHub authored those merge commits (`c7e7621`,
-   `38bcdf6`) with your account's primary email. Removing them needs a second history
-   rewrite, which you have not approved, so I have not done it. With the "recreate"
-   option above, the fresh repository would get a clean history in one go (that
-   rewrite also needs your approval). GitHub rejected the noreply address as a merge
-   author, so from PR #4 on, pull requests are merged by fast-forward with no
-   GitHub-authored commit (AGENTS.md). Worth knowing: your public
-   GitHub profile itself shows this Gmail address; enabling "Keep my email addresses
-   private" in your GitHub account settings would prevent this class of leak.
+1. **Published on 2026-10-17** as a fresh repository with a clean history (section
+   "2026-10-17 — Publication" below). The old repository is now
+   `phc-scintillator-extraction-archive`, private and unchanged. It holds every remote
+   run, artifact and pull request up to M4.
+2. **Please enable "Keep my email addresses private"** (GitHub → Settings → Emails).
+   - Your public profile shows your personal address.
+   - Merges done on GitHub (`gh pr merge`, the web button) put your primary address
+     into commits. That is how it reached the old history.
+   - Until then, pull requests are merged by fast-forward (AGENTS.md), so GitHub
+     authors no commit.
 3. **Material constants are PROVISIONAL.** LYSO n = 1.81 at 420 nm, BGO n = 2.15 at
    480 nm (Luxium product pages), grease n = 1.46 (Eljen EJ-550). Please confirm.
 4. **References not content-verified** beyond abstracts: Knapitsch 2012 (geometry not
@@ -35,10 +25,46 @@ recorded inside that file. Commit hashes from before 2026-10-16 are translated i
    found for mirror or diffuse wrapping films, so wall reflectivity 0.95 is an
    assumption in M3.
 5. **Argon** has not started. No independent cross-check exists yet.
-6. **GitHub Actions minutes.** This repository has used about 1,340 of the 2,000
-   free private-repository minutes this month. The quota is shared with your other
-   private repositories, which I cannot see; please check Settings → Billing →
-   Usage. Making the repository public (item 1) would make standard runners free.
+6. **GitHub Actions minutes.** The archive repository used about 1,340 of the 2,000
+   free private-repository minutes in October. That quota is shared with your other
+   private repositories, which I cannot see; please check Settings → Billing → Usage.
+   Standard runners are free for this public repository.
+
+## 2026-10-17 — Publication
+
+Approved by Aziz on 2026-10-17: public today, after a full-history audit, noreply
+commit emails, an MIT licence and secret scanning push protection. He chose the
+"new repository" option.
+
+| Item | State |
+|---|---|
+| 1. Full-history audit (secrets, KAUST material, personal information) | Done, findings below. |
+| 2. Commit emails to the noreply address | Done: rewritten history (docs/history-rewrite.md, second section). All 42 commits now carry only the noreply addresses of Aziz, of GitHub and of the agents. |
+| 3. MIT licence | `LICENSE` (MIT, © 2026 Azizbek Eshmominov), since 2026-10-16. |
+| 4. Secret scanning and push protection | Enabled right after the visibility change (not available while private). |
+| 5. Old repository | Renamed to `phc-scintillator-extraction-archive`, still private. |
+| 6. Public repository | Created from the rewritten `main`. Actions settings copied: actions pinned to full SHAs required, read-only default token, no PR approval by Actions. Then made public. |
+| 7. Branch protection on `main` | A pull request and the `test` check are required, with no approvals. Force pushes and deletion are blocked. The owner account can still fast-forward `main` after green CI (AGENTS.md). |
+
+**Audit findings.** The audit covered all 46 commits reachable from any ref of the old
+repository, including GitHub's `refs/pull/1–5/head`.
+- **Secrets: none.** The search looked for GitHub, AWS, Google and Slack tokens,
+  `sk-` keys, private-key headers, JWTs, and assignments to password, secret, token or
+  API key.
+- **KAUST / Primalight: no files, data, designs or code.** The names appear only in
+  the rule line of AGENTS.md and in this status file.
+- **Personal information: only the personal email address.**
+  - It was in the metadata of 6 commits: the 4 pre-rewrite commits of PR #1, and
+    GitHub's merge commits of PRs #2 and #3.
+  - It was also in the text of `docs/history-rewrite.md`, in 37 revisions.
+  - All of it is removed in the published history. The audit was repeated on the
+    rewritten history and found 0 occurrences in metadata, messages or any file of any
+    revision.
+  - The name appears in LICENSE, README, pyproject.toml and this file, as intended.
+- **Files:** 122 paths in total, all code, configs, docs, small result JSONs and
+  figures. The largest blob is 267 kB.
+- **Pull request texts (#1–#5):** no email addresses or other personal information.
+  They stay in the archive.
 
 ## M4 — optimisation and comparison (done 2026-10-16)
 

@@ -271,6 +271,24 @@ commit hashes change, so result provenance stays valid.
   evaluates both integrated objectives of every final design at orders 7, 9 and 11 on a
   9 × 2 angle grid, and its size is quoted next to the numbers.
 
+## 2026-10-17 — Published as a fresh repository; old one kept as a private archive
+GitHub keeps the refs of merged pull requests, and users cannot delete them. In the
+old repository they reached commits carrying Aziz's personal address, so making it
+public would have exposed the address, whatever was done to `main`.
+
+Aziz chose the "new repository" option (2026-10-17):
+- rename the old repository to `phc-scintillator-extraction-archive` (private);
+- publish the rewritten history (docs/history-rewrite.md) under the original name.
+
+Remote runs before this date stay in the archive. Their numbers are in
+`results/*.json`; hashes are mapped in docs/history-rewrite.md.
+
+Branch protection on `main` requires a pull request and the `test` check, with no
+approvals and no admin enforcement. Admin enforcement is off so that the owner account
+can keep merging by fast-forward after green CI. Merges done by GitHub would author a
+commit with the account's primary email until "Keep my email addresses private" is
+enabled.
+
 ## Open
 - Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
   M3 uses n_g = n and states the bias.
