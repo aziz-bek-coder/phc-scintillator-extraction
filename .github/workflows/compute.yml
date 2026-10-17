@@ -8,6 +8,8 @@ name: compute
 # A job is split into chunks (matrix, at most 6 in parallel, each under 5 h). Every
 # chunk checkpoints; to resume an interrupted run pass its id as resume_run_id.
 # No schedule trigger, and never pull_request_target.
+# Runs before 2026-10-17 (M1-M4) belong to the private archive repository:
+#   gh run download <run-id> -R aziz-bek-coder/phc-scintillator-extraction-archive ...
 
 on:
   workflow_dispatch:
