@@ -30,6 +30,114 @@ repository.
    private repositories, which I cannot see; please check Settings → Billing → Usage.
    Standard runners are free for this public repository.
 
+## M5 — robustness checks, final figures, publication (started 2026-10-17)
+
+### Done
+- **Publication**: section "2026-10-17 — Publication" below.
+- **Robustness check 1**, early-photon gain at the 50, 100 and 200 ps thresholds
+  (Aziz's request).
+  - New eq. (1b) in derivation 05 extends the first-pass model up to two transit times.
+  - Code: `src/phcscint/firstpass.py`. It is tested against the closed form of
+    derivation 04 at 50, 150 and 230 ps (2e-4).
+  - Script: `scripts/m5_threshold_check.py`.
+- **Robustness check 2**, the early-photon optimisation rerun from three new starts
+  (Aziz's request).
+  - Latin hypercube over the same bounds, 40 Adam steps.
+  - Runs 39018671447 (grease) and 39018677264 (air); script
+    `scripts/m5_restart_check.py`.
+- **Spectral check**: the five final designs at seven wavelengths over 390–480 nm.
+  New remote job `spectral`, run 39019077411.
+- **Data and figures**:
+  - `results/runs.json` lists the 22 remote runs quoted in the docs.
+  - `scripts/data_bundle.py` packs their merged outputs, published as the asset of
+    release `results-2026-10-17` (3.0 MB).
+  - `scripts/make_figures.py` regenerates every figure in `docs/figures` from them with
+    one command.
+- **README**: result so far, reproduction, explicit limitations.
+
+### Numbers produced
+**Check 1: gain over the bare face in photons detected by τ**
+- Source: Monte Carlo runs of M4 (nominal wraps), `results/m5_threshold_check.json`.
+- The Monte Carlo gain has its 1σ; the model is eq. (1b) over the same tables.
+- All 21 Monte Carlo yields agree with the model within |z| ≤ 1.7.
+
+| Readout | 50 ps | 100 ps | 200 ps | Model (50 / 100 / 200 ps) |
+|---|---|---|---|---|
+| Grease, reference | −0.3 ± 0.5 % | −0.3 ± 0.4 % | −0.1 ± 0.2 % | +0.2 / −0.0 / −0.2 % |
+| Grease, optimised for E(100 ps) | **+2.3 ± 0.6 %** | **+2.9 ± 0.4 %** | **+2.9 ± 0.3 %** | +2.6 / +2.5 / +2.5 % |
+| Grease, optimised for single pass | −1.7 ± 0.5 % | −2.1 ± 0.4 % | −2.4 ± 0.2 % | −1.4 / −1.8 / −2.3 % |
+| Air, reference | +1.4 ± 0.9 % | +1.2 ± 0.6 % | +1.7 ± 0.4 % | +1.3 / +1.2 / +1.6 % |
+| Air, optimised for E(100 ps) | **+6.7 ± 0.9 %** | **+7.0 ± 0.6 %** | **+6.6 ± 0.4 %** | +6.8 / +6.8 / +6.9 % |
+
+**Check 2: optimisation from three new starts**
+- The objective is eq. (1) at order 5 on the 18 × 4 grid. Gains are relative to the bare
+  face on that grid.
+- Source: `results/m5_restart_check.json`, figures
+  `docs/figures/m5_opt_*_early_restarts.png`.
+
+| Start (a / f / h) | Grease: best gain, final design | Air: best gain, final design |
+|---|---|---|
+| M4 best (for comparison) | +3.8 %, a = 0.234 µm | +8.3 %, a = 0.232 µm |
+| 0.246 / 0.507 / 0.561 | +3.2 %, a = 0.240 µm, f = 0.25, h = 0.44 µm | +1.8 %, a = 0.224 µm, f = 0.52, h = 0.46 µm |
+| 0.795 / 0.316 / 0.131 | +1.0 %, a = 0.903 µm, f = 0.05, h = 0.19 µm | +0.1 %, a = 0.821 µm, f = 0.30, h = 0.11 µm |
+| 0.636 / 0.163 / 0.482 | +2.7 %, a = 0.291 µm, f = 0.08, h = 0.67 µm | +3.7 %, a = 0.477 µm, f = 0.12, h = 0.69 µm |
+
+**Spectral check**
+- Gain of the first-pass integrals over the flat face, 390–480 nm in 15 nm steps.
+- Order 7 on the 18 × 4 grid.
+- LYSO, grease and air keep their 420 nm indices; Si₃N₄ is dispersive.
+- Source: `results/spectral-39019077411.json`, figure `docs/figures/m5_spectral.png`.
+
+| Design | E(100 ps) gain, range over the band (at 420 nm) | Single-pass gain, range |
+|---|---|---|
+| Grease, reference | −1.1 to +0.6 % (+0.6 %) | +5.7 to +9.7 % |
+| Grease, optimised for E(100 ps) | **+2.3 to +3.8 %** (+3.8 %) | +4.4 to +6.0 % |
+| Grease, optimised for single pass | −3.5 to −1.8 % (−1.8 %) | +16.4 to +22.5 % |
+| Air, reference | −3.3 to +2.4 % (−2.6 %) | +12.1 to +27.2 % |
+| Air, optimised for E(100 ps) | **+2.0 to +8.2 %** (+8.2 %) | +8.0 to +14.3 % |
+
+### What this means
+- **The early-photon gain does not hinge on the 100 ps threshold.**
+  - The early-photon designs gain at 50, 100 and 200 ps alike: grease +2.3 to +2.9 %,
+    air +6.6 to +7.0 %.
+  - The yield-oriented designs gain nothing early at any of the three thresholds.
+  - Eq. (1b) predicts every gain within the Monte Carlo errors.
+- **It survives the emission band.**
+  - Over 390–480 nm, both early-photon designs stay above the flat face for early
+    photons, and grease stays within +2.3 to +3.8 %.
+  - The air design peaks at its 420 nm design wavelength and falls to +2.0 % at
+    390 nm.
+  - A design optimised over the band would trade some of the peak for the edges.
+- **The optimisation has several local optima.**
+  - With grease every new start ends above the bare face. The best restart lands close
+    to the M4 design in period (0.240 against 0.234 µm) but stays 0.6 points of gain
+    below it.
+  - With air no restart comes near the M4 optimum. That optimum was found by one start
+    out of seven.
+  - The good designs share a period near λ/n_LYSO = 0.232 µm, which suggests scanning
+    the period there rather than adding random starts.
+
+### Open issues
+1. **Global optimum unknown.** The M4 designs are the best found from 9 (grease) and 7
+   (air) starts. A scan of the period around λ/n_LYSO, or many more starts, could find
+   better ones, especially for air.
+2. **The spectral check shows trends, not values.** It runs on the coarse optimisation
+   grid, which misjudges designs with sharp angular features. At 420 nm it gives −2.6 %
+   for the air reference, where the fine tables give +2.3 % and the Monte Carlo
+   +1.2 %. A band average also needs a cited LYSO emission spectrum; none is in
+   `docs/references.md` yet.
+3. **No LYSO dispersion data.** The scan varies only the period-to-wavelength ratio and
+   the Si₃N₄ index.
+4. The M3/M4 limitations still apply (README, "Limitations").
+
+### Next
+- The technical note, written by Aziz. Agents review it for correctness and clarity.
+- Optional, free now that runners are free:
+  - a period scan near λ/n_LYSO;
+  - an objective averaged over the band, once an emission spectrum is cited;
+  - a single-pass optimisation for air;
+  - the Knapitsch geometry.
+
 ## 2026-10-17 — Publication
 
 Approved by Aziz on 2026-10-17: public today, after a full-history audit, noreply

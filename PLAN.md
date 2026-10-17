@@ -72,8 +72,12 @@ Dates revised 2026-10-15 (Aziz): pause 21 Dec 2026 to 3 Jan 2027.
 
 ## Pause — 21 Dec 2026 to 3 Jan 2027
 
-## M5 — final figures, README, public release (4 to 12 Jan 2027)
-- [ ] All figures regenerated from scripts in one command
-- [ ] README final, limitations stated explicitly
+## M5 — final figures, README, public release (started 2026-10-17; note 4 to 12 Jan 2027)
+- [x] Robustness: early-photon gain at 50/100/200 ps; optimisation from three new starts
+      (asked by Aziz, 2026-10-17)
+- [x] Spectral check of the final designs over 390–480 nm
+- [x] All figures regenerated from scripts in one command (`scripts/make_figures.py`;
+      run outputs in release `results-2026-10-17`)
+- [x] README limitations stated explicitly (README to be finalised with the note)
 - [ ] Technical note written by Aziz (agents review for correctness and clarity only)
-- [ ] Licence chosen; repo made public only with Aziz's explicit approval
+- [x] Licence chosen; repo made public with Aziz's explicit approval (2026-10-17)

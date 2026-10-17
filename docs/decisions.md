@@ -289,6 +289,23 @@ can keep merging by fast-forward after green CI. Merges done by GitHub would aut
 commit with the account's primary email until "Keep my email addresses private" is
 enabled.
 
+## 2026-10-17 — Run outputs published as a release asset
+- Run artifacts expire after 30 days, and every run before 2026-10-17 belongs to the
+  private archive.
+- So the merged outputs of every quoted run (summaries, tables, CSVs, figures) are
+  zipped by `scripts/data_bundle.py`. The zip is attached to release
+  `results-2026-10-17` of this repository. `results/runs.json` lists the runs.
+- Chunk checkpoints are left out.
+- `*.npz` stays out of git (the existing rule). The release keeps the binary tables
+  next to the code that made them without growing the history.
+
+## 2026-10-17 — M5 robustness checks
+- Starts for the restart check: Latin hypercube, seed 20261017, one set of three for
+  both media, 40 steps. They are unbiased by the M4 results; the distances to the M4
+  starts are recorded by `scripts/make_m5_configs.py`.
+- Threshold check: compared with eq. (1b), the extension of the first-pass model to
+  two transit times, so that the 200 ps threshold has a model too.
+
 ## Open
 - Group index of LYSO at 420 nm: no dispersion source found (docs/references.md);
   M3 uses n_g = n and states the bias.
