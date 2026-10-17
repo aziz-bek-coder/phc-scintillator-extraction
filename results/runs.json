@@ -1,0 +1,157 @@
+{
+ "what": "Remote runs whose merged outputs are quoted in docs/ and results/. Runs before 2026-10-17 belong to the private archive repository; their commits are mapped in docs/history-rewrite.md. The outputs are attached to a release of this repository (scripts/data_bundle.py).",
+ "runs": [
+  {
+   "job": "benchmark",
+   "run": 38798175139,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M2",
+   "config": "configs/benchmark.json",
+   "merged_at_commit": "c7e7621"
+  },
+  {
+   "job": "convergence",
+   "run": 38901900762,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M2",
+   "config": "configs/m2_convergence.json",
+   "merged_at_commit": "49189f4"
+  },
+  {
+   "job": "lut",
+   "run": 38901905525,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M2",
+   "config": "configs/m2_lut_ref_grease_coarse_M7.json",
+   "merged_at_commit": "49189f4"
+  },
+  {
+   "job": "lut",
+   "run": 38901911122,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M2",
+   "config": "configs/m2_lut_ref_air_coarse_M7.json",
+   "merged_at_commit": "49189f4"
+  },
+  {
+   "job": "mc",
+   "run": 38902476498,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M3",
+   "config": "configs/m3_validation.json",
+   "merged_at_commit": "40c7f22"
+  },
+  {
+   "job": "mc",
+   "run": 38902480681,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M3",
+   "config": "configs/m3_wall_models.json",
+   "merged_at_commit": "40c7f22"
+  },
+  {
+   "job": "mc",
+   "run": 38903357645,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M3",
+   "config": "configs/m3_reference.json",
+   "merged_at_commit": "1fd662b"
+  },
+  {
+   "job": "optimize",
+   "run": 38905901930,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_opt_grease_early.json",
+   "merged_at_commit": "e107a3b"
+  },
+  {
+   "job": "optimize",
+   "run": 38905905490,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_opt_grease_single_pass.json",
+   "merged_at_commit": "e107a3b"
+  },
+  {
+   "job": "optimize",
+   "run": 38950528275,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_opt_air_early.json",
+   "merged_at_commit": "c0be7cb"
+  },
+  {
+   "job": "lut",
+   "run": 38931698470,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_lut_ref_lyso_grease_fine_M9.json",
+   "merged_at_commit": "2bf04bf"
+  },
+  {
+   "job": "lut",
+   "run": 38931708295,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_lut_opt_early_lyso_grease_fine_M9.json",
+   "merged_at_commit": "2bf04bf"
+  },
+  {
+   "job": "lut",
+   "run": 38931717766,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_lut_opt_single_pass_lyso_grease_fine_M9.json",
+   "merged_at_commit": "2bf04bf"
+  },
+  {
+   "job": "lut",
+   "run": 38931726855,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_lut_ref_lyso_air_fine_M9.json",
+   "merged_at_commit": "2bf04bf"
+  },
+  {
+   "job": "lut",
+   "run": 38949348290,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_lut_opt_early_lyso_air_fine_M9.json",
+   "merged_at_commit": "14f9f18"
+  },
+  {
+   "job": "mc",
+   "run": 38936853588,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_mc_grease.json",
+   "merged_at_commit": "04f0aae"
+  },
+  {
+   "job": "mc",
+   "run": 38938178392,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_mc_grease_mirror_check.json",
+   "merged_at_commit": "decc222"
+  },
+  {
+   "job": "mc",
+   "run": 38953882816,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_mc_air.json",
+   "merged_at_commit": "05f08b3"
+  },
+  {
+   "job": "ordercheck",
+   "run": 38949360857,
+   "repository": "aziz-bek-coder/phc-scintillator-extraction-archive",
+   "milestone": "M4",
+   "config": "configs/m4_ordercheck.json",
+   "merged_at_commit": "14f9f18"
+  }
+ ]
+}
